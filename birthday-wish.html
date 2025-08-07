@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Sinh Nhật</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="birthday-wish">
+    <div class="wish-container">
+        <h1 class="main-title">🎉 Chúc Mừng Sinh Nhật! 🎉</h1>
+        <div class="book-container">
+            <div class="book" id="book" onclick="openBook()">
+                <div class="book-cover">
+                    <img src="images/anhbia.jpg" alt="Birthday Photo" class="cover-image">
+                </div>
+                <div class="book-page">
+                    <div class="wish-content">
+                        <div class="message">
+                            <p class="message-line">Hôm nay là ngày đặc biệt của em,</p>
+                            <p class="message-line">Một ngày đánh dấu thêm một tuổi mới.</p>
+                            <p class="message-line">Chúc em luôn xinh đẹp, đáng iu,</p>
+                            <p class="message-line">Chúc tuổi mới mang đến nhiều niềm vui,</p>
+                            <p class="message-line">Chúc em có được tất cả! 💕</p>
+                            <p class="message-line">Và ước mơ của em sẽ thành hiện thực! 🎂</p>
+                        </div>
+                        <div class="signature">
+                            ✨ Với tình yêu thương ✨
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="click-hint" id="clickHint">👆 Nhấp vào sổ để mở nhé!!!</div>
+
+        <!-- Nút điều khiển nhạc -->
+        <div class="music-control" id="musicControl" onclick="toggleMusic()">
+            🎵 Bật nhạc
+        </div>
+        
+        <div class="button-container">
+            <a href="index.html" class="back-button">Quay lại</a>
+            <a href="gift.html" class="next-button">Tiếp theo</a>
+        </div>
+    </div>
+
+    <canvas class="confetti" id="confetti"></canvas>
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <!-- Thêm audio element -->
+    <audio id="birthdayMusic" preload="auto">
+        <source src="audio/birthday.mp3" type="audio/mpeg">
+        <source src="audio/birthday-music.wav" type="audio/wav">
+        <!-- Fallback cho các trình duyệt không hỗ trợ -->
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        function createConfetti() {
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const confettiPieces = [];
+            const colors = ['#ff9a9e', '#fecfef', '#fda085', '#ffb3ba', '#ff6b9d', '#ffc1cc'];
+
+            for (let i = 0; i < 150; i++) {
+                confettiPieces.push({
+                    x: Math.random() * canvas.width,
+                    y: -10,
+                    width: Math.random() * 10 + 5,
+                    height: Math.random() * 10 + 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: Math.random() * 3 + 2,
+                    rotation: Math.random() * 360
+                });
+            }
+
+            function animateConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                confettiPieces.forEach((piece, index) => {
+                    piece.y += piece.speed;
+                    piece.rotation += 2;
+
+                    ctx.save();
+                    ctx.translate(piece.x + piece.width / 2, piece.y + piece.height / 2);
+                    ctx.rotate(piece.rotation * Math.PI / 180);
+                    ctx.fillStyle = piece.color;
+                    ctx.fillRect(-piece.width / 2, -piece.height / 2, piece.width, piece.height);
+                    ctx.restore();
+
+                    if (piece.y > canvas.height) {
+                        confettiPieces.splice(index, 1);
+                    }
+                });
+
+                if (confettiPieces.length > 0) {
+                    requestAnimationFrame(animateConfetti);
+                }
+            }
+
+            animateConfetti();
+        }
+
+        function createHearts() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            
+            function addHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '💖';
+                
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    if (heart.parentNode) {
+                        heart.parentNode.removeChild(heart);
+                    }
+                }, 8000);
+            }
+            
+            const heartInterval = setInterval(addHeart, 800);
+            
+            setTimeout(() => {
+                clearInterval(heartInterval);
+            }, 20000);
+        }
+
+        // Bắt đầu hiệu ứng khi trang load
+        document.addEventListener('DOMContentLoaded', function() {
+            createConfetti();
+            createHearts();
+        });
+
+        function openBook() {
+            const book = document.getElementById('book');
+            const clickHint = document.getElementById('clickHint');
+            const music = document.getElementById('birthdayMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            book.classList.toggle('open');
+            
+            if (book.classList.contains('open')) {
+                clickHint.textContent = '👆 Nhấp để đóng sổ';
+                clickHint.style.opacity = '0.7';
+                
+                // Phát nhạc khi mở sổ
+                music.currentTime = 0; // Reset về đầu bài
+                music.volume = 0.5; // Âm lượng 50%
+                music.play().then(() => {
+                    // Cập nhật nút khi nhạc phát thành công
+                    musicControl.textContent = '🎵 Tắt nhạc';
+                }).catch(error => {
+                    console.log('Không thể phát nhạc:', error);
+                    // Giữ nguyên nút nếu không phát được
+                });
+            } else {
+                clickHint.textContent = '👆 Nhấp để mở sổ';
+                clickHint.style.opacity = '1';
+                
+                // Dừng nhạc khi đóng sổ
+                music.pause();
+                music.currentTime = 0;
+                // Cập nhật nút khi dừng nhạc
+                musicControl.textContent = '🎵 Bật nhạc';
+            }
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('birthdayMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            if (music.paused) {
+                music.play().then(() => {
+                    musicControl.textContent = '🎵 Tắt nhạc';
+                }).catch(error => {
+                    console.log('Không thể phát nhạc:', error);
+                });
+            } else {
+                music.pause();
+                musicControl.textContent = '🎵 Bật nhạc';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quà Sinh Nhật</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body class="gift-body">
+    <div id="photos-container"></div>
+    <div id="sparkles-container"></div>
+    <div id="hearts-container"></div>
+
+    <!-- Nút điều khiển nhạc -->
+    <div class="music-control" id="musicControl" onclick="toggleMusic()">
+        🎵 Bật nhạc
+    </div>
+    
+    <!-- Thêm audio element -->
+    <audio id="giftMusic" preload="auto" loop autoplay>
+        <source src="audio/birthday1.mp3" type="audio/mpeg">
+        <source src="audio/birthday1.mp3" type="audio/mpeg">
+        <!-- Fallback cho các trình duyệt không hỗ trợ -->
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        console.log('Page loaded - Bắt đầu tạo animation');
+        
+        // Auto-start music when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const music = document.getElementById('giftMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            // Thử phát nhạc ngay khi page load
+            music.volume = 0.3;
+            music.play().then(() => {
+                musicControl.textContent = '🎵 Tắt nhạc';
+                console.log('Nhạc đã bắt đầu phát tự động!');
+            }).catch(error => {
+                console.log('Không thể phát nhạc tự động, cần tương tác từ user:', error);
+                // Fallback: phát khi user click lần đầu
+                document.addEventListener('click', function() {
+                    if (music.paused) {
+                        music.play().then(() => {
+                            musicControl.textContent = '🎵 Tắt nhạc';
+                        }).catch(e => console.log('Lỗi phát nhạc:', e));
+                    }
+                }, { once: true });
+            });
+        });
+        
+        // Function to toggle music
+        function toggleMusic() {
+            const music = document.getElementById('giftMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            if (music.paused) {
+                music.volume = 0.3;
+                music.play().then(() => {
+                    musicControl.textContent = '🎵 Tắt nhạc';
+                }).catch(error => {
+                    console.log('Không thể phát nhạc:', error);
+                });
+            } else {
+                music.pause();
+                musicControl.textContent = '🎵 Bật nhạc';
+            }
+        }
+        
+        // Tạo photos chạy
+        function createPhoto(index) {
+            const photo = document.createElement('div');
+            photo.className = 'gift-photo-runner';
+            
+            // Mảng chứa 5 ảnh khác nhau
+            const photoList = [
+                'images/birthday.jpg',
+                'images/photo1.jpg', 
+                'images/photo2.jpg',
+                'images/photo3.jpg',
+                'images/photo4.jpg'
+            ];
+            
+            // Chọn ảnh theo thứ tự hoặc ngẫu nhiên
+            const photoIndex = index % photoList.length;
+            photo.style.backgroundImage = `url('${photoList[photoIndex]}')`;
+            
+            const randomY = Math.random() * (window.innerHeight - 250);
+            const delay = (index * 0.8) % 15; 
+            
+            // Kích thước ngẫu nhiên
+            const randomSize = 120 + Math.random() * 80; // Từ 120px đến 200px
+            
+            photo.style.top = randomY + 'px';
+            photo.style.animationDelay = delay + 's';
+            photo.style.zIndex = 100 + index;
+            photo.style.width = randomSize + 'px';
+            photo.style.height = randomSize + 'px';
+            
+            // Thêm sự kiện hover và touch để hiện trái tim
+            photo.addEventListener('mouseenter', function() {
+                showHeart(this);
+            });
+            
+            // Thêm touch support cho mobile
+            photo.addEventListener('touchstart', function(e) {
+                e.preventDefault(); // Ngăn scroll khi touch
+                showHeart(this);
+            });
+            
+            function showHeart(element) {
+                const heart = document.createElement('div');
+                heart.className = 'gift-hover-heart';
+                heart.textContent = '💖';
+                element.appendChild(heart);
+                
+                // Xóa trái tim sau animation
+                setTimeout(() => {
+                    if (heart.parentNode) {
+                        heart.parentNode.removeChild(heart);
+                    }
+                }, 600);
+            }
+            
+            document.getElementById('photos-container').appendChild(photo);
+            console.log(`Tạo photo ${index + 1} (${photoList[photoIndex]}) tại Y=${randomY.toFixed(0)}, size=${randomSize.toFixed(0)}px, delay=${delay.toFixed(1)}s`);
+        }
+        
+        // Tạo sparkles
+        function createSparkle(index) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'gift-sparkle';
+            sparkle.textContent = '✨';
+            
+            const randomX = Math.random() * window.innerWidth;
+            const randomY = Math.random() * window.innerHeight;
+            const delay = Math.random() * 4;
+            
+            sparkle.style.left = randomX + 'px';
+            sparkle.style.top = randomY + 'px';
+            sparkle.style.animationDelay = delay + 's';
+            
+            document.getElementById('sparkles-container').appendChild(sparkle);
+        }
+        
+        // Tạo hearts
+        function createHeart(index) {
+            const heart = document.createElement('div');
+            heart.className = 'gift-floating-heart';
+            heart.textContent = '❤️';
+            
+            const randomX = Math.random() * window.innerWidth;
+            const delay = Math.random() * 6;
+            const size = 1 + Math.random() * 2;
+            
+            heart.style.left = randomX + 'px';
+            heart.style.animationDelay = delay + 's';
+            heart.style.fontSize = size + 'rem';
+            
+            document.getElementById('hearts-container').appendChild(heart);
+        }
+        
+        // Tạo elements với số lượng responsive
+        const isMobile = window.innerWidth <= 768;
+        const photoCount = isMobile ? 12 : 20; // Giảm số lượng trên mobile
+        const sparkleCount = isMobile ? 15 : 25;
+        const heartCount = isMobile ? 10 : 20;
+        
+        for (let i = 0; i < photoCount; i++) {
+            createPhoto(i);
+        }
+        
+        for (let i = 0; i < sparkleCount; i++) { 
+            createSparkle(i);
+        }
+        
+        for (let i = 0; i < heartCount; i++) { 
+            createHeart(i);
+        }
+        
+        console.log(`Tất cả elements đã được tạo! Photos: ${photoCount}, Sparkles: ${sparkleCount}, Hearts: ${heartCount}`);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Sinh Nhật</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <div class="birthday-image"></div>
+        </div>
+        
+        <div class="right-section">
+            <div class="keypad-container">
+                <h2 class="keypad-title">Nhập Ngày Sinh</h2>
+                <div class="password-display" id="passwordDisplay">_ _ _ _</div>
+                
+                <div class="keypad">
+                    <button class="key" onclick="addDigit('1')">1</button>
+                    <button class="key" onclick="addDigit('2')">2</button>
+                    <button class="key" onclick="addDigit('3')">3</button>
+                    <button class="key" onclick="addDigit('4')">4</button>
+                    <button class="key" onclick="addDigit('5')">5</button>
+                    <button class="key" onclick="addDigit('6')">6</button>
+                    <button class="key" onclick="addDigit('7')">7</button>
+                    <button class="key" onclick="addDigit('8')">8</button>
+                    <button class="key" onclick="addDigit('9')">9</button>
+                    <button class="btn btn-clear" onclick="clearPassword()">Xóa</button>
+                    <button class="key" onclick="addDigit('0')">0</button>
+                    <button class="btn btn-submit" onclick="submitPassword()">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <canvas class="confetti" id="confetti"></canvas>
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
