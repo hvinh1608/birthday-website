@@ -31,22 +31,33 @@
         document.addEventListener('DOMContentLoaded', function() {
             const music = document.getElementById('giftMusic');
             const musicControl = document.getElementById('musicControl');
+            let musicStarted = false;
             
             // Thử phát nhạc ngay khi page load
             music.volume = 0.3;
             music.play().then(() => {
                 musicControl.textContent = '🎵 Tắt nhạc';
+                musicStarted = true;
                 console.log('Nhạc đã bắt đầu phát tự động!');
             }).catch(error => {
-                console.log('Không thể phát nhạc tự động, cần tương tác từ user:', error);
-                // Fallback: phát khi user click lần đầu
-                document.addEventListener('click', function() {
-                    if (music.paused) {
+                console.log('Không thể phát nhạc tự động, chờ user tương tác:', error);
+                
+                // Bắt mọi sự kiện touch/click trên toàn bộ màn hình để phát nhạc
+                function startMusicOnInteraction() {
+                    if (!musicStarted && music.paused) {
                         music.play().then(() => {
                             musicControl.textContent = '🎵 Tắt nhạc';
+                            musicStarted = true;
+                            console.log('Nhạc đã bắt đầu phát sau tương tác!');
                         }).catch(e => console.log('Lỗi phát nhạc:', e));
                     }
-                }, { once: true });
+                }
+                
+                // Lắng nghe mọi loại tương tác
+                document.addEventListener('click', startMusicOnInteraction, { once: true });
+                document.addEventListener('touchstart', startMusicOnInteraction, { once: true });
+                document.addEventListener('touchend', startMusicOnInteraction, { once: true });
+                document.addEventListener('keydown', startMusicOnInteraction, { once: true });
             });
         });
         

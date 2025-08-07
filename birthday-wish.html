@@ -137,6 +137,27 @@
         document.addEventListener('DOMContentLoaded', function() {
             createConfetti();
             createHearts();
+            
+            // Tự động phát nhạc khi user tương tác (cho mobile)
+            const music = document.getElementById('birthdayMusic');
+            const musicControl = document.getElementById('musicControl');
+            let musicStarted = false;
+            
+            function startMusicOnInteraction() {
+                if (!musicStarted && music.paused) {
+                    music.volume = 0.5;
+                    music.play().then(() => {
+                        musicControl.textContent = '🎵 Tắt nhạc';
+                        musicStarted = true;
+                        console.log('Nhạc nền đã bắt đầu phát!');
+                    }).catch(e => console.log('Không thể phát nhạc:', e));
+                }
+            }
+            
+            // Lắng nghe mọi loại tương tác để bật nhạc
+            document.addEventListener('click', startMusicOnInteraction, { once: true });
+            document.addEventListener('touchstart', startMusicOnInteraction, { once: true });
+            document.addEventListener('touchend', startMusicOnInteraction, { once: true });
         });
 
         function openBook() {
