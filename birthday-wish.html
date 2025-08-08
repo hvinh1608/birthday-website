@@ -10,7 +10,23 @@
 <body class="birthday-wish">
     <div class="wish-container">
         <h1 class="main-title">🎉 Chúc Mừng Sinh Nhật! 🎉</h1>
+        
         <div class="book-container">
+            <!-- Bút lông vũ trang trí -->
+            <div class="feather-pen">
+                <div class="feather">
+                    <div class="feather-shaft"></div>
+                    <div class="feather-barbs">
+                        <div class="barb"></div>
+                        <div class="barb"></div>
+                        <div class="barb"></div>
+                        <div class="barb"></div>
+                        <div class="barb"></div>
+                    </div>
+                </div>
+                <div class="pen-nib"></div>
+                <div class="ink-drop">💧</div>
+            </div>
             <div class="book" id="book">
                 <div class="book-cover" onclick="openBook()">
                     <img src="images/anhbia.jpg" alt="Birthday Photo" class="cover-image">
@@ -491,6 +507,14 @@
                 currentPage = 1;
                 showPage(currentPage);
                 
+                // Hiển thị bút lông vũ với delay để đồng bộ với chữ
+                setTimeout(() => {
+                    const featherPen = document.querySelector('.feather-pen');
+                    if (featherPen) {
+                        featherPen.classList.add('show');
+                    }
+                }, 800); // Delay 0.8s để cây bút xuất hiện sau khi chữ bắt đầu hiện
+                
                 // Phát nhạc khi mở sổ
                 music.currentTime = 0; // Reset về đầu bài
                 music.volume = 0.5; // Âm lượng 50%
@@ -513,6 +537,12 @@
             book.classList.remove('open');
             clickHint.textContent = '👆 Nhấp để mở sổ';
             clickHint.style.opacity = '1';
+            
+            // Ẩn bút lông vũ
+            const featherPen = document.querySelector('.feather-pen');
+            if (featherPen) {
+                featherPen.classList.remove('show');
+            }
             
             // Dừng nhạc khi đóng sổ
             music.pause();

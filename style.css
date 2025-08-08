@@ -2611,3 +2611,284 @@ body.birthday-wish {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* ==================== FEATHER PEN DECORATION ==================== */
+.feather-pen {
+    position: absolute;
+    top: 50%;
+    right: -150px;
+    transform: translateY(-50%) rotate(-15deg) translateX(50px);
+    z-index: 5;
+    animation: featherFloat 4s ease-in-out infinite;
+    filter: drop-shadow(0 5px 15px rgba(255, 105, 180, 0.3));
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out, visibility 0.6s;
+}
+
+/* Hiện bút khi sổ mở */
+.feather-pen.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) rotate(-15deg) translateX(-20px);
+    animation: penWriting 4s ease-in-out, penBounce 0.8s ease-in-out infinite 4s;
+}
+
+@keyframes penWriting {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) rotate(-45deg) translateX(120px) translateY(-30px) scale(0.2);
+    }
+    10% {
+        opacity: 0.3;
+        transform: translateY(-50%) rotate(-35deg) translateX(90px) translateY(-20px) scale(0.4);
+    }
+    20% {
+        opacity: 0.6;
+        transform: translateY(-50%) rotate(-25deg) translateX(60px) translateY(-10px) scale(0.6);
+    }
+    30% {
+        opacity: 0.8;
+        transform: translateY(-50%) rotate(-20deg) translateX(30px) translateY(5px) scale(0.8);
+    }
+    40% {
+        opacity: 0.9;
+        transform: translateY(-50%) rotate(-18deg) translateX(10px) translateY(10px) scale(0.9);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-50%) rotate(-15deg) translateX(-5px) translateY(8px) scale(1);
+    }
+    60% {
+        transform: translateY(-50%) rotate(-12deg) translateX(-15px) translateY(5px) scale(1);
+    }
+    70% {
+        transform: translateY(-50%) rotate(-10deg) translateX(-20px) translateY(0px) scale(1);
+    }
+    80% {
+        transform: translateY(-50%) rotate(-8deg) translateX(-25px) translateY(-5px) scale(1);
+    }
+    90% {
+        transform: translateY(-50%) rotate(-12deg) translateX(-22px) translateY(-2px) scale(1);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(-50%) rotate(-15deg) translateX(-20px) translateY(0px) scale(1);
+    }
+}
+
+/* Animation cho bút nhấp nhô như đang viết */
+@keyframes penBounce {
+    0%, 100% {
+        transform: translateY(-50%) rotate(-15deg) translateX(-20px) translateY(0px);
+    }
+    25% {
+        transform: translateY(-50%) rotate(-12deg) translateX(-18px) translateY(3px);
+    }
+    50% {
+        transform: translateY(-50%) rotate(-18deg) translateX(-22px) translateY(-2px);
+    }
+    75% {
+        transform: translateY(-50%) rotate(-14deg) translateX(-19px) translateY(2px);
+    }
+}
+
+@keyframes featherFloat {
+    0%, 100% { 
+        transform: translateY(-50%) rotate(-25deg) translateX(0); 
+    }
+    50% { 
+        transform: translateY(-50%) rotate(-25deg) translateX(5px); 
+    }
+}
+
+.feather {
+    position: relative;
+    width: 280px;
+    height: 12px;
+}
+
+.feather-shaft {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 280px;
+    height: 3px;
+    background: linear-gradient(to right, #8B4513, #D2691E, #DEB887);
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.feather-barbs {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 220px;
+    height: 12px;
+}
+
+.barb {
+    position: absolute;
+    background: linear-gradient(45deg, #ff6b9d, #ff9a9e, #fecfef);
+    border-radius: 50% 0 50% 0;
+    opacity: 0.8;
+    animation: barbFloat 3s ease-in-out infinite;
+}
+
+.barb:nth-child(1) {
+    width: 30px;
+    height: 8px;
+    top: -4px;
+    left: 0;
+    animation-delay: 0s;
+}
+
+.barb:nth-child(2) {
+    width: 45px;
+    height: 10px;
+    top: -5px;
+    left: 35px;
+    animation-delay: 0.3s;
+}
+
+.barb:nth-child(3) {
+    width: 55px;
+    height: 12px;
+    top: -6px;
+    left: 80px;
+    animation-delay: 0.6s;
+}
+
+.barb:nth-child(4) {
+    width: 50px;
+    height: 11px;
+    top: -5px;
+    left: 140px;
+    animation-delay: 0.9s;
+}
+
+.barb:nth-child(5) {
+    width: 35px;
+    height: 8px;
+    top: -4px;
+    left: 180px;
+    animation-delay: 1.2s;
+}
+
+@keyframes barbFloat {
+    0%, 100% { 
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+    }
+    50% { 
+        transform: translateY(-2px) scale(1.05);
+        opacity: 1;
+    }
+}
+
+.pen-nib {
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 8px;
+    background: linear-gradient(45deg, #2c3e50, #34495e);
+    border-radius: 0 50% 50% 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.pen-nib::after {
+    content: '';
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 4px;
+    background: #1a252f;
+    border-radius: 1px;
+}
+
+.ink-drop {
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 8px;
+    color: #3498db;
+    animation: inkDrop 2s ease-in-out infinite;
+}
+
+@keyframes inkDrop {
+    0%, 100% { 
+        opacity: 0;
+        transform: translateY(-50%) scale(0.5);
+    }
+    50% { 
+        opacity: 1;
+        transform: translateY(-50%) scale(1);
+    }
+}
+
+/* Responsive cho feather pen */
+@media (max-width: 768px) {
+    .feather-pen {
+        right: -120px;
+        top: 55%;
+        transform: translateY(-50%) rotate(-10deg) scale(0.6);
+    }
+    
+    .feather-pen.show {
+        transform: translateY(-50%) rotate(-10deg) scale(0.6) translateX(-15px);
+    }
+    
+    .feather {
+        width: 210px;
+    }
+    
+    .feather-shaft {
+        width: 210px;
+    }
+    
+    .feather-barbs {
+        width: 160px;
+        left: 15px;
+    }
+    
+    .barb:nth-child(1) { width: 22px; height: 6px; }
+    .barb:nth-child(2) { width: 33px; height: 8px; left: 25px; }
+    .barb:nth-child(3) { width: 40px; height: 9px; left: 60px; }
+    .barb:nth-child(4) { width: 35px; height: 8px; left: 105px; }
+    .barb:nth-child(5) { width: 25px; height: 6px; left: 135px; }
+}
+
+@media (max-width: 480px) {
+    .feather-pen {
+        right: -80px;
+        top: 60%;
+        transform: translateY(-50%) rotate(-5deg) scale(0.4);
+    }
+    
+    .feather-pen.show {
+        transform: translateY(-50%) rotate(-5deg) scale(0.4) translateX(-10px);
+    }
+    
+    .feather {
+        width: 168px;
+    }
+    
+    .feather-shaft {
+        width: 168px;
+    }
+    
+    .feather-barbs {
+        width: 130px;
+        left: 10px;
+    }
+    
+    .ink-drop {
+        font-size: 6px;
+    }
+}
