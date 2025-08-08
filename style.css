@@ -1115,6 +1115,48 @@ body {
     }
 }
 
+/* CSS cho nút điều khiển nhạc mystery */
+.mystery-music-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(145deg, #ff6b6b, #ee5a52);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+    user-select: none;
+    z-index: 1001;
+    animation: musicPulse 2s ease-in-out infinite;
+}
+
+.mystery-music-control:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.5);
+    background: linear-gradient(145deg, #ff5722, #ff6b6b);
+}
+
+.mystery-music-control:active {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+}
+
+@keyframes musicPulse {
+    0%, 100% { 
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 5px 20px rgba(255, 107, 107, 0.6);
+        transform: scale(1.02);
+    }
+}
+
 .hearts-container {
     position: fixed;
     top: 0;
@@ -1263,6 +1305,13 @@ body.birthday-wish {
     .mystery-control {
         top: 15px;
         right: 140px;
+        padding: 8px 12px;
+        font-size: 0.9em;
+    }
+    
+    .mystery-music-control {
+        top: 15px;
+        right: 15px;
         padding: 8px 12px;
         font-size: 0.9em;
     }

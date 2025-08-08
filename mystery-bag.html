@@ -7,6 +7,19 @@
     <link rel="stylesheet" href="./style.css?v=3.0">
 </head>
 <body class="mystery-body">
+    <!-- Audio element cho nhạc nền -->
+    <audio id="mysteryMusic" loop autoplay preload="auto">
+        <source src="./music/mystery-music.mp3" type="audio/mpeg">
+        <source src="./music/mystery-music.wav" type="audio/wav">
+        <source src="./music/mystery-music.ogg" type="audio/ogg">
+        <!-- Fallback online music nếu không có file local -->
+        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <!-- Nút điều khiển nhạc -->
+    <button id="musicControl" class="mystery-music-control" onclick="toggleMusic()">🎵 Bật nhạc</button>
+    
     <div class="mystery-container">
         <h1 class="mystery-title">🎂 Thổi Nến Sinh Nhật</h1>
         <p class="mystery-subtitle">Nhấp vào bánh sinh nhật để thổi nến và nhận quà!</p>
@@ -310,6 +323,73 @@
                 e.preventDefault();
                 blowCandles();
             }
+        });
+
+        // Music control functions
+        function toggleMusic() {
+            const music = document.getElementById('mysteryMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            if (music.paused) {
+                music.volume = 0.3; // Âm lượng 30%
+                music.play().then(() => {
+                    musicControl.textContent = '🔇 Tắt nhạc';
+                }).catch(error => {
+                    console.log('Could not play music:', error);
+                    musicControl.textContent = '🎵 Không có nhạc';
+                });
+            } else {
+                music.pause();
+                musicControl.textContent = '🎵 Bật nhạc';
+            }
+        }
+
+        // Auto play music functions
+        function tryAutoPlayMusic() {
+            const music = document.getElementById('mysteryMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            music.volume = 0.3;
+            music.play().then(() => {
+                console.log('Music auto-played successfully');
+                musicControl.textContent = '🔇 Tắt nhạc';
+            }).catch(error => {
+                console.log('Auto-play blocked, waiting for user interaction:', error);
+                musicControl.textContent = '🎵 Bật nhạc';
+            });
+        }
+
+        // Try to auto-play when page loads
+        window.addEventListener('load', function() {
+            setTimeout(tryAutoPlayMusic, 500); // Delay 0.5s để trang load xong
+        });
+
+        // Auto start music on first user interaction (desktop & mobile)
+        const startMusicEvents = ['click', 'touchstart', 'touchend', 'keydown', 'scroll'];
+        
+        function enableMusicOnInteraction() {
+            const music = document.getElementById('mysteryMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            if (music.paused) {
+                music.volume = 0.3;
+                music.play().then(() => {
+                    musicControl.textContent = '🔇 Tắt nhạc';
+                    console.log('Music started on user interaction');
+                }).catch(error => {
+                    console.log('Could not start music on interaction:', error);
+                });
+            }
+            
+            // Remove event listeners after first interaction
+            startMusicEvents.forEach(event => {
+                document.removeEventListener(event, enableMusicOnInteraction);
+            });
+        }
+
+        // Add event listeners for auto-play on interaction
+        startMusicEvents.forEach(event => {
+            document.addEventListener(event, enableMusicOnInteraction, { once: true });
         });
     </script>
 </body>
