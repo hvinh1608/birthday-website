@@ -6,7 +6,6 @@
     <title>Chúc Mừng Sinh Nhật</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css?v=6.0">
-    <script src="toast.js?v=1.0"></script>
 </head>
 <body class="birthday-wish">
     <div class="wish-container">
@@ -570,6 +569,62 @@
                 music.pause();
                 musicControl.textContent = '🎵 Bật nhạc';
             }
+        }
+
+        // ==================== TOAST NOTIFICATION SYSTEM ====================
+        function showToast(message, type = 'info', duration = 4000) {
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            toast.innerHTML = `
+                <button class="toast-close" onclick="removeToast(this.parentElement)">&times;</button>
+                <div>${message}</div>
+                <div class="toast-progress"></div>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            const progress = toast.querySelector('.toast-progress');
+            progress.style.width = '100%';
+            setTimeout(() => {
+                progress.style.width = '0%';
+                progress.style.transition = `width ${duration}ms linear`;
+            }, 200);
+
+            setTimeout(() => removeToast(toast), duration);
+            return toast;
+        }
+
+        function removeToast(toast) {
+            if (toast && toast.classList) {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.parentElement.removeChild(toast);
+                    }
+                }, 400);
+            }
+        }
+
+        function showSuccess(message, duration = 3000) {
+            return showToast(message, 'success', duration);
+        }
+        function showWarning(message, duration = 4000) {
+            return showToast(message, 'warning', duration);
+        }
+        function showError(message, duration = 4000) {
+            return showToast(message, 'error', duration);
+        }
+        function showInfo(message, duration = 4000) {
+            return showToast(message, 'info', duration);
         }
     </script>
 </body>
