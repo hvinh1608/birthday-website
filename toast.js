@@ -84,8 +84,10 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => showError('❌ Đây là error test!'), 3000);
     };
     
-    // Auto test toast after 2 seconds
-    setTimeout(() => {
-        showInfo('🎊 Chào mừng! Toast notifications đã sẵn sàng!', 2000);
-    }, 2000);
+    // Chỉ hiện toast chào mừng ở trang chủ
+    if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+        setTimeout(() => {
+            showInfo('🎊 Chào mừng! Nhập mật khẩu để vào!', 3000);
+        }, 1000);
+    }
 });
