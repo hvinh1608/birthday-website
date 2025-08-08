@@ -11,3 +11,16 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Test files và files không cần thiết
+*-test.html
+*-fixed.html
+test-*.html
+analytics.html
+qr-generator.html
+qr-ready.html
+DOMAIN_SETUP.md
+
+# Temporary files
+*.tmp
+*.temp
