@@ -1,11 +1,14 @@
 // ==================== TOAST NOTIFICATION SYSTEM ====================
 function showToast(message, type = 'info', duration = 4000) {
+    console.log('showToast called:', message, type);
+    
     // Tạo container nếu chưa có
     let container = document.querySelector('.toast-container');
     if (!container) {
         container = document.createElement('div');
         container.className = 'toast-container';
         document.body.appendChild(container);
+        console.log('Toast container created');
     }
 
     // Tạo toast element
