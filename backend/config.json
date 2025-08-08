@@ -1,0 +1,279 @@
+{
+  "currentImages": {
+    "gift1": "optimized-images-1754643847680-104235408.jpg",
+    "gift2": "optimized-images-1754647302385-1599778.jpg",
+    "gift3": "optimized-gift3-1754644143543-54608385.jpg",
+    "background": null,
+    "profile": "optimized-cover-1754648553194-392595152.jpg",
+    "cover": "optimized-cover-1754648528772-792263539.jpg",
+    "gift5": "optimized-gift5-1754648421583-476589125.jpg",
+    "gift4": "optimized-images-1754646511368-794159927.jpg"
+  },
+  "imageHistory": [
+    {
+      "filename": "optimized-images-1754643847680-104235408.jpg",
+      "uploadedAt": "2025-08-08T09:04:07.860Z",
+      "originalName": "photo4.jpg",
+      "action": "upload_only"
+    },
+    {
+      "imageType": "gift1",
+      "filename": "optimized-images-1754643847680-104235408.jpg",
+      "assignedAt": "2025-08-08T09:04:57.285Z"
+    },
+    {
+      "filename": "optimized-images-1754643969507-257930519.jpeg",
+      "uploadedAt": "2025-08-08T09:06:09.586Z",
+      "originalName": "QRHPBD.jpeg",
+      "action": "upload_only"
+    },
+    {
+      "imageType": "profile",
+      "filename": "optimized-images-1754643969507-257930519.jpeg",
+      "assignedAt": "2025-08-08T09:06:17.882Z"
+    },
+    {
+      "imageType": "gift3",
+      "filename": "optimized-gift3-1754644143543-54608385.jpg",
+      "uploadedAt": "2025-08-08T09:09:03.796Z",
+      "originalName": "photo3.jpg",
+      "action": "upload_and_assign"
+    },
+    {
+      "imageType": "gift2",
+      "filename": "optimized-gift3-1754644143543-54608385.jpg",
+      "assignedAt": "2025-08-08T09:19:44.258Z"
+    },
+    {
+      "imageType": "background",
+      "filename": "optimized-images-1754643969507-257930519.jpeg",
+      "assignedAt": "2025-08-08T09:19:46.020Z"
+    },
+    {
+      "imageType": "background",
+      "filename": "optimized-images-1754643969507-257930519.jpeg",
+      "assignedAt": "2025-08-08T09:24:17.749Z"
+    },
+    {
+      "filename": "optimized-cover-1754645169923-447293762.jpg",
+      "uploadedAt": "2025-08-08T09:26:10.061Z",
+      "originalName": "photo1.jpg",
+      "action": "upload_only"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-cover-1754645169923-447293762.jpg",
+      "assignedAt": "2025-08-08T09:40:03.570Z"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-gift3-1754644143543-54608385.jpg",
+      "assignedAt": "2025-08-08T09:40:19.321Z"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-cover-1754645169923-447293762.jpg",
+      "assignedAt": "2025-08-08T09:42:34.109Z"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-gift3-1754644143543-54608385.jpg",
+      "assignedAt": "2025-08-08T09:42:40.295Z"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-cover-1754645169923-447293762.jpg",
+      "assignedAt": "2025-08-08T09:42:50.790Z"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-cover-1754645169923-447293762.jpg",
+      "assignedAt": "2025-08-08T09:44:55.991Z"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-gift3-1754644143543-54608385.jpg",
+      "assignedAt": "2025-08-08T09:44:57.233Z"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-images-1754643969507-257930519.jpeg",
+      "assignedAt": "2025-08-08T09:45:02.160Z"
+    },
+    {
+      "imageType": "gift2",
+      "filename": "optimized-images-1754643969507-257930519.jpeg",
+      "assignedAt": "2025-08-08T09:48:06.348Z"
+    },
+    {
+      "filename": "optimized-images-1754646511368-794159927.jpg",
+      "uploadedAt": "2025-08-08T09:48:31.493Z",
+      "originalName": "photo2.jpg",
+      "action": "upload_only"
+    },
+    {
+      "imageType": "profile",
+      "filename": "optimized-images-1754646511368-794159927.jpg",
+      "assignedAt": "2025-08-08T09:48:43.315Z"
+    },
+    {
+      "imageType": "background",
+      "filename": "optimized-images-1754643847680-104235408.jpg",
+      "assignedAt": "2025-08-08T09:49:00.288Z"
+    },
+    {
+      "imageType": "background",
+      "filename": "optimized-images-1754643969507-257930519.jpeg",
+      "assignedAt": "2025-08-08T09:49:02.131Z"
+    },
+    {
+      "imageType": "background",
+      "filename": "optimized-images-1754646511368-794159927.jpg",
+      "assignedAt": "2025-08-08T09:49:03.308Z"
+    },
+    {
+      "imageType": "profile",
+      "filename": "optimized-gift3-1754644143543-54608385.jpg",
+      "assignedAt": "2025-08-08T09:50:47.406Z"
+    },
+    {
+      "imageType": "gift5",
+      "filename": "optimized-images-1754646511368-794159927.jpg",
+      "assignedAt": "2025-08-08T10:01:13.645Z"
+    },
+    {
+      "filename": "optimized-images-1754647302385-1599778.jpg",
+      "uploadedAt": "2025-08-08T10:01:42.515Z",
+      "originalName": "photo1.jpg",
+      "action": "upload_only"
+    },
+    {
+      "filename": "optimized-images-1754647338725-305839005.jpg",
+      "uploadedAt": "2025-08-08T10:02:18.784Z",
+      "originalName": "birthday.jpg",
+      "action": "upload_only"
+    },
+    {
+      "filename": "optimized-images-1754647359153-627758972.png",
+      "uploadedAt": "2025-08-08T10:02:39.242Z",
+      "originalName": "{596B86BF-2DCF-43E4-ADA1-1F7389259A20}.png",
+      "action": "upload_only"
+    },
+    {
+      "imageType": "gift4",
+      "filename": "optimized-images-1754647338725-305839005.jpg",
+      "assignedAt": "2025-08-08T10:02:57.735Z"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-images-1754647302385-1599778.jpg",
+      "assignedAt": "2025-08-08T10:03:38.935Z"
+    },
+    {
+      "imageType": "profile",
+      "filename": "optimized-images-1754647359153-627758972.png",
+      "assignedAt": "2025-08-08T10:05:26.002Z"
+    },
+    {
+      "imageType": "background",
+      "filename": null,
+      "assignedAt": "2025-08-08T10:15:35.694Z"
+    },
+    {
+      "imageType": "gift2",
+      "filename": "optimized-images-1754647359153-627758972.png",
+      "assignedAt": "2025-08-08T10:19:44.350Z"
+    },
+    {
+      "imageType": "gift2",
+      "filename": "optimized-images-1754647338725-305839005.jpg",
+      "assignedAt": "2025-08-08T10:19:45.418Z"
+    },
+    {
+      "imageType": "gift2",
+      "filename": "optimized-images-1754647302385-1599778.jpg",
+      "assignedAt": "2025-08-08T10:19:47.369Z"
+    },
+    {
+      "imageType": "gift4",
+      "filename": "optimized-images-1754643847680-104235408.jpg",
+      "assignedAt": "2025-08-08T10:19:59.306Z"
+    },
+    {
+      "imageType": "gift4",
+      "filename": "optimized-images-1754643969507-257930519.jpeg",
+      "assignedAt": "2025-08-08T10:20:04.580Z"
+    },
+    {
+      "imageType": "gift4",
+      "filename": "optimized-gift3-1754644143543-54608385.jpg",
+      "assignedAt": "2025-08-08T10:20:06.146Z"
+    },
+    {
+      "imageType": "gift4",
+      "filename": "optimized-images-1754646511368-794159927.jpg",
+      "assignedAt": "2025-08-08T10:20:09.253Z"
+    },
+    {
+      "imageType": "gift5",
+      "filename": "optimized-gift5-1754648421583-476589125.jpg",
+      "uploadedAt": "2025-08-08T10:20:21.705Z",
+      "originalName": "photo5.jpg",
+      "action": "upload_and_assign"
+    },
+    {
+      "imageType": "profile",
+      "filename": "optimized-images-1754643969507-257930519.jpeg",
+      "assignedAt": "2025-08-08T10:20:56.360Z"
+    },
+    {
+      "imageType": "profile",
+      "filename": "optimized-images-1754643847680-104235408.jpg",
+      "assignedAt": "2025-08-08T10:20:58.210Z"
+    },
+    {
+      "imageType": "profile",
+      "filename": "optimized-gift3-1754644143543-54608385.jpg",
+      "assignedAt": "2025-08-08T10:20:59.950Z"
+    },
+    {
+      "imageType": "profile",
+      "filename": "optimized-images-1754646511368-794159927.jpg",
+      "assignedAt": "2025-08-08T10:21:01.432Z"
+    },
+    {
+      "imageType": "profile",
+      "filename": "optimized-images-1754647302385-1599778.jpg",
+      "assignedAt": "2025-08-08T10:21:03.302Z"
+    },
+    {
+      "imageType": "profile",
+      "filename": "optimized-images-1754647338725-305839005.jpg",
+      "assignedAt": "2025-08-08T10:21:04.492Z"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-cover-1754648528772-792263539.jpg",
+      "uploadedAt": "2025-08-08T10:22:08.828Z",
+      "originalName": "birthday.jpg",
+      "action": "upload_and_assign"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-cover-1754648553194-392595152.jpg",
+      "uploadedAt": "2025-08-08T10:22:33.303Z",
+      "originalName": "anhbia.jpg",
+      "action": "upload_and_assign"
+    },
+    {
+      "imageType": "cover",
+      "filename": "optimized-cover-1754648528772-792263539.jpg",
+      "assignedAt": "2025-08-08T10:27:13.304Z"
+    },
+    {
+      "imageType": "profile",
+      "filename": "optimized-cover-1754648553194-392595152.jpg",
+      "assignedAt": "2025-08-08T10:27:21.152Z"
+    }
+  ]
+}
