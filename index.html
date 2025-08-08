@@ -132,10 +132,28 @@
         // Auto welcome toast
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Inline toast system loaded!');
-            setTimeout(() => {
-                showInfo('🎊 Chào mừng! Nhập mật khẩu để vào!', 3000);
-            }, 1000);
+            console.log('showToast function available:', typeof showToast === 'function');
+            console.log('showSuccess function available:', typeof showSuccess === 'function');
+            
+            // Browser compatibility check
+            const isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+            
+            if (isOpera) {
+                console.log('Opera detected - using alert fallback');
+                setTimeout(() => {
+                    alert('🎊 Chào mừng! Nhập mật khẩu để vào! (Opera mode)');
+                }, 1000);
+            } else {
+                console.log('Modern browser detected - using toast');
+                setTimeout(() => {
+                    showInfo('🎊 Chào mừng! Nhập mật khẩu để vào!', 3000);
+                }, 1000);
+            }
         });
+    </script>
+    <script>
+        console.log('About to load script.js');
+        console.log('Toast functions available before script.js:', typeof showToast === 'function');
     </script>
     <script src="script.js"></script>
 </body>

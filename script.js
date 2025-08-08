@@ -2,6 +2,36 @@ let password = '';
 const maxLength = 4;
 const correctPassword = '0311';
 
+// Browser detection and fallback
+function isOpera() {
+    return (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+}
+
+// Safe toast function with Opera fallback
+function safeShowError(message) {
+    if (isOpera() || typeof showError !== 'function') {
+        alert(message.replace(/❌ /g, '').replace(/⚠️ /g, '').replace(/✅ /g, ''));
+    } else {
+        showError(message);
+    }
+}
+
+function safeShowWarning(message) {
+    if (isOpera() || typeof showWarning !== 'function') {
+        alert(message.replace(/❌ /g, '').replace(/⚠️ /g, '').replace(/✅ /g, ''));
+    } else {
+        showWarning(message);
+    }
+}
+
+function safeShowSuccess(message) {
+    if (isOpera() || typeof showSuccess !== 'function') {
+        alert(message.replace(/❌ /g, '').replace(/⚠️ /g, '').replace(/✅ /g, ''));
+    } else {
+        showSuccess(message);
+    }
+}
+
 function addDigit(digit) {
     if (password.length < maxLength) {
         password += digit;
@@ -32,17 +62,16 @@ function updateDisplay() {
 function submitPassword() {
     if (password.length === maxLength) {
         if (password === correctPassword) {
-            showSuccess('🎉 Mật khẩu đúng! Đang chuyển hướng...', 2000);
-            // Delay chuyển hướng để hiện toast
+            safeShowSuccess('🎉 Mật khẩu đúng! Đang chuyển hướng...');
             setTimeout(() => {
                 window.location.href = 'birthday-wish.html';
             }, 1000);
         } else {
-            showError('❌ Mật khẩu không đúng! Thử lại nhé! 😊');
+            safeShowError('❌ Mật khẩu không đúng! Thử lại nhé! 😊');
             clearPassword();
         }
     } else {
-        showWarning('⚠️ Vui lòng nhập đủ 4 số');
+        safeShowWarning('⚠️ Vui lòng nhập đủ 4 số');
     }
 }
 
