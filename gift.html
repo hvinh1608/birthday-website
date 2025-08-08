@@ -10,6 +10,8 @@
     <link rel="apple-touch-icon" href="./apple-touch-icon.png">
     <link rel="stylesheet" href="./style.css?v=6.0">
     <script src="toast.js?v=1.0"></script>
+    <!-- Birthday Image Sync -->
+    <script src="http://localhost:3001/birthday-sync.js"></script>
   </head>
   <body class="gift-body">
     <div id="photos-container"></div>
@@ -98,49 +100,41 @@
         function createPhoto(index) {
             const photo = document.createElement('div');
             photo.className = 'gift-photo-runner';
-            
             // Mảng chứa 5 ảnh khác nhau
             const photoList = [
-                'images/birthday.jpg',
-                'images/photo1.jpg', 
-                'images/photo2.jpg',
-                'images/photo3.jpg',
-                'images/photo4.jpg'
+                { url: 'images/birthday.jpg', data: 'gift1' },
+                { url: 'images/photo1.jpg', data: 'gift2' },
+                { url: 'images/photo2.jpg', data: 'gift3' },
+                { url: 'images/photo3.jpg', data: 'gift4' },
+                { url: 'images/photo4.jpg', data: 'gift5' }
             ];
-            
             // Chọn ảnh theo thứ tự hoặc ngẫu nhiên
             const photoIndex = index % photoList.length;
-            photo.style.backgroundImage = `url('${photoList[photoIndex]}')`;
-            
+            photo.style.backgroundImage = `url('${photoList[photoIndex].url}')`;
+            photo.setAttribute('data-image', photoList[photoIndex].data);
             const randomY = Math.random() * (window.innerHeight - 250);
             const delay = (index * 0.8) % 15; 
-            
             // Kích thước ngẫu nhiên
             const randomSize = 120 + Math.random() * 80; // Từ 120px đến 200px
-            
             photo.style.top = randomY + 'px';
             photo.style.animationDelay = delay + 's';
             photo.style.zIndex = 100 + index;
             photo.style.width = randomSize + 'px';
             photo.style.height = randomSize + 'px';
-            
             // Thêm sự kiện hover và touch để hiện trái tim
             photo.addEventListener('mouseenter', function() {
                 showHeart(this);
             });
-            
             // Thêm touch support cho mobile
             photo.addEventListener('touchstart', function(e) {
                 e.preventDefault(); // Ngăn scroll khi touch
                 showHeart(this);
             });
-            
             function showHeart(element) {
                 const heart = document.createElement('div');
                 heart.className = 'gift-hover-heart';
                 heart.textContent = '💖';
                 element.appendChild(heart);
-                
                 // Xóa trái tim sau animation
                 setTimeout(() => {
                     if (heart.parentNode) {
@@ -148,9 +142,8 @@
                     }
                 }, 600);
             }
-            
             document.getElementById('photos-container').appendChild(photo);
-            console.log(`Tạo photo ${index + 1} (${photoList[photoIndex]}) tại Y=${randomY.toFixed(0)}, size=${randomSize.toFixed(0)}px, delay=${delay.toFixed(1)}s`);
+            console.log(`Tạo photo ${index + 1} (${photoList[photoIndex].url}) tại Y=${randomY.toFixed(0)}, size=${randomSize.toFixed(0)}px, delay=${delay.toFixed(1)}s, data-image=${photoList[photoIndex].data}`);
         }
         
         // Tạo sparkles

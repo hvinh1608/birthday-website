@@ -1,6 +1,6 @@
 {
   "name": "birthday-backend",
-  "version": "1.0.0", 
+  "version": "1.0.0",
   "description": "Backend API for Birthday Website Image Management",
   "main": "server.js",
   "scripts": {
@@ -8,16 +8,21 @@
     "dev": "nodemon server.js",
     "init": "npm install"
   },
-  "keywords": ["express", "image-upload", "birthday", "api"],
+  "keywords": [
+    "express",
+    "image-upload",
+    "birthday",
+    "api"
+  ],
   "author": "Birthday Website Admin",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "multer": "^1.4.5-lts.1",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
+    "express": "^4.18.2",
     "fs-extra": "^11.1.1",
-    "sharp": "^0.32.6",
-    "body-parser": "^1.20.2"
+    "multer": "^1.4.5-lts.1",
+    "sharp": "^0.32.6"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
