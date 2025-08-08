@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Hình Trái Tim</title>
+    <link rel="stylesheet" href="./style.css?v=4.0">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -242,6 +243,58 @@
     </div>
 
     <script>
+        // Toast notification functions
+        function showToast(message, type = 'info', duration = 4000) {
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            toast.innerHTML = `
+                <button class="toast-close" onclick="removeToast(this.parentElement)">&times;</button>
+                <div>${message}</div>
+                <div class="toast-progress"></div>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+
+            const progress = toast.querySelector('.toast-progress');
+            progress.style.width = '100%';
+            
+            setTimeout(() => {
+                progress.style.width = '0%';
+                progress.style.transition = `width ${duration}ms linear`;
+            }, 200);
+
+            setTimeout(() => {
+                removeToast(toast);
+            }, duration);
+
+            return toast;
+        }
+
+        function removeToast(toast) {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.parentElement.removeChild(toast);
+                }
+            }, 400);
+        }
+
+        function showInfo(message, duration = 4000) {
+            return showToast(message, 'info', duration);
+        }
+
         function downloadHeartQR(type) {
             let url;
             let filename;
@@ -249,7 +302,7 @@
             switch(type) {
                 case 'css':
                     // Capture CSS heart
-                    alert('Right-click vào CSS Heart và chọn "Save image as" để tải về!');
+                    showInfo('💡 Right-click vào CSS Heart và chọn "Save image as" để tải về!', 5000);
                     break;
                 case 'svg':
                     // Download SVG
@@ -259,6 +312,7 @@
                     url = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://fantastic-sprite-3992a4.netlify.app&color=FF1493&bgcolor=FFF0F5';
                     filename = 'heart-border-qr.png';
                     downloadImage(url, filename);
+                    showInfo('💕 Đang tải QR Heart Border...', 3000);
                     break;
             }
         }
