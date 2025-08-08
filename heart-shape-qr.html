@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Hình Trái Tim</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(45deg, #FFB6C1, #FFC0CB, #FFE4E1);
+            min-height: 100vh;
+        }
+        .heart-qr-container {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(255,105,180,0.3);
+            display: inline-block;
+            margin: 20px;
+            border: 3px solid #FF69B4;
+        }
+        
+        /* QR Code trong khung hình trái tim */
+        .heart-shape {
+            position: relative;
+            width: 300px;
+            height: 260px;
+            margin: 20px auto;
+            transform: rotate(-45deg);
+        }
+        
+        .heart-shape:before,
+        .heart-shape:after {
+            content: '';
+            width: 150px;
+            height: 240px;
+            position: absolute;
+            left: 150px;
+            transform: rotate(-45deg);
+            background: #FF69B4;
+            border-radius: 150px 150px 0 0;
+            transform-origin: 0 100%;
+        }
+        
+        .heart-shape:after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+        
+        .qr-in-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            z-index: 10;
+            background: white;
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* CSS Heart Shape với QR bên trong */
+        .css-heart {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 30px auto;
+            background: linear-gradient(45deg, #FF69B4, #FF1493);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform: rotate(-45deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(255,105,180,0.4);
+        }
+        
+        .css-heart:before,
+        .css-heart:after {
+            content: '';
+            width: 150px;
+            height: 150px;
+            position: absolute;
+            background: linear-gradient(45deg, #FF69B4, #FF1493);
+            border-radius: 50%;
+            top: -75px;
+            left: 0;
+        }
+        
+        .css-heart:after {
+            left: 75px;
+        }
+        
+        .qr-center {
+            position: absolute;
+            transform: rotate(45deg);
+            background: white;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        /* SVG Heart QR */
+        .svg-heart-container {
+            position: relative;
+            display: inline-block;
+            margin: 20px;
+        }
+        
+        .download-btn {
+            background: linear-gradient(45deg, #FF69B4, #FF1493);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(255,105,180,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,105,180,0.4);
+        }
+        
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .qr-option {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            border: 3px solid #FF69B4;
+            box-shadow: 0 8px 25px rgba(255,105,180,0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>💖 QR Code Hình Trái Tim 💖</h1>
+    <p>QR code thực sự có hình dạng trái tim!</p>
+    
+    <div class="option-grid">
+        <!-- Option 1: CSS Heart với QR ở giữa -->
+        <div class="qr-option">
+            <h3>💖 CSS Heart Style</h3>
+            <div class="css-heart">
+                <div class="qr-center">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://fantastic-sprite-3992a4.netlify.app&color=FF1493" 
+                         style="border-radius: 8px;">
+                </div>
+            </div>
+            <p>QR nhỏ gọn trong trái tim CSS</p>
+            <button class="download-btn" onclick="downloadHeartQR('css')">💖 Tải CSS Heart</button>
+        </div>
+        
+        <!-- Option 2: SVG Heart Shape -->
+        <div class="qr-option">
+            <h3>💝 SVG Heart Shape</h3>
+            <div class="svg-heart-container">
+                <svg width="280" height="250" viewBox="0 0 280 250">
+                    <defs>
+                        <clipPath id="heartClip">
+                            <path d="M140,220 C73,160 20,108 20,78 C20,47 45,22 76,22 C100,22 123,40 140,60 C157,40 180,22 204,22 C235,22 260,47 260,78 C260,108 207,160 140,220 Z" fill="#FF69B4"/>
+                        </clipPath>
+                        <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#FF69B4;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#FF1493;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Heart Background -->
+                    <path d="M140,220 C73,160 20,108 20,78 C20,47 45,22 76,22 C100,22 123,40 140,60 C157,40 180,22 204,22 C235,22 260,47 260,78 C260,108 207,160 140,220 Z" 
+                          fill="url(#heartGradient)" stroke="#FF1493" stroke-width="3"/>
+                    
+                    <!-- QR Code clipped to heart shape -->
+                    <foreignObject x="40" y="40" width="200" height="160" clip-path="url(#heartClip)">
+                        <div style="padding: 20px; background: white; border-radius: 10px;">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https://fantastic-sprite-3992a4.netlify.app&color=FF1493&bgcolor=FFFFFF" 
+                                 style="width: 100%; height: auto; border-radius: 5px;">
+                        </div>
+                    </foreignObject>
+                </svg>
+            </div>
+            <p>QR code cắt theo hình trái tim</p>
+            <button class="download-btn" onclick="downloadHeartQR('svg')">💝 Tải SVG Heart</button>
+        </div>
+        
+        <!-- Option 3: Heart Border QR -->
+        <div class="qr-option">
+            <h3>💕 Heart Border Style</h3>
+            <div style="position: relative; display: inline-block;">
+                <!-- Heart border decoration -->
+                <div style="
+                    position: absolute;
+                    top: -20px;
+                    left: -20px;
+                    right: -20px;
+                    bottom: -20px;
+                    background: linear-gradient(45deg, #FF69B4, #FF1493);
+                    border-radius: 20px;
+                    z-index: -1;
+                "></div>
+                
+                <!-- Multiple heart decorations around QR -->
+                <div style="position: absolute; top: -15px; left: -15px; font-size: 25px; color: #FF1493;">💖</div>
+                <div style="position: absolute; top: -15px; right: -15px; font-size: 25px; color: #FF69B4;">💕</div>
+                <div style="position: absolute; bottom: -15px; left: -15px; font-size: 25px; color: #FF1493;">💗</div>
+                <div style="position: absolute; bottom: -15px; right: -15px; font-size: 25px; color: #FF69B4;">💝</div>
+                
+                <div style="background: white; padding: 15px; border-radius: 15px; position: relative;">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://fantastic-sprite-3992a4.netlify.app&color=FF1493&bgcolor=FFF0F5" 
+                         style="border-radius: 10px; border: 2px solid #FF69B4;">
+                </div>
+            </div>
+            <p>QR với viền trái tim trang trí</p>
+            <button class="download-btn" onclick="downloadHeartQR('border')">💕 Tải Heart Border</button>
+        </div>
+    </div>
+    
+    <div class="heart-qr-container">
+        <h3>🎂 Thông tin website</h3>
+        <p style="font-family: monospace; background: #FFF0F5; padding: 15px; border-radius: 10px; color: #FF1493;">
+            https://fantastic-sprite-3992a4.netlify.app
+        </p>
+        <p><strong>Mật khẩu: 0311</strong></p>
+        
+        <div style="margin: 20px 0; color: #FF1493;">
+            <p>💖 QR hình trái tim độc đáo</p>
+            <p>📱 Quét = Mở website ngay</p>
+            <p>🎵 Nhạc tự động khi chạm màn hình</p>
+        </div>
+    </div>
+
+    <script>
+        function downloadHeartQR(type) {
+            let url;
+            let filename;
+            
+            switch(type) {
+                case 'css':
+                    // Capture CSS heart
+                    alert('Right-click vào CSS Heart và chọn "Save image as" để tải về!');
+                    break;
+                case 'svg':
+                    // Download SVG
+                    downloadSVG();
+                    break;
+                case 'border':
+                    url = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=https://fantastic-sprite-3992a4.netlify.app&color=FF1493&bgcolor=FFF0F5';
+                    filename = 'heart-border-qr.png';
+                    downloadImage(url, filename);
+                    break;
+            }
+        }
+        
+        function downloadImage(url, filename) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.click();
+        }
+        
+        function downloadSVG() {
+            const svg = document.querySelector('svg');
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            canvas.width = 280;
+            canvas.height = 250;
+            
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0);
+                const link = document.createElement('a');
+                link.download = 'heart-shape-qr.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            };
+            
+            img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+        }
+        
+        // Add floating hearts animation
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.style.position = 'fixed';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.top = '100vh';
+            heart.style.fontSize = '20px';
+            heart.style.color = '#FF69B4';
+            heart.style.pointerEvents = 'none';
+            heart.style.zIndex = '1000';
+            heart.textContent = ['💖', '💕', '💗', '💝'][Math.floor(Math.random() * 4)];
+            
+            document.body.appendChild(heart);
+            
+            let pos = window.innerHeight;
+            const timer = setInterval(() => {
+                pos -= 2;
+                heart.style.top = pos + 'px';
+                heart.style.transform = `rotate(${(window.innerHeight - pos) * 0.5}deg)`;
+                
+                if (pos < -50) {
+                    clearInterval(timer);
+                    heart.remove();
+                }
+            }, 20);
+        }
+        
+        // Create floating hearts periodically
+        setInterval(createFloatingHeart, 2000);
+        
+        // Initial hearts
+        for (let i = 0; i < 3; i++) {
+            setTimeout(createFloatingHeart, i * 800);
+        }
+    </script>
+</body>
+</html>
