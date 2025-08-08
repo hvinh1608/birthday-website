@@ -16,6 +16,11 @@
         🎵 Bật nhạc
     </div>
     
+    <!-- Nút chuyển sang trang mystery -->
+    <div class="mystery-control" onclick="goToMystery()">
+        🎂 Mini Game
+    </div>
+    
     <!-- Thêm audio element -->
     <audio id="giftMusic" preload="auto" loop autoplay>
         <source src="audio/birthday1.mp3" type="audio/mpeg">
@@ -77,6 +82,11 @@
                 music.pause();
                 musicControl.textContent = '🎵 Bật nhạc';
             }
+        }
+        
+        // Chuyển sang trang mystery-bag
+        function goToMystery() {
+            window.location.href = 'mystery-bag.html';
         }
         
         // Tạo photos chạy

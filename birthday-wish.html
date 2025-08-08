@@ -11,13 +11,19 @@
     <div class="wish-container">
         <h1 class="main-title">🎉 Chúc Mừng Sinh Nhật! 🎉</h1>
         <div class="book-container">
-            <div class="book" id="book" onclick="openBook()">
-                <div class="book-cover">
+            <div class="book" id="book">
+                <div class="book-cover" onclick="openBook()">
                     <img src="images/anhbia.jpg" alt="Birthday Photo" class="cover-image">
                 </div>
-                <div class="book-page">
+                
+                <!-- Trang 1: Lời chúc chính -->
+                <div class="book-page page-1" id="page1" onclick="event.stopPropagation()">
                     <div class="wish-content">
-                        <div class="message">
+                        <div class="page-header">
+                            <span class="page-number">1</span>
+                            <button class="edit-btn" onclick="toggleEdit(1)">✏️ Chỉnh sửa</button>
+                        </div>
+                        <div class="message editable-content" id="content1" contenteditable="false">
                             <p class="message-line">Hôm nay là ngày đặc biệt của em,</p>
                             <p class="message-line">Một ngày đánh dấu thêm một tuổi mới.</p>
                             <p class="message-line">Chúc em luôn xinh đẹp, đáng iu,</p>
@@ -25,8 +31,96 @@
                             <p class="message-line">Chúc em có được tất cả! 💕</p>
                             <p class="message-line">Và ước mơ của em sẽ thành hiện thực! 🎂</p>
                         </div>
-                        <div class="signature">
-                            ✨ Với tình yêu thương ✨
+                        <div class="edit-controls" id="controls1" style="display: none;">
+                            <button onclick="saveContent(1)" class="save-btn">💾 Lưu</button>
+                            <button onclick="cancelEdit(1)" class="cancel-btn">❌ Hủy</button>
+                        </div>
+                        <div class="page-nav">
+                            <button onclick="nextPage()" class="nav-btn">Trang tiếp theo →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trang 2: Kỷ niệm -->
+                <div class="book-page page-2" id="page2" style="display: none;" onclick="event.stopPropagation()">
+                    <div class="wish-content">
+                        <div class="page-header">
+                            <span class="page-number">2</span>
+                            <button class="edit-btn" onclick="toggleEdit(2)">✏️ Chỉnh sửa</button>
+                        </div>
+                        <div class="page-title">📸 Những Kỷ Niệm Đẹp</div>
+                        <div class="message editable-content" id="content2" contenteditable="false">
+                            <p class="message-line">Nhớ lại những ngày đầu quen nhau,</p>
+                            <p class="message-line">Những câu chuyện, tiếng cười vui vẻ,</p>
+                            <p class="message-line">Những chuyến đi, những khoảnh khắc,</p>
+                            <p class="message-line">Tất cả đều là kỷ niệm tuyệt vời! 🌟</p>
+                            <p class="message-line">Cảm ơn em đã là một phần</p>
+                            <p class="message-line">trong cuộc đời này! 💖</p>
+                        </div>
+                        <div class="edit-controls" id="controls2" style="display: none;">
+                            <button onclick="saveContent(2)" class="save-btn">💾 Lưu</button>
+                            <button onclick="cancelEdit(2)" class="cancel-btn">❌ Hủy</button>
+                        </div>
+                        <div class="page-nav">
+                            <button onclick="prevPage()" class="nav-btn">← Trang trước</button>
+                            <button onclick="nextPage()" class="nav-btn">Trang tiếp theo →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trang 3: Lời chúc tương lai -->
+                <div class="book-page page-3" id="page3" style="display: none;" onclick="event.stopPropagation()">
+                    <div class="wish-content">
+                        <div class="page-header">
+                            <span class="page-number">3</span>
+                            <button class="edit-btn" onclick="toggleEdit(3)">✏️ Chỉnh sửa</button>
+                        </div>
+                        <div class="page-title">🌈 Những Điều Ước Cho Em</div>
+                        <div class="message editable-content" id="content3" contenteditable="false">
+                            <p class="message-line">Mong em luôn khỏe mạnh và hạnh phúc,</p>
+                            <p class="message-line">Mỗi ngày đều tràn đầy tiếng cười,</p>
+                            <p class="message-line">Công việc thuận lợi, học tập tốt,</p>
+                            <p class="message-line">Tình yêu ngọt ngào, gia đình ấm áp! 🏠</p>
+                            <p class="message-line">Và luôn nhớ rằng có người</p>
+                            <p class="message-line">sẽ luôn ủng hộ em! 💪</p>
+                        </div>
+                        <div class="edit-controls" id="controls3" style="display: none;">
+                            <button onclick="saveContent(3)" class="save-btn">💾 Lưu</button>
+                            <button onclick="cancelEdit(3)" class="cancel-btn">❌ Hủy</button>
+                        </div>
+                        <div class="page-nav">
+                            <button onclick="prevPage()" class="nav-btn">← Trang trước</button>
+                            <button onclick="nextPage()" class="nav-btn">Trang tiếp theo →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trang 4: Lời kết -->
+                <div class="book-page page-4" id="page4" style="display: none;" onclick="event.stopPropagation()">
+                    <div class="wish-content">
+                        <div class="page-header">
+                            <span class="page-number">4</span>
+                            <button class="edit-btn" onclick="toggleEdit(4)">✏️ Chỉnh sửa</button>
+                        </div>
+                        <div class="page-title">🎉 Happy Birthday! 🎉</div>
+                        <div class="message special-message editable-content" id="content4" contenteditable="false">
+                            <p class="message-line big-text">Chúc mừng sinh nhật!</p>
+                            <p class="message-line">🎂🎈🎁🎊</p>
+                            <p class="message-line">Hy vọng ngày hôm nay</p>
+                            <p class="message-line">sẽ thật đặc biệt và ý nghĩa!</p>
+                            <p class="message-line">Và những điều tốt đẹp nhất</p>
+                            <p class="message-line">sẽ đến với em! ✨</p>
+                        </div>
+                        <div class="signature editable-content" id="signature4" contenteditable="false">
+                            💝 Love you 3000 💝
+                        </div>
+                        <div class="edit-controls" id="controls4" style="display: none;">
+                            <button onclick="saveContent(4)" class="save-btn">💾 Lưu</button>
+                            <button onclick="cancelEdit(4)" class="cancel-btn">❌ Hủy</button>
+                        </div>
+                        <div class="page-nav">
+                            <button onclick="prevPage()" class="nav-btn">← Trang trước</button>
+                            <button onclick="closeBook()" class="nav-btn">� Đóng sổ</button>
                         </div>
                     </div>
                 </div>
@@ -57,6 +151,225 @@
     </audio>
 
     <script>
+        // Functions for page navigation
+        let currentPage = 1;
+        const totalPages = 4;
+        
+        function showPage(pageNum) {
+            // Ẩn tất cả các trang
+            for (let i = 1; i <= totalPages; i++) {
+                const page = document.getElementById(`page${i}`);
+                if (page) {
+                    page.style.display = 'none';
+                }
+            }
+            
+            // Hiển thị trang hiện tại
+            const currentPageElement = document.getElementById(`page${pageNum}`);
+            if (currentPageElement) {
+                currentPageElement.style.display = 'flex';
+            }
+            
+            currentPage = pageNum;
+        }
+        
+        function nextPage() {
+            if (currentPage < totalPages) {
+                // Phát âm thanh lật trang (tùy chọn)
+                playPageFlipSound();
+                showPageWithAnimation(currentPage + 1);
+            }
+            // Không làm gì nếu đã ở trang cuối - giữ nguyên sách mở
+        }
+        
+        function prevPage() {
+            if (currentPage > 1) {
+                // Phát âm thanh lật trang (tùy chọn)
+                playPageFlipSound();
+                showPageWithAnimation(currentPage - 1);
+            }
+        }
+        
+        function showPageWithAnimation(pageNum) {
+            const currentPageElement = document.getElementById(`page${currentPage}`);
+            const nextPageElement = document.getElementById(`page${pageNum}`);
+            
+            if (pageNum === currentPage) return;
+            
+            // Hiệu ứng lật trang nhanh và mượt
+            if (currentPageElement) {
+                currentPageElement.classList.add('flipping-out');
+                
+                setTimeout(() => {
+                    currentPageElement.style.display = 'none';
+                    currentPageElement.classList.remove('flipping-out');
+                }, 600);
+            }
+            
+            // Hiển thị trang mới
+            if (nextPageElement) {
+                setTimeout(() => {
+                    nextPageElement.style.display = 'flex';
+                    nextPageElement.classList.add('flipping-in');
+                    
+                    // Shimmer effect đơn giản
+                    nextPageElement.classList.add('page-shimmer');
+                    setTimeout(() => {
+                        nextPageElement.classList.add('active');
+                    }, 50);
+                    
+                    // Cleanup
+                    setTimeout(() => {
+                        nextPageElement.classList.remove('flipping-in', 'page-shimmer', 'active');
+                    }, 600);
+                }, 300);
+            }
+            
+            currentPage = pageNum;
+        }
+        
+        // Simple page flip sound - optimized for performance
+        function playPageFlipSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Simple swoosh sound
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.2);
+                
+                gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            } catch (e) {
+                console.log('Audio not available');
+            }
+        }
+
+        // Interactive editing functions
+        let originalContent = {};
+        
+        function toggleEdit(pageNum) {
+            const content = document.getElementById(`content${pageNum}`);
+            const controls = document.getElementById(`controls${pageNum}`);
+            const editBtn = document.querySelector(`#page${pageNum} .edit-btn`);
+            
+            if (content.contentEditable === 'false') {
+                // Bắt đầu chỉnh sửa
+                originalContent[pageNum] = content.innerHTML;
+                content.contentEditable = 'true';
+                content.classList.add('editing');
+                content.focus();
+                controls.style.display = 'flex';
+                editBtn.style.display = 'none';
+                
+                // Add typing sound effect
+                content.addEventListener('input', playTypingSound);
+            }
+        }
+        
+        function saveContent(pageNum) {
+            const content = document.getElementById(`content${pageNum}`);
+            const controls = document.getElementById(`controls${pageNum}`);
+            const editBtn = document.querySelector(`#page${pageNum} .edit-btn`);
+            
+            // Lưu vào localStorage
+            localStorage.setItem(`page${pageNum}Content`, content.innerHTML);
+            
+            // Kết thúc chỉnh sửa
+            content.contentEditable = 'false';
+            content.classList.remove('editing');
+            controls.style.display = 'none';
+            editBtn.style.display = 'inline-block';
+            
+            // Remove typing sound listener
+            content.removeEventListener('input', playTypingSound);
+            
+            // Show save notification
+            showNotification('💾 Đã lưu thành công!');
+        }
+        
+        function cancelEdit(pageNum) {
+            const content = document.getElementById(`content${pageNum}`);
+            const controls = document.getElementById(`controls${pageNum}`);
+            const editBtn = document.querySelector(`#page${pageNum} .edit-btn`);
+            
+            // Khôi phục nội dung gốc
+            content.innerHTML = originalContent[pageNum];
+            content.contentEditable = 'false';
+            content.classList.remove('editing');
+            controls.style.display = 'none';
+            editBtn.style.display = 'inline-block';
+            
+            // Remove typing sound listener
+            content.removeEventListener('input', playTypingSound);
+        }
+        
+        function playTypingSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(800 + Math.random() * 200, audioContext.currentTime);
+                
+                gainNode.gain.setValueAtTime(0.02, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch (e) {
+                // Silent fail
+            }
+        }
+        
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 2000);
+        }
+        
+        // Load saved content on page load
+        function loadSavedContent() {
+            for (let i = 1; i <= 4; i++) {
+                const savedContent = localStorage.getItem(`page${i}Content`);
+                if (savedContent) {
+                    const content = document.getElementById(`content${i}`);
+                    if (content) {
+                        content.innerHTML = savedContent;
+                    }
+                }
+            }
+        }
+        
+        function resetBook() {
+            currentPage = 1;
+            showPage(currentPage);
+        }
+
         function createConfetti() {
             const canvas = document.getElementById('confetti');
             const ctx = canvas.getContext('2d');
@@ -137,6 +450,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             createConfetti();
             createHearts();
+            loadSavedContent(); // Load nội dung đã lưu
             
             // Tự động phát nhạc khi user tương tác (cho mobile)
             const music = document.getElementById('birthdayMusic');
@@ -166,11 +480,16 @@
             const music = document.getElementById('birthdayMusic');
             const musicControl = document.getElementById('musicControl');
             
-            book.classList.toggle('open');
-            
-            if (book.classList.contains('open')) {
+            // Chỉ toggle open/close nếu sách chưa mở hoặc đang ở trang cuối và muốn đóng
+            if (!book.classList.contains('open')) {
+                // Mở sách
+                book.classList.add('open');
                 clickHint.textContent = '👆 Nhấp để đóng sổ';
                 clickHint.style.opacity = '0.7';
+                
+                // Hiển thị trang đầu tiên
+                currentPage = 1;
+                showPage(currentPage);
                 
                 // Phát nhạc khi mở sổ
                 music.currentTime = 0; // Reset về đầu bài
@@ -182,16 +501,28 @@
                     console.log('Không thể phát nhạc:', error);
                     // Giữ nguyên nút nếu không phát được
                 });
-            } else {
-                clickHint.textContent = '👆 Nhấp để mở sổ';
-                clickHint.style.opacity = '1';
-                
-                // Dừng nhạc khi đóng sổ
-                music.pause();
-                music.currentTime = 0;
-                // Cập nhật nút khi dừng nhạc
-                musicControl.textContent = '🎵 Bật nhạc';
             }
+        }
+        
+        function closeBook() {
+            const book = document.getElementById('book');
+            const clickHint = document.getElementById('clickHint');
+            const music = document.getElementById('birthdayMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            book.classList.remove('open');
+            clickHint.textContent = '👆 Nhấp để mở sổ';
+            clickHint.style.opacity = '1';
+            
+            // Dừng nhạc khi đóng sổ
+            music.pause();
+            music.currentTime = 0;
+            // Cập nhật nút khi dừng nhạc
+            musicControl.textContent = '🎵 Bật nhạc';
+            
+            // Reset về trang đầu
+            currentPage = 1;
+            showPage(currentPage);
         }
 
         function toggleMusic() {
