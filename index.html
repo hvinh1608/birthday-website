@@ -1,166 +1,332 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>Chúc Mừng Sinh Nhật</title>
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
-    <link rel="icon" type="image/x-icon" href="./favicon.ico">
-    <link rel="apple-touch-icon" href="./apple-touch-icon.png">
-    <link rel="stylesheet" href="./style.css?v=6.0">
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="./favicon.ico" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="stylesheet" href="./style.css?v=6.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <style>
+      /* CSS cho Modal Hướng dẫn */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 500px;
+        text-align: left;
+        position: relative;
+        transform: translateY(-50px);
+        transition: transform 0.3s ease;
+      }
+
+      .modal-overlay.show .modal-content {
+        transform: translateY(0);
+      }
+
+      .modal-content h2 {
+        margin-top: 0;
+        color: #d63384;
+      }
+
+      .text-center {
+        text-align: center;
+      }
+
+      .modal-content ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .modal-content ul li {
+        margin-bottom: 10px;
+        line-height: 1.5;
+      }
+
+      .modal-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #aaa;
+        cursor: pointer;
+      }
+
+      .modal-close:hover {
+        color: #333;
+      }
+
+      .modal-button {
+        background-color: #d63384;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+        width: 100%;
+      }
+    </style>
     <!-- Birthday Image Sync -->
     <script src="http://localhost:3001/birthday-sync.js"></script>
     <script>
-        // Force CSS reload with timestamp
-        document.addEventListener('DOMContentLoaded', function() {
-            const link = document.querySelector('link[rel="stylesheet"]');
-            const href = link.href;
-            if (!href.includes('&t=')) {
-                link.href = href + '&t=' + Date.now();
-            }
-        });
+      // Force CSS reload with timestamp
+      document.addEventListener("DOMContentLoaded", function () {
+        const link = document.querySelector('link[rel="stylesheet"]');
+        const href = link.href;
+        if (!href.includes("&t=")) {
+          link.href = href + "&t=" + Date.now();
+        }
+      });
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="left-section">
-            <div class="birthday-image" data-image="profile"></div>
+      <div class="left-section">
+        <div class="birthday-image" data-image="profile"></div>
+      </div>
+
+      <div class="right-section">
+        <div class="keypad-container">
+          <h2 class="keypad-title">Nhập Ngày Sinh</h2>
+          <div class="password-display" id="passwordDisplay">_ _ _ _</div>
+
+          <div class="keypad">
+            <button class="key" onclick="addDigit('1')">1</button>
+            <button class="key" onclick="addDigit('2')">2</button>
+            <button class="key" onclick="addDigit('3')">3</button>
+            <button class="key" onclick="addDigit('4')">4</button>
+            <button class="key" onclick="addDigit('5')">5</button>
+            <button class="key" onclick="addDigit('6')">6</button>
+            <button class="key" onclick="addDigit('7')">7</button>
+            <button class="key" onclick="addDigit('8')">8</button>
+            <button class="key" onclick="addDigit('9')">9</button>
+            <button class="btn btn-clear" onclick="clearPassword()">Xóa</button>
+            <button class="key" onclick="addDigit('0')">0</button>
+            <button class="btn btn-submit" onclick="submitPassword()">
+              OK
+            </button>
+          </div>
         </div>
-        
-        <div class="right-section">
-            <div class="keypad-container">
-                <h2 class="keypad-title">Nhập Ngày Sinh</h2>
-                <div class="password-display" id="passwordDisplay">_ _ _ _</div>
-                
-                <div class="keypad">
-                    <button class="key" onclick="addDigit('1')">1</button>
-                    <button class="key" onclick="addDigit('2')">2</button>
-                    <button class="key" onclick="addDigit('3')">3</button>
-                    <button class="key" onclick="addDigit('4')">4</button>
-                    <button class="key" onclick="addDigit('5')">5</button>
-                    <button class="key" onclick="addDigit('6')">6</button>
-                    <button class="key" onclick="addDigit('7')">7</button>
-                    <button class="key" onclick="addDigit('8')">8</button>
-                    <button class="key" onclick="addDigit('9')">9</button>
-                    <button class="btn btn-clear" onclick="clearPassword()">Xóa</button>
-                    <button class="key" onclick="addDigit('0')">0</button>
-                    <button class="btn btn-submit" onclick="submitPassword()">OK</button>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
 
     <canvas class="confetti" id="confetti"></canvas>
     <div class="hearts-container" id="heartsContainer"></div>
 
     <script>
-        // ==================== TOAST NOTIFICATION SYSTEM ====================
-        function showToast(message, type = 'info', duration = 4000) {
-            console.log('showToast called:', message, type);
-            
-            let container = document.querySelector('.toast-container');
-            if (!container) {
-                container = document.createElement('div');
-                container.className = 'toast-container';
-                document.body.appendChild(container);
-                console.log('Toast container created');
-            }
+      // ==================== TOAST NOTIFICATION SYSTEM ====================
+      function showToast(message, type = "info", duration = 4000) {
+        console.log("showToast called:", message, type);
 
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            
-            toast.innerHTML = `
+        let container = document.querySelector(".toast-container");
+        if (!container) {
+          container = document.createElement("div");
+          container.className = "toast-container";
+          document.body.appendChild(container);
+          console.log("Toast container created");
+        }
+
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+
+        toast.innerHTML = `
                 <button class="toast-close" onclick="removeToast(this.parentElement)">&times;</button>
                 <div>${message}</div>
                 <div class="toast-progress"></div>
             `;
 
-            container.appendChild(toast);
+        container.appendChild(toast);
 
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 100);
+        setTimeout(() => {
+          toast.classList.add("show");
+        }, 100);
 
-            const progress = toast.querySelector('.toast-progress');
-            progress.style.width = '100%';
-            
-            setTimeout(() => {
-                progress.style.width = '0%';
-                progress.style.transition = `width ${duration}ms linear`;
-            }, 200);
+        const progress = toast.querySelector(".toast-progress");
+        progress.style.width = "100%";
 
-            setTimeout(() => {
-                removeToast(toast);
-            }, duration);
+        setTimeout(() => {
+          progress.style.width = "0%";
+          progress.style.transition = `width ${duration}ms linear`;
+        }, 200);
 
-            return toast;
-        }
+        setTimeout(() => {
+          removeToast(toast);
+        }, duration);
 
-        function removeToast(toast) {
-            if (toast && toast.classList) {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    if (toast.parentElement) {
-                        toast.parentElement.removeChild(toast);
-                    }
-                }, 400);
+        return toast;
+      }
+
+      function removeToast(toast) {
+        if (toast && toast.classList) {
+          toast.classList.remove("show");
+          setTimeout(() => {
+            if (toast.parentElement) {
+              toast.parentElement.removeChild(toast);
             }
+          }, 400);
         }
+      }
 
-        function showSuccess(message, duration = 3000) {
-            return showToast(message, 'success', duration);
+      function showSuccess(message, duration = 3000) {
+        return showToast(message, "success", duration);
+      }
+
+      function showWarning(message, duration = 4000) {
+        return showToast(message, "warning", duration);
+      }
+
+      function showError(message, duration = 4000) {
+        return showToast(message, "error", duration);
+      }
+
+      function showInfo(message, duration = 4000) {
+        return showToast(message, "info", duration);
+      }
+
+      // Test function
+      window.testToast = function () {
+        showInfo("🎉 Toast system đang hoạt động!");
+        setTimeout(() => showSuccess("✅ CSS đã load thành công!"), 1000);
+        setTimeout(() => showWarning("⚠️ Đây là warning test!"), 2000);
+        setTimeout(() => showError("❌ Đây là error test!"), 3000);
+      };
+
+      // Auto welcome toast
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("Inline toast system loaded!");
+        console.log(
+          "showToast function available:",
+          typeof showToast === "function"
+        );
+        console.log(
+          "showSuccess function available:",
+          typeof showSuccess === "function"
+        );
+
+        // Browser compatibility check
+        const isOpera =
+          (!!window.opr && !!opr.addons) ||
+          !!window.opera ||
+          navigator.userAgent.indexOf(" OPR/") >= 0;
+
+        if (isOpera) {
+          console.log("Opera detected - using alert fallback");
+          setTimeout(() => {
+            alert("🎊 Chào mừng! Nhập mật khẩu để vào! (Opera mode)");
+          }, 1000);
+        } else {
+          console.log("Modern browser detected - using toast");
+          setTimeout(() => {
+            showInfo("🎊 Chào mừng! Nhập mật khẩu để vào!", 3000);
+          }, 1000);
         }
-
-        function showWarning(message, duration = 4000) {
-            return showToast(message, 'warning', duration);
-        }
-
-        function showError(message, duration = 4000) {
-            return showToast(message, 'error', duration);
-        }
-
-        function showInfo(message, duration = 4000) {
-            return showToast(message, 'info', duration);
-        }
-
-        // Test function
-        window.testToast = function() {
-            showInfo('🎉 Toast system đang hoạt động!');
-            setTimeout(() => showSuccess('✅ CSS đã load thành công!'), 1000);
-            setTimeout(() => showWarning('⚠️ Đây là warning test!'), 2000);
-            setTimeout(() => showError('❌ Đây là error test!'), 3000);
-        };
-
-        // Auto welcome toast
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Inline toast system loaded!');
-            console.log('showToast function available:', typeof showToast === 'function');
-            console.log('showSuccess function available:', typeof showSuccess === 'function');
-            
-            // Browser compatibility check
-            const isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-            
-            if (isOpera) {
-                console.log('Opera detected - using alert fallback');
-                setTimeout(() => {
-                    alert('🎊 Chào mừng! Nhập mật khẩu để vào! (Opera mode)');
-                }, 1000);
-            } else {
-                console.log('Modern browser detected - using toast');
-                setTimeout(() => {
-                    showInfo('🎊 Chào mừng! Nhập mật khẩu để vào!', 3000);
-                }, 1000);
-            }
-        });
+      });
     </script>
     <script>
-        console.log('About to load script.js');
-        console.log('Toast functions available before script.js:', typeof showToast === 'function');
+      console.log("About to load script.js");
+      console.log(
+        "Toast functions available before script.js:",
+        typeof showToast === "function"
+      );
     </script>
     <script src="script.js"></script>
-</body>
+
+    <!-- Modal Hướng dẫn -->
+    <div id="tutorial-modal" class="modal-overlay">
+      <div class="modal-content">
+        <span class="modal-close">&times;</span>
+        <h2 class="text-center">Chào mừng em đến với trang web!</h2>
+        <br />
+        <ul>
+          <li>
+            "Với 4 năm đại học của mình, anh muốn làm điều gì đó đặc biệt để
+            chúc mừng sinh nhật em, thay vì chỉ nhắn tin như mọi khi. Đây là
+            trang web anh tự tay làm để gửi gắm những lời chúc tốt đẹp nhất đến
+            em. Mong rằng em sẽ thích món quà nhỏ này!" . Nếu a có lựa ảnh em k
+            thích thông cảm nha!
+          </li>
+          <p>Đây là một vài hướng dẫn nhỏ để em có trải nghiệm tốt nhất:</p>
+          <br />
+          <li>
+            <strong>P/s:</strong> Hãy dùng máy tính/laptop để có trải nghiệm tốt
+            nhất nhé. (Và nếu em ko biết mật khẩu là 0311 nha)
+          </li>
+        </ul>
+
+        <button id="close-tutorial-btn" class="modal-button">Đã hiểu</button>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("tutorial-modal");
+        const closeModalBtn = document.querySelector(".modal-close");
+        const understandBtn = document.getElementById("close-tutorial-btn");
+
+        // Hàm để hiển thị modal
+        const showModal = () => {
+          modal.classList.add("show");
+        };
+
+        // Hàm để ẩn modal
+        const hideModal = () => {
+          modal.classList.remove("show");
+          // Lưu vào localStorage để không hiện lại
+          localStorage.setItem("hasVisited", "true");
+        };
+
+        // Kiểm tra xem người dùng đã vào trang lần nào chưa
+        if (!localStorage.getItem("hasVisited")) {
+          // Nếu chưa, hiện modal sau 1 giây
+          setTimeout(showModal, 1000);
+        }
+
+        // Thêm sự kiện click để đóng modal
+        closeModalBtn.addEventListener("click", hideModal);
+        understandBtn.addEventListener("click", hideModal);
+        modal.addEventListener("click", function (event) {
+          // Chỉ đóng khi click vào lớp overlay bên ngoài
+          if (event.target === modal) {
+            hideModal();
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
