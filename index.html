@@ -308,15 +308,10 @@
         // Hàm để ẩn modal
         const hideModal = () => {
           modal.classList.remove("show");
-          // Lưu vào localStorage để không hiện lại
-          localStorage.setItem("hasVisited", "true");
         };
 
-        // Kiểm tra xem người dùng đã vào trang lần nào chưa
-        if (!localStorage.getItem("hasVisited")) {
-          // Nếu chưa, hiện modal sau 1 giây
-          setTimeout(showModal, 1000);
-        }
+        // Luôn hiện modal sau 1 giây mỗi khi tải trang
+        setTimeout(showModal, 1000);
 
         // Thêm sự kiện click để đóng modal
         closeModalBtn.addEventListener("click", hideModal);
