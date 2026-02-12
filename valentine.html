@@ -1275,6 +1275,16 @@
             // Save to localStorage
             localStorage.setItem(DAYS_COUNTER_KEY, selectedDate);
             
+            // Save to Firebase for real-time sync
+            try {
+                database.ref('shared/daysStartDate').set({
+                    date: selectedDate,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
+            } catch (error) {
+                console.error('Error saving to Firebase:', error);
+            }
+            
             // Update display
             updateDaysCounter();
             
@@ -1282,7 +1292,7 @@
             document.getElementById('editDateFormModal').style.display = 'none';
             document.getElementById('editDateToggleBtn').style.display = 'block';
             
-            showSuccess('💕 Đã lưu ngày bắt đầu!');
+            showSuccess('💕 Đã lưu ngày bắt đầu! (Cả hai người đều có thể thấy)');
         }
         
         // Toggle days info modal
@@ -1313,6 +1323,20 @@
         
         // Initialize counter on page load
         document.addEventListener('DOMContentLoaded', function() {
+            // Load days start date from Firebase and listen for real-time updates
+            const sharedDaysRef = database.ref('shared/daysStartDate');
+            
+            sharedDaysRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.date) {
+                    // Save to localStorage
+                    localStorage.setItem(DAYS_COUNTER_KEY, data.date);
+                    // Update display
+                    updateDaysCounter();
+                    console.log('📅 Đã cập nhật ngày bên nhau từ Firebase:', data.date);
+                }
+            });
+            
             // Update counter on initial load
             updateDaysCounter();
             
