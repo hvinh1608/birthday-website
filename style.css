@@ -1406,22 +1406,22 @@ body {
 }
 
 .click-hint {
-    position: absolute;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: static;
     font-size: 1em;
     color: #d63384;
     animation: pulse 2s infinite;
+    margin: 15px auto 10px auto;
+    text-align: center;
+    display: block;
 }
 
 @keyframes pulse {
     0%, 100% {
-        transform: translateX(-50%) scale(1);
+        transform: scale(1);
         opacity: 0.8;
     }
     50% {
-        transform: translateX(-50%) scale(1.05);
+        transform: scale(1.05);
         opacity: 1;
     }
 }
@@ -2969,6 +2969,19 @@ body.birthday-wish {
     object-fit: cover;
     cursor: pointer;
     transition: transform 0.3s ease;
+}
+
+.photo-card img.lazy-image {
+    filter: blur(14px);
+    transform: scale(1.02);
+    opacity: 0.9;
+    transition: filter 0.4s ease, transform 0.4s ease, opacity 0.4s ease;
+}
+
+.photo-card img.lazy-image.loaded {
+    filter: blur(0);
+    transform: scale(1);
+    opacity: 1;
 }
 
 .photo-card:hover img {
