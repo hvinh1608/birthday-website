@@ -157,10 +157,14 @@
         </div>
         <div class="click-hint" id="clickHint">👆 Nhấp vào sổ để mở nhé!!!</div>
 
-        <!-- Nút điều khiển nhạc và lịch -->
+        <!-- Nút điều khiển nhạc, lịch và khoảnh khắc -->
         <div class="controls-bar">
             <div class="music-control" id="musicControl" onclick="toggleMusic()">
                 🎵 Bật nhạc
+            </div>
+            
+            <div class="camera-control" id="cameraControl" onclick="openGallery()" title="Xem khoảnh khắc">
+                📸
             </div>
             
             <div class="calendar-control" id="calendarControl" onclick="toggleDaysInfo()" title="Xem ngày bên nhau">
@@ -231,7 +235,6 @@
         </div>
         
         <div class="button-container">
-            <button onclick="openGallery()" class="gallery-button">📸 Khoảnh khắc</button>
             <a href="index.html" class="back-button">Quay lại</a>
         </div>
     </div>
@@ -1324,12 +1327,13 @@
             const modal = document.getElementById('daysInfoModal');
             if (!modal) return;
             
-            // Only close if clicking outside the modal content
-            if (event && event.target !== modal) {
-                return;
+            // Close if clicking on the modal backdrop (not the content)
+            if (event && !event.target.closest('.days-info-content')) {
+                modal.classList.remove('show');
+            } else if (!event) {
+                // Always close if called without an event (from close button)
+                modal.classList.remove('show');
             }
-            
-            modal.classList.remove('show');
         }
         
         // Initialize counter on page load
