@@ -157,18 +157,27 @@
         </div>
         <div class="click-hint" id="clickHint">👆 Nhấp vào sổ để mở nhé!!!</div>
 
-        <!-- Nút điều khiển nhạc, lịch và khoảnh khắc -->
-        <div class="controls-bar">
-            <div class="music-control" id="musicControl" onclick="toggleMusic()">
-                🎵 Bật nhạc
+        <!-- Top navigation bar with online counter and controls -->
+        <div class="top-nav-bar">
+            <!-- Online counter -->
+            <div class="online-counter" id="onlineCounter">
+                <span class="online-dot"></span>
+                <span id="onlineCount">0</span> người đang xem
             </div>
             
-            <div class="camera-control" id="cameraControl" onclick="openGallery()" title="Xem khoảnh khắc">
-                📸
-            </div>
-            
-            <div class="calendar-control" id="calendarControl" onclick="toggleDaysInfo()" title="Xem ngày bên nhau">
-                📅
+            <!-- Nút điều khiển nhạc, lịch và khoảnh khắc -->
+            <div class="controls-bar">
+                <div class="music-control" id="musicControl" onclick="toggleMusic()">
+                    🎵 Bật nhạc
+                </div>
+                
+                <div class="camera-control" id="cameraControl" onclick="openGallery()" title="Xem khoảnh khắc">
+                    📸
+                </div>
+                
+                <div class="calendar-control" id="calendarControl" onclick="toggleDaysInfo()" title="Xem ngày bên nhau">
+                    📅
+                </div>
             </div>
         </div>
         
@@ -226,12 +235,6 @@
                     </button>
                 </div>
             </div>
-        </div>
-        
-        <!-- Online counter -->
-        <div class="online-counter" id="onlineCounter">
-            <span class="online-dot"></span>
-            <span id="onlineCount">0</span> người đang xem
         </div>
         
         <div class="button-container">
