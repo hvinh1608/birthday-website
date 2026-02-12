@@ -829,6 +829,17 @@
             wishContainer.addEventListener('click', function(e) {
                 const book = document.getElementById('book');
                 const bookContainer = document.querySelector('.book-container');
+                const controlsBar = document.querySelector('.controls-bar');
+                const daysInfoModal = document.getElementById('daysInfoModal');
+                const onlineCounter = document.getElementById('onlineCounter');
+                const clickHint = document.getElementById('clickHint');
+                
+                // Không đóng sổ nếu click vào controls, modal, online counter, hoặc hint
+                if (controlsBar && controlsBar.contains(e.target)) return;
+                if (daysInfoModal && daysInfoModal.contains(e.target)) return;
+                if (onlineCounter && onlineCounter.contains(e.target)) return;
+                if (clickHint && clickHint.contains(e.target)) return;
+                
                 if (book.classList.contains('open') && !bookContainer.contains(e.target) && e.target !== bookContainer) {
                     closeBook();
                 }
