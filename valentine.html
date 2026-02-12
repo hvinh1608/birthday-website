@@ -860,7 +860,7 @@
                 if (!musicStarted && music.paused) {
                     music.volume = 0.5;
                     music.play().then(() => {
-                        musicControl.textContent = '🎵 Tắt nhạc';
+                        musicControl.textContent = '🎵';
                         musicStarted = true;
                         console.log('Nhạc nền đã bắt đầu phát!');
                     }).catch(e => console.log('Không thể phát nhạc:', e));
@@ -901,7 +901,7 @@
                 music.currentTime = 0;
                 music.volume = 0.5;
                 music.play().then(() => {
-                    musicControl.textContent = '🎵 Tắt nhạc';
+                    musicControl.textContent = '🎵';
                 }).catch(error => {
                     console.log('Không thể phát nhạc:', error);
                 });
@@ -927,7 +927,7 @@
             // Dừng nhạc khi đóng sổ
             music.pause();
             music.currentTime = 0;
-            musicControl.textContent = '🎵 Bật nhạc';
+            musicControl.textContent = '🔇';
             
             // Reset về trang đầu
             currentPage = 1;
