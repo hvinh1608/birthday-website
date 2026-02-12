@@ -1476,28 +1476,31 @@ body {
 }
 
 .music-control {
-    background: linear-gradient(145deg, #ff9a9e, #fda085);
-    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff9a9e, #fda085);
     border: none;
-    padding: 12px 20px;
-    border-radius: 25px;
-    font-size: 1em;
-    font-weight: bold;
+    color: white;
+    font-size: 24px;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 5px 15px rgba(255, 154, 158, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     user-select: none;
 }
 
 .music-control:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 154, 158, 0.4);
-    background: linear-gradient(145deg, #ff6b9d, #ff9a9e);
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 8px 20px rgba(255, 154, 158, 0.5);
+    background: linear-gradient(135deg, #fda085, #ff9a9e);
 }
 
 .music-control:active {
-    transform: translateY(0);
-    box-shadow: 0 3px 10px rgba(255, 154, 158, 0.3);
+    transform: translateY(-1px) scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 154, 158, 0.3);
 }
 
 .online-counter {
@@ -1776,8 +1779,9 @@ body.birthday-wish {
     }
     
     .music-control {
-        padding: 8px 12px;
-        font-size: 0.9em;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
     }
     
     .online-counter {
@@ -1840,8 +1844,9 @@ body.birthday-wish {
     }
     
     .music-control {
-        padding: 5px 10px;
-        font-size: 0.75em;
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
     }
     
     .book-container {

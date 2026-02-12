@@ -167,8 +167,8 @@
             
             <!-- Nút điều khiển nhạc, lịch và khoảnh khắc -->
             <div class="controls-bar">
-                <div class="music-control" id="musicControl" onclick="toggleMusic()">
-                    🎵 Bật nhạc
+                <div class="music-control" id="musicControl" onclick="toggleMusic()" title="Bật/Tắt nhạc">
+                    🎵
                 </div>
                 
                 <div class="camera-control" id="cameraControl" onclick="openGallery()" title="Xem khoảnh khắc">
@@ -940,13 +940,13 @@
             
             if (music.paused) {
                 music.play().then(() => {
-                    musicControl.textContent = '🎵 Tắt nhạc';
+                    musicControl.textContent = '🎵';
                 }).catch(error => {
                     console.log('Không thể phát nhạc:', error);
                 });
             } else {
                 music.pause();
-                musicControl.textContent = '🎵 Bật nhạc';
+                musicControl.textContent = '🔇';
             }
         }
 
