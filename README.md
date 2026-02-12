@@ -1,6 +1,6 @@
-# Birthday Website
+# Valentine Website
 
-Một website chúc mừng sinh nhật tương tác với:
+Một website chúc mừng Valentine tương tác với:
 - Giao diện keypad đăng nhập
 - Sổ lời chúc 3D
 - Slideshow ảnh với hiệu ứng động
@@ -8,8 +8,7 @@ Một website chúc mừng sinh nhật tương tác với:
 
 ## Cấu trúc file:
 - `index.html` - Trang chủ với keypad
-- `birthday-wish.html` - Trang sổ lời chúc
-- `gift.html` - Trang slideshow ảnh
+- `valentine.html` - Trang sổ lời chúc Valentine
 - `style.css` - CSS tổng hợp
 - `script.js` - JavaScript cho trang chủ
 - `images/` - Thư mục ảnh

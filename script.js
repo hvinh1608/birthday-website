@@ -62,9 +62,9 @@ function updateDisplay() {
 function submitPassword() {
     if (password.length === maxLength) {
         if (password === correctPassword) {
-            safeShowSuccess('🎉 Mật khẩu đúng! Đang chuyển hướng...');
+            safeShowSuccess('💘 Mật khẩu đúng! Đang chuyển hướng đến trang Valentine...');
             setTimeout(() => {
-                window.location.href = 'birthday-wish.html';
+                window.location.href = 'valentine.html';
             }, 1000);
         } else {
             safeShowError('❌ Mật khẩu không đúng! Thử lại nhé! 😊');

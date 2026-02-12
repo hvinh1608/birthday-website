@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Valentine</title>
+    <!-- Favicon - Valentine Heart -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' text-anchor='middle' x='50'>💖</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css?v=6.0">
+    
+    <!-- Firebase SDK (v8 compat) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <!-- Cloudinary Upload Widget -->
+    <script src="https://upload-widget.cloudinary.com/latest/global/all.js"></script>
+</head>
+<body class="birthday-wish">
+    <div class="wish-container" id="wishContainer">
+        <h1 class="main-title">💖 Happy Valentine's Day! 💖</h1>
+        
+        <div class="book-container">
+            <!-- Bút lông vũ trang trí -->
+            <div class="feather-pen">
+                <div class="feather">
+                    <div class="feather-shaft"></div>
+                    <div class="feather-barbs">
+                        <div class="barb"></div>
+                        <div class="barb"></div>
+                        <div class="barb"></div>
+                        <div class="barb"></div>
+                        <div class="barb"></div>
+                    </div>
+                </div>
+                <div class="pen-nib"></div>
+                <div class="ink-drop">💧</div>
+            </div>
+            <div class="book" id="book">
+                <div class="book-cover" onclick="openBook()">
+                    <img src="images/anhbia.jpg?v=20260211" alt="Valentine Photo" class="cover-image" loading="lazy" decoding="async">
+                </div>
+                
+                <!-- Trang 1: Lời chúc chính -->
+                <div class="book-page page-1" id="page1" onclick="event.stopPropagation()">
+                    <div class="wish-content">
+                        <div class="page-header">
+                            <span class="page-number">1</span>
+                            <button class="edit-btn" onclick="toggleEdit(1)">✏️ Chỉnh sửa</button>
+                            <button class="copy-link-btn" onclick="copyPageLink(1)">📎 Copy link</button>
+                        </div>
+                        <div class="message editable-content" id="content1" contenteditable="false">
+                            <p class="message-line">Hôm nay là ngày của yêu thương,</p>
+                            <p class="message-line">Ngày để mình nói lời trân trọng nhất.</p>
+                            <p class="message-line">Cảm ơn em vì luôn dịu dàng và ấm áp,</p>
+                            <p class="message-line">Cảm ơn em vì đã ở bên cạnh anh.</p>
+                            <p class="message-line">Chúc mình mãi ngọt ngào như hôm nay! 💕</p>
+                            <p class="message-line">Và mọi điều ước sẽ thành hiện thực! 💘</p>
+                        </div>
+                        <div class="edit-controls" id="controls1" style="display: none;">
+                            <button onclick="saveContent(1)" class="save-btn">💾 Lưu</button>
+                            <button onclick="cancelEdit(1)" class="cancel-btn">❌ Hủy</button>
+                        </div>
+                        <div class="page-nav">
+                            <button onclick="nextPage()" class="nav-btn">Trang tiếp theo →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trang 2: Kỷ niệm -->
+                <div class="book-page page-2" id="page2" style="display: none;" onclick="event.stopPropagation()">
+                    <div class="wish-content">
+                        <div class="page-header">
+                            <span class="page-number">2</span>
+                            <button class="edit-btn" onclick="toggleEdit(2)">✏️ Chỉnh sửa</button>
+                            <button class="copy-link-btn" onclick="copyPageLink(2)">📎 Copy link</button>
+                        </div>
+                        <div class="page-title">📸 Những Kỷ Niệm Đáng Yêu</div>
+                        <div class="message editable-content" id="content2" contenteditable="false">
+                            <p class="message-line">Nhớ những lần mình nắm tay thật chặt,</p>
+                            <p class="message-line">Những câu chuyện nhỏ nhưng đầy ấm áp,</p>
+                            <p class="message-line">Những chuyến đi, những khoảnh khắc,</p>
+                            <p class="message-line">Tất cả đều thật đáng yêu! 🌟</p>
+                            <p class="message-line">Cảm ơn em đã bước vào</p>
+                            <p class="message-line">cuộc đời này! 💖</p>
+                        </div>
+                        <div class="edit-controls" id="controls2" style="display: none;">
+                            <button onclick="saveContent(2)" class="save-btn">💾 Lưu</button>
+                            <button onclick="cancelEdit(2)" class="cancel-btn">❌ Hủy</button>
+                        </div>
+                        <div class="page-nav">
+                            <button onclick="prevPage()" class="nav-btn">← Trang trước</button>
+                            <button onclick="nextPage()" class="nav-btn">Trang tiếp theo →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trang 3: Lời chúc tương lai -->
+                <div class="book-page page-3" id="page3" style="display: none;" onclick="event.stopPropagation()">
+                    <div class="wish-content">
+                        <div class="page-header">
+                            <span class="page-number">3</span>
+                            <button class="edit-btn" onclick="toggleEdit(3)">✏️ Chỉnh sửa</button>
+                            <button class="copy-link-btn" onclick="copyPageLink(3)">📎 Copy link</button>
+                        </div>
+                        <div class="page-title">🌈 Lời Ước Cho Chúng Mình</div>
+                        <div class="message editable-content" id="content3" contenteditable="false">
+                            <p class="message-line">Mong em luôn khỏe mạnh và hạnh phúc,</p>
+                            <p class="message-line">Mỗi ngày đều tràn đầy tiếng cười,</p>
+                            <p class="message-line">Mọi điều em muốn đều thuận lợi,</p>
+                            <p class="message-line">Tình yêu luôn ấm áp, bình yên! 🏠</p>
+                            <p class="message-line">Và hãy nhớ rằng có anh</p>
+                            <p class="message-line">luôn ủng hộ em! 💪</p>
+                        </div>
+                        <div class="edit-controls" id="controls3" style="display: none;">
+                            <button onclick="saveContent(3)" class="save-btn">💾 Lưu</button>
+                            <button onclick="cancelEdit(3)" class="cancel-btn">❌ Hủy</button>
+                        </div>
+                        <div class="page-nav">
+                            <button onclick="prevPage()" class="nav-btn">← Trang trước</button>
+                            <button onclick="nextPage()" class="nav-btn">Trang tiếp theo →</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Trang 4: Lời kết -->
+                <div class="book-page page-4" id="page4" style="display: none;" onclick="event.stopPropagation()">
+                    <div class="wish-content">
+                        <div class="page-header">
+                            <span class="page-number">4</span>
+                            <button class="edit-btn" onclick="toggleEdit(4)">✏️ Chỉnh sửa</button>
+                            <button class="copy-link-btn" onclick="copyPageLink(4)">📎 Copy link</button>
+                        </div>
+                        <div class="page-title">💖 Valentine Ngọt Ngào 💖</div>
+                        <div class="message special-message editable-content" id="content4" contenteditable="false">
+                            <p class="message-line big-text">Yêu em nhiều!</p>
+                            <p class="message-line">💘🌹💝✨</p>
+                            <p class="message-line">Chúc em một Valentine</p>
+                            <p class="message-line">thật ấm áp và hạnh phúc.</p>
+                            <p class="message-line">Và chúng mình sẽ</p>
+                            <p class="message-line">luôn bên nhau! ✨</p>
+                        </div>
+                        <div class="signature editable-content" id="signature4" contenteditable="false">
+                            💝 Love you 3000 💝
+                        </div>
+                        <div class="edit-controls" id="controls4" style="display: none;">
+                            <button onclick="saveContent(4)" class="save-btn">💾 Lưu</button>
+                            <button onclick="cancelEdit(4)" class="cancel-btn">❌ Hủy</button>
+                        </div>
+                        <div class="page-nav">
+                            <button onclick="prevPage()" class="nav-btn">← Trang trước</button>
+                            <button onclick="nextPage()" class="nav-btn">Trang tiếp theo →</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="click-hint" id="clickHint">👆 Nhấp vào sổ để mở nhé!!!</div>
+
+        <!-- Nút điều khiển nhạc và lịch -->
+        <div class="controls-bar">
+            <div class="music-control" id="musicControl" onclick="toggleMusic()">
+                🎵 Bật nhạc
+            </div>
+            
+            <div class="calendar-control" id="calendarControl" onclick="toggleDaysInfo()" title="Xem ngày bên nhau">
+                📅
+            </div>
+        </div>
+        
+        <!-- Modal hiển thị ngày bên nhau -->
+        <div class="days-info-modal" id="daysInfoModal" onclick="closeDaysInfo(event)">
+            <div class="days-info-content" onclick="event.stopPropagation()">
+                <button class="close-modal-btn" onclick="closeDaysInfo()">✖</button>
+                
+                <div class="modal-header">
+                    <h2>💕 Ngày Bên Nhau 💕</h2>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="big-days-display">
+                        <div class="days-item">
+                            <div class="days-item-label">Ngày</div>
+                            <div class="days-item-number" id="modalDaysNumber">0</div>
+                        </div>
+                        <div class="separator">|</div>
+                        <div class="days-item">
+                            <div class="days-item-label">Tuần</div>
+                            <div class="days-item-number" id="modalWeekNumber">0</div>
+                        </div>
+                        <div class="separator">|</div>
+                        <div class="days-item">
+                            <div class="days-item-label">Tháng</div>
+                            <div class="days-item-number" id="modalMonthNumber">0</div>
+                        </div>
+                        <div class="separator">|</div>
+                        <div class="days-item">
+                            <div class="days-item-label">Năm</div>
+                            <div class="days-item-number" id="modalYearNumber">0</div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-start-date" id="modalStartDate"></div>
+                    
+                    <div class="modal-message">
+                        Từ ngày đầu tiên gặp nhau đến giờ 💖
+                    </div>
+                    
+                    <div class="edit-date-form-modal" id="editDateFormModal" style="display: none;">
+                        <div class="form-group">
+                            <label for="startDateModal">Chọn ngày bắt đầu:</label>
+                            <input type="date" id="startDateModal" class="date-input">
+                            <div class="form-buttons">
+                                <button onclick="saveDaysDate()" class="save-btn">💾 Lưu</button>
+                                <button onclick="toggleEditDate()" class="cancel-btn">❌ Hủy</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="edit-date-quick-btn" id="editDateToggleBtn" onclick="toggleEditDate()">
+                        ✏️ Chỉnh sửa ngày bắt đầu
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Online counter -->
+        <div class="online-counter" id="onlineCounter">
+            <span class="online-dot"></span>
+            <span id="onlineCount">0</span> người đang xem
+        </div>
+        
+        <div class="button-container">
+            <button onclick="openGallery()" class="gallery-button">📸 Khoảnh khắc</button>
+            <a href="index.html" class="back-button">Quay lại</a>
+        </div>
+    </div>
+
+    <canvas class="confetti" id="confetti"></canvas>
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <!-- Photo Gallery Modal -->
+    <div class="gallery-modal" id="galleryModal">
+        <div class="gallery-content">
+            <div class="gallery-header">
+                <h2>📸 Khoảnh Khắc Đáng Nhớ 💖</h2>
+                <button class="close-gallery" onclick="closeGallery()">✖</button>
+            </div>
+            
+            <div class="upload-section">
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('photoInput').click()">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">Click hoặc kéo ảnh vào đây</div>
+                    <div class="upload-hint">(JPG, PNG, tối đa 5MB)</div>
+                </div>
+                <input type="file" id="photoInput" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+            </div>
+            
+            <div class="gallery-grid" id="galleryGrid">
+                <div class="loading-photos">Đang tải ảnh...</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Thêm audio element -->
+    <audio id="birthdayMusic" preload="auto">
+        <source src="audio/valentine.mp3" type="audio/mpeg">
+        <source src="audio/birthday-music.wav" type="audio/wav">
+        <!-- Fallback cho các trình duyệt không hỗ trợ -->
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAp7dDBS7i48tNlPKQJSJEptnKzE-xaqiI",
+            authDomain: "valentine-fd73c.firebaseapp.com",
+            databaseURL: "https://valentine-fd73c-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "valentine-fd73c",
+            storageBucket: "valentine-fd73c.firebasestorage.app",
+            messagingSenderId: "260681999001",
+            appId: "1:260681999001:web:65c5b862824b9df35b4e08"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const pagesRef = database.ref('valentinePages');
+        const photosRef = database.ref('photos');
+        
+        // Cloudinary Cloud Name
+        const CLOUDINARY_CLOUD_NAME = 'dn3vjvokz';
+
+        // Monitor Firebase connection status
+        const connectedRef = database.ref('.info/connected');
+        connectedRef.on('value', (snap) => {
+            if (snap.val() === true) {
+                console.log('🔗 Firebase đã kết nối!');
+            } else {
+                console.log('📡 Đang kết nối Firebase...');
+            }
+        });
+
+        // Online presence tracking
+        const presenceRef = database.ref('presence');
+        const myConnectionRef = presenceRef.push();
+        
+        connectedRef.on('value', (snap) => {
+            if (snap.val() === true) {
+                // Thêm user vào danh sách online
+                myConnectionRef.set({
+                    online: true,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                });
+                
+                // Tự động xóa khi disconnect
+                myConnectionRef.onDisconnect().remove();
+            }
+        });
+        
+        // Đếm số người online
+        presenceRef.on('value', (snapshot) => {
+            const onlineCount = snapshot.numChildren();
+            const countElement = document.getElementById('onlineCount');
+            if (countElement) {
+                countElement.textContent = onlineCount;
+                console.log(`👥 Có ${onlineCount} người đang online`);
+            }
+        });
+
+        // Functions for page navigation
+        let currentPage = 1;
+        let totalPages = 4;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isMobile = window.innerWidth <= 768;
+        const confettiCount = prefersReducedMotion ? 0 : (isMobile ? 80 : 150);
+        const heartIntervalMs = isMobile ? 1200 : 800;
+        const heartDurationMs = isMobile ? 12000 : 20000;
+        
+        function showPage(pageNum) {
+            // Ẩn tất cả các trang
+            for (let i = 1; i <= totalPages; i++) {
+                const page = document.getElementById(`page${i}`);
+                if (page) {
+                    page.style.display = 'none';
+                }
+            }
+            
+            // Hiển thị trang hiện tại
+            const currentPageElement = document.getElementById(`page${pageNum}`);
+            if (currentPageElement) {
+                currentPageElement.style.display = 'flex';
+            }
+            
+            currentPage = pageNum;
+        }
+        
+        function nextPage() {
+            if (currentPage >= totalPages) {
+                // Tạo trang mới
+                createNewPage();
+            }
+            if (currentPage < totalPages) {
+                // Phát âm thanh lật trang (tùy chọn)
+                playPageFlipSound();
+                showPageWithAnimation(currentPage + 1);
+            }
+        }
+        
+        function prevPage() {
+            if (currentPage > 1) {
+                // Phát âm thanh lật trang (tùy chọn)
+                playPageFlipSound();
+                showPageWithAnimation(currentPage - 1);
+            }
+        }
+        
+        function showPageWithAnimation(pageNum) {
+            const currentPageElement = document.getElementById(`page${currentPage}`);
+            const nextPageElement = document.getElementById(`page${pageNum}`);
+            
+            if (pageNum === currentPage) return;
+            
+            // Hiệu ứng lật trang nhanh và mượt
+            if (currentPageElement) {
+                currentPageElement.classList.add('flipping-out');
+                
+                setTimeout(() => {
+                    currentPageElement.style.display = 'none';
+                    currentPageElement.classList.remove('flipping-out');
+                }, 600);
+            }
+            
+            // Hiển thị trang mới
+            if (nextPageElement) {
+                setTimeout(() => {
+                    nextPageElement.style.display = 'flex';
+                    nextPageElement.classList.add('flipping-in');
+                    
+                    // Shimmer effect đơn giản
+                    nextPageElement.classList.add('page-shimmer');
+                    setTimeout(() => {
+                        nextPageElement.classList.add('active');
+                    }, 50);
+                    
+                    // Cleanup
+                    setTimeout(() => {
+                        nextPageElement.classList.remove('flipping-in', 'page-shimmer', 'active');
+                    }, 600);
+                }, 300);
+            }
+            
+            currentPage = pageNum;
+        }
+        
+        // Simple page flip sound - optimized for performance
+        function playPageFlipSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Simple swoosh sound
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.2);
+                
+                gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.2);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            } catch (e) {
+                console.log('Audio not available');
+            }
+        }
+
+        // Interactive editing functions
+        let originalContent = {};
+        
+        function toggleEdit(pageNum) {
+            const content = document.getElementById(`content${pageNum}`);
+            const controls = document.getElementById(`controls${pageNum}`);
+            const editBtn = document.querySelector(`#page${pageNum} .edit-btn`);
+            
+            if (content.contentEditable === 'false') {
+                // Bắt đầu chỉnh sửa
+                originalContent[pageNum] = content.innerHTML;
+                content.contentEditable = 'true';
+                content.classList.add('editing');
+                content.focus();
+                controls.style.display = 'flex';
+                editBtn.style.display = 'none';
+                
+                // Add typing sound effect
+                content.addEventListener('input', playTypingSound);
+            }
+        }
+        
+        function saveContent(pageNum) {
+            const content = document.getElementById(`content${pageNum}`);
+            const controls = document.getElementById(`controls${pageNum}`);
+            const editBtn = document.querySelector(`#page${pageNum} .edit-btn`);
+            
+            const dataToSave = {
+                content: content.innerHTML,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+            
+            console.log(`💾 Đang lưu trang ${pageNum}:`, dataToSave);
+            
+            // Lưu vào Firebase Realtime Database
+            pagesRef.child(`page${pageNum}`).set(dataToSave).then(() => {
+                console.log(`✅ Đã lưu trang ${pageNum} thành công!`);
+                
+                // Kết thúc chỉnh sửa
+                content.contentEditable = 'false';
+                content.classList.remove('editing');
+                controls.style.display = 'none';
+                editBtn.style.display = 'inline-block';
+                
+                // Remove typing sound listener
+                content.removeEventListener('input', playTypingSound);
+                
+                // Show save notification
+                showNotification('💾 Đã lưu vào cloud thành công!');
+            }).catch((error) => {
+                console.error('❌ Lỗi khi lưu:', error);
+                showNotification('❌ Lỗi khi lưu: ' + error.message);
+            });
+        }
+        
+        function cancelEdit(pageNum) {
+            const content = document.getElementById(`content${pageNum}`);
+            const controls = document.getElementById(`controls${pageNum}`);
+            const editBtn = document.querySelector(`#page${pageNum} .edit-btn`);
+            
+            // Khôi phục nội dung gốc
+            content.innerHTML = originalContent[pageNum];
+            content.contentEditable = 'false';
+            content.classList.remove('editing');
+            controls.style.display = 'none';
+            editBtn.style.display = 'inline-block';
+            
+            // Remove typing sound listener
+            content.removeEventListener('input', playTypingSound);
+        }
+        
+        function playTypingSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(800 + Math.random() * 200, audioContext.currentTime);
+                
+                gainNode.gain.setValueAtTime(0.02, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.1);
+            } catch (e) {
+                // Silent fail
+            }
+        }
+        
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 2000);
+        }
+        
+        // Load saved content from Firebase - Realtime sync
+        function loadSavedContent() {
+            // Sử dụng .on() để tự động cập nhật khi có thay đổi
+            pagesRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    // Lấy tất cả các page từ Firebase
+                    Object.keys(data).forEach(key => {
+                        const match = key.match(/page(\d+)/);
+                        if (match) {
+                            const pageNum = parseInt(match[1]);
+                            const pageData = data[key];
+                            
+                            // Tạo trang nếu chưa tồn tại
+                            let pageElement = document.getElementById(`page${pageNum}`);
+                            if (!pageElement && pageNum > 4) {
+                                createPageWithNumber(pageNum);
+                                pageElement = document.getElementById(`page${pageNum}`);
+                            }
+                            
+                            // Load nội dung
+                            if (pageData && pageData.content) {
+                                const content = document.getElementById(`content${pageNum}`);
+                                if (content && content.contentEditable === 'false') {
+                                    // Chỉ update khi không đang chỉnh sửa
+                                    content.innerHTML = pageData.content;
+                                }
+                            }
+                            
+                            // Cập nhật totalPages
+                            if (pageNum > totalPages) {
+                                totalPages = pageNum;
+                            }
+                        }
+                    });
+                    console.log(`✅ Đã load ${Object.keys(data).length} trang từ Firebase`);
+                } else {
+                    console.log('ℹ️ Chưa có dữ liệu trên Firebase');
+                }
+            }, (error) => {
+                console.error('Lỗi khi load từ Firebase:', error);
+            });
+        }
+        
+        // Helper function để tạo trang với số cụ thể
+        function createPageWithNumber(pageNum) {
+            const bookContainer = document.querySelector('.book');
+            const existingPage = document.getElementById(`page${pageNum}`);
+            if (existingPage) return; // Đã tồn tại
+            
+            const newPage = document.createElement('div');
+            newPage.className = 'book-page page-' + pageNum;
+            newPage.id = 'page' + pageNum;
+            newPage.style.display = 'none';
+            newPage.onclick = (e) => e.stopPropagation();
+            
+            const deleteBtn = pageNum > 4 ? `<button class="delete-btn" onclick="deletePage(${pageNum})">🗑️ Xóa</button>` : '';
+            
+            newPage.innerHTML = `
+                <div class="wish-content">
+                    <div class="page-header">
+                        <span class="page-number">${pageNum}</span>
+                        <button class="edit-btn" onclick="toggleEdit(${pageNum})">✏️ Chỉnh sửa</button>
+                        <button class="copy-link-btn" onclick="copyPageLink(${pageNum})">📎 Copy link</button>
+                        ${deleteBtn}
+                    </div>
+                    <div class="message editable-content" id="content${pageNum}" contenteditable="false">
+                        <p class="message-line">Đang tải...</p>
+                    </div>
+                    <div class="edit-controls" id="controls${pageNum}" style="display: none;">
+                        <button onclick="saveContent(${pageNum})" class="save-btn">💾 Lưu</button>
+                        <button onclick="cancelEdit(${pageNum})" class="cancel-btn">❌ Hủy</button>
+                    </div>
+                    <div class="page-nav">
+                        <button onclick="prevPage()" class="nav-btn">← Trang trước</button>
+                        <button onclick="nextPage()" class="nav-btn">Trang tiếp theo →</button>
+                    </div>
+                </div>
+            `;
+            
+            bookContainer.appendChild(newPage);
+            console.log(`📄 Đã tạo trang ${pageNum}`);
+        }
+        
+        function resetBook() {
+            currentPage = 1;
+            showPage(currentPage);
+        }
+        
+        // Copy link to specific page
+        function copyPageLink(pageNum) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', pageNum);
+            
+            navigator.clipboard.writeText(url.toString()).then(() => {
+                showNotification(`📎 Đã copy link trang ${pageNum}!`);
+            }).catch(err => {
+                console.error('Lỗi khi copy:', err);
+                showNotification('❌ Không thể copy link');
+            });
+        }
+        
+        // Delete page (only for page > 4)
+        function deletePage(pageNum) {
+            if (pageNum <= 4) {
+                showNotification('❌ Không thể xóa 4 trang đầu!');
+                return;
+            }
+            
+            if (!confirm(`Bạn có chắc muốn xóa trang ${pageNum}?`)) {
+                return;
+            }
+            
+            // Xóa khỏi Firebase
+            pagesRef.child(`page${pageNum}`).remove().then(() => {
+                // Xóa khỏi DOM
+                const pageElement = document.getElementById(`page${pageNum}`);
+                if (pageElement) {
+                    pageElement.remove();
+                }
+                
+                // Chuyển về trang trước nếu đang ở trang bị xóa
+                if (currentPage === pageNum) {
+                    currentPage = Math.max(1, pageNum - 1);
+                    showPage(currentPage);
+                }
+                
+                showNotification(`🗑️ Đã xóa trang ${pageNum}!`);
+                console.log(`🗑️ Đã xóa trang ${pageNum}`);
+            }).catch(error => {
+                console.error('Lỗi khi xóa:', error);
+                showNotification('❌ Lỗi khi xóa trang');
+            });
+        }
+
+        function createNewPage() {
+            totalPages++;
+            const pageNum = totalPages;
+            const bookContainer = document.querySelector('.book');
+            
+            const newPage = document.createElement('div');
+            newPage.className = 'book-page page-' + pageNum;
+            newPage.id = 'page' + pageNum;
+            newPage.style.display = 'none';
+            newPage.onclick = (e) => e.stopPropagation();
+            
+            const deleteBtn = pageNum > 4 ? `<button class="delete-btn" onclick="deletePage(${pageNum})">🗑️ Xóa</button>` : '';
+            
+            newPage.innerHTML = `
+                <div class="wish-content">
+                    <div class="page-header">
+                        <span class="page-number">${pageNum}</span>
+                        <button class="edit-btn" onclick="toggleEdit(${pageNum})">✏️ Chỉnh sửa</button>
+                        <button class="copy-link-btn" onclick="copyPageLink(${pageNum})">📎 Copy link</button>
+                        ${deleteBtn}
+                    </div>
+                    <div class="message editable-content" id="content${pageNum}" contenteditable="false">
+                        <p class="message-line">Trang ${pageNum}</p>
+                        <p class="message-line">Tôi yêu em và mãi yêu em! ❤️</p>
+                    </div>
+                    <div class="edit-controls" id="controls${pageNum}" style="display: none;">
+                        <button onclick="saveContent(${pageNum})" class="save-btn">💾 Lưu</button>
+                        <button onclick="cancelEdit(${pageNum})" class="cancel-btn">❌ Hủy</button>
+                    </div>
+                    <div class="page-nav">
+                        <button onclick="prevPage()" class="nav-btn">← Trang trước</button>
+                        <button onclick="nextPage()" class="nav-btn">Trang tiếp theo →</button>
+                    </div>
+                </div>
+            `;
+            
+            bookContainer.appendChild(newPage);
+        }
+
+        function createConfetti() {
+            if (confettiCount <= 0) return;
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const confettiPieces = [];
+            const colors = ['#ff9a9e', '#fecfef', '#fda085', '#ffb3ba', '#ff6b9d', '#ffc1cc'];
+
+            for (let i = 0; i < confettiCount; i++) {
+                confettiPieces.push({
+                    x: Math.random() * canvas.width,
+                    y: -10,
+                    width: Math.random() * 10 + 5,
+                    height: Math.random() * 10 + 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: Math.random() * 3 + 2,
+                    rotation: Math.random() * 360
+                });
+            }
+
+            function animateConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                confettiPieces.forEach((piece, index) => {
+                    piece.y += piece.speed;
+                    piece.rotation += 2;
+
+                    ctx.save();
+                    ctx.translate(piece.x + piece.width / 2, piece.y + piece.height / 2);
+                    ctx.rotate(piece.rotation * Math.PI / 180);
+                    ctx.fillStyle = piece.color;
+                    ctx.fillRect(-piece.width / 2, -piece.height / 2, piece.width, piece.height);
+                    ctx.restore();
+
+                    if (piece.y > canvas.height) {
+                        confettiPieces.splice(index, 1);
+                    }
+                });
+
+                if (confettiPieces.length > 0) {
+                    requestAnimationFrame(animateConfetti);
+                }
+            }
+
+            animateConfetti();
+        }
+
+        function createHearts() {
+            if (prefersReducedMotion) return;
+            const heartsContainer = document.getElementById('heartsContainer');
+            
+            function addHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '💖';
+                
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    if (heart.parentNode) {
+                        heart.parentNode.removeChild(heart);
+                    }
+                }, 8000);
+            }
+            
+            const heartInterval = setInterval(addHeart, heartIntervalMs);
+            
+            setTimeout(() => {
+                clearInterval(heartInterval);
+            }, heartDurationMs);
+        }
+
+        // Bắt đầu hiệu ứng khi trang load
+        document.addEventListener('DOMContentLoaded', function() {
+            createConfetti();
+            createHearts();
+            // Load nội dung đã lưu từ Firebase
+            loadSavedContent();
+            
+            // Check URL parameter để mở trang cụ thể
+            const urlParams = new URLSearchParams(window.location.search);
+            const pageParam = urlParams.get('page');
+            if (pageParam) {
+                const pageNum = parseInt(pageParam);
+                if (pageNum > 0) {
+                    // Đợi một chút để Firebase load xong
+                    setTimeout(() => {
+                        currentPage = pageNum;
+                        openBook();
+                        showPage(pageNum);
+                        console.log(`📖 Đã mở trang ${pageNum} từ URL`);
+                    }, 1000);
+                }
+            }
+            
+            // Click ngoài sổ để đóng
+            const wishContainer = document.getElementById('wishContainer');
+            wishContainer.addEventListener('click', function(e) {
+                const book = document.getElementById('book');
+                const bookContainer = document.querySelector('.book-container');
+                if (book.classList.contains('open') && !bookContainer.contains(e.target) && e.target !== bookContainer) {
+                    closeBook();
+                }
+            });
+            
+            // Tự động phát nhạc khi user tương tác (cho mobile)
+            const music = document.getElementById('birthdayMusic');
+            const musicControl = document.getElementById('musicControl');
+            let musicStarted = false;
+            
+            function startMusicOnInteraction() {
+                if (!musicStarted && music.paused) {
+                    music.volume = 0.5;
+                    music.play().then(() => {
+                        musicControl.textContent = '🎵 Tắt nhạc';
+                        musicStarted = true;
+                        console.log('Nhạc nền đã bắt đầu phát!');
+                    }).catch(e => console.log('Không thể phát nhạc:', e));
+                }
+            }
+            
+            // Lắng nghe mọi loại tương tác để bật nhạc
+            document.addEventListener('click', startMusicOnInteraction, { once: true });
+            document.addEventListener('touchstart', startMusicOnInteraction, { once: true });
+            document.addEventListener('touchend', startMusicOnInteraction, { once: true });
+        });
+
+        function openBook() {
+            const book = document.getElementById('book');
+            const clickHint = document.getElementById('clickHint');
+            const music = document.getElementById('birthdayMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            if (!book.classList.contains('open')) {
+                // Mở sách
+                book.classList.add('open');
+                clickHint.textContent = '👆 Nhấp ngoài sổ để đóng';
+                clickHint.style.opacity = '0.7';
+                
+                // Hiển thị trang đầu tiên
+                currentPage = 1;
+                showPage(currentPage);
+                
+                // Hiển thị bút lông vũ với delay để đồng bộ với chữ
+                setTimeout(() => {
+                    const featherPen = document.querySelector('.feather-pen');
+                    if (featherPen) {
+                        featherPen.classList.add('show');
+                    }
+                }, 800);
+                
+                // Phát nhạc khi mở sổ
+                music.currentTime = 0;
+                music.volume = 0.5;
+                music.play().then(() => {
+                    musicControl.textContent = '🎵 Tắt nhạc';
+                }).catch(error => {
+                    console.log('Không thể phát nhạc:', error);
+                });
+            }
+        }
+        
+        function closeBook() {
+            const book = document.getElementById('book');
+            const clickHint = document.getElementById('clickHint');
+            const music = document.getElementById('birthdayMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            book.classList.remove('open');
+            clickHint.textContent = '👆 Nhấp vào sổ để mở nhé!!!';
+            clickHint.style.opacity = '1';
+            
+            // Ẩn bút lông vũ
+            const featherPen = document.querySelector('.feather-pen');
+            if (featherPen) {
+                featherPen.classList.remove('show');
+            }
+            
+            // Dừng nhạc khi đóng sổ
+            music.pause();
+            music.currentTime = 0;
+            musicControl.textContent = '🎵 Bật nhạc';
+            
+            // Reset về trang đầu
+            currentPage = 1;
+            showPage(currentPage);
+        }
+
+        function toggleMusic() {
+            const music = document.getElementById('birthdayMusic');
+            const musicControl = document.getElementById('musicControl');
+            
+            if (music.paused) {
+                music.play().then(() => {
+                    musicControl.textContent = '🎵 Tắt nhạc';
+                }).catch(error => {
+                    console.log('Không thể phát nhạc:', error);
+                });
+            } else {
+                music.pause();
+                musicControl.textContent = '🎵 Bật nhạc';
+            }
+        }
+
+        // ==================== TOAST NOTIFICATION SYSTEM ====================
+        function showToast(message, type = 'info', duration = 4000) {
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            toast.innerHTML = `
+                <button class="toast-close" onclick="removeToast(this.parentElement)">&times;</button>
+                <div>${message}</div>
+                <div class="toast-progress"></div>
+            `;
+
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 100);
+
+            const progress = toast.querySelector('.toast-progress');
+            progress.style.width = '100%';
+            setTimeout(() => {
+                progress.style.width = '0%';
+                progress.style.transition = `width ${duration}ms linear`;
+            }, 200);
+
+            setTimeout(() => removeToast(toast), duration);
+            return toast;
+        }
+
+        function removeToast(toast) {
+            if (toast && toast.classList) {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    if (toast.parentElement) {
+                        toast.parentElement.removeChild(toast);
+                    }
+                }, 400);
+            }
+        }
+
+        function showSuccess(message, duration = 3000) {
+            return showToast(message, 'success', duration);
+        }
+        function showWarning(message, duration = 4000) {
+            return showToast(message, 'warning', duration);
+        }
+        function showError(message, duration = 4000) {
+            return showToast(message, 'error', duration);
+        }
+        function showInfo(message, duration = 4000) {
+            return showToast(message, 'info', duration);
+        }
+        
+        // ==================== PHOTO GALLERY FUNCTIONS ====================
+        function openGallery() {
+            const modal = document.getElementById('galleryModal');
+            modal.style.display = 'flex';
+            loadPhotos();
+        }
+        
+        function closeGallery() {
+            const modal = document.getElementById('galleryModal');
+            modal.style.display = 'none';
+        }
+        
+        // Drag and drop support
+        const uploadArea = document.getElementById('uploadArea');
+        if (uploadArea) {
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ff9a9e';
+                uploadArea.style.background = 'rgba(255, 154, 158, 0.1)';
+            });
+            
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ddd';
+                uploadArea.style.background = 'white';
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#ddd';
+                uploadArea.style.background = 'white';
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    uploadPhoto(files[0]);
+                }
+            });
+        }
+        
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                uploadPhoto(file);
+            }
+        }
+        
+        function uploadPhoto(file) {
+            // Validate file
+            if (!file.type.startsWith('image/')) {
+                showError('❌ Chỉ chấp nhận file ảnh!');
+                return;
+            }
+            
+            if (file.size > 5 * 1024 * 1024) { // 5MB
+                showError('❌ Ảnh quá lớn! Tối đa 5MB');
+                return;
+            }
+            
+            showInfo('💾 Đang upload ảnh...');
+            
+            // Upload to Cloudinary
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'valentine_photos'); // Cần tạo upload preset
+            
+            fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Cloudinary error:', data.error);
+                    showError('❌ Lỗi upload: ' + data.error.message);
+                    return;
+                }
+                
+                // Save metadata to Firebase Database
+                photosRef.push({
+                    url: data.secure_url,
+                    public_id: data.public_id,
+                    filename: file.name,
+                    timestamp: firebase.database.ServerValue.TIMESTAMP
+                }).then(() => {
+                    showSuccess('✨ Đã thêm ảnh thành công!');
+                    loadPhotos();
+                    document.getElementById('photoInput').value = '';
+                }).catch((error) => {
+                    console.error('Database error:', error);
+                    showError('❌ Lỗi khi lưu metadata');
+                });
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                showError('❌ Lỗi khi upload: ' + error.message);
+            });
+        }
+        
+        function loadPhotos() {
+            const gridElement = document.getElementById('galleryGrid');
+            gridElement.innerHTML = '<div class="loading-photos">Đang tải ảnh...</div>';
+            
+            photosRef.orderByChild('timestamp').once('value').then((snapshot) => {
+                gridElement.innerHTML = '';
+                
+                if (!snapshot.exists()) {
+                    gridElement.innerHTML = '<div class="no-photos">📸 Chưa có ảnh nào. Hãy thêm khoảnh khắc đầu tiên!</div>';
+                    return;
+                }
+                
+                const photos = [];
+                snapshot.forEach((child) => {
+                    photos.push({ key: child.key, ...child.val() });
+                });
+                
+                // Display photos (newest first)
+                photos.reverse().forEach((photo) => {
+                    const photoCard = document.createElement('div');
+                    photoCard.className = 'photo-card';
+                    photoCard.innerHTML = `
+                        <img src="${photo.url}" alt="${photo.filename}" onclick="viewPhoto('${photo.url}', '${photo.filename}')">
+                        <div class="photo-actions">
+                            <button onclick="deletePhoto('${photo.key}', '${photo.path}')" class="delete-photo-btn">🗑️</button>
+                        </div>
+                    `;
+                    gridElement.appendChild(photoCard);
+                });
+                
+                console.log(`📸 Đã load ${photos.length} ảnh`);
+            }).catch((error) => {
+                console.error('Error loading photos:', error);
+                gridElement.innerHTML = '<div class="no-photos">❌ Lỗi khi tải ảnh</div>';
+            });
+        }
+        
+        function viewPhoto(url, filename) {
+            window.open(url, '_blank');
+        }
+        
+        function deletePhoto(key, publicId) {
+            if (!confirm('Bạn có chắc muốn xóa ảnh này?')) {
+                return;
+            }
+            
+            photosRef.child(key).remove().then(() => {
+                showSuccess('🗑️ Đã xóa ảnh!');
+                loadPhotos();
+            }).catch((error) => {
+                console.error('Error deleting:', error);
+                showError('❌ Lỗi khi xóa ảnh');
+            });
+        }
+
+        // ==================== DAYS TOGETHER COUNTER ====================
+        const DAYS_COUNTER_KEY = 'valentineDaysStartDate';
+        
+        function calculateDaysBetween(startDate) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const start = new Date(startDate);
+            start.setHours(0, 0, 0, 0);
+            
+            const diffTime = Math.abs(today - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            return diffDays;
+        }
+        
+        function updateDaysCounter() {
+            const startDateStr = localStorage.getItem(DAYS_COUNTER_KEY);
+            
+            if (!startDateStr) {
+                // Nếu chưa có ngày, hiển thị form để người dùng nhập
+                const daysNumber = document.getElementById('daysNumber');
+                const counterDetails = document.querySelector('.counter-details');
+                const startDateDisplay = document.getElementById('startDateDisplay');
+                
+                if (daysNumber) daysNumber.textContent = '?';
+                if (counterDetails) counterDetails.style.display = 'none';
+                if (startDateDisplay) startDateDisplay.textContent = '👆 Nhấn ✏️ để thiết lập ngày bắt đầu';
+                return;
+            }
+            
+            const days = calculateDaysBetween(startDateStr);
+            const weeks = Math.floor(days / 7);
+            const months = Math.floor(days / 30.44); // Trung bình một tháng
+            const years = Math.floor(days / 365.25); // Trung bình một năm
+            
+            const daysNumber = document.getElementById('daysNumber');
+            const weekValue = document.getElementById('weekValue');
+            const monthValue = document.getElementById('monthValue');
+            const yearValue = document.getElementById('yearValue');
+            const startDateDisplay = document.getElementById('startDateDisplay');
+            
+            if (daysNumber) daysNumber.textContent = days;
+            if (weekValue) weekValue.textContent = weeks;
+            if (monthValue) monthValue.textContent = months;
+            if (yearValue) yearValue.textContent = years;
+            
+            if (startDateDisplay) {
+                const displayDate = new Date(startDateStr).toLocaleDateString('vi-VN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                startDateDisplay.textContent = `Từ ngày ${displayDate}`;
+            }
+            
+            // Update modal info
+            const modalDaysNumber = document.getElementById('modalDaysNumber');
+            const modalWeekNumber = document.getElementById('modalWeekNumber');
+            const modalMonthNumber = document.getElementById('modalMonthNumber');
+            const modalYearNumber = document.getElementById('modalYearNumber');
+            const modalStartDate = document.getElementById('modalStartDate');
+            
+            if (modalDaysNumber) modalDaysNumber.textContent = days;
+            if (modalWeekNumber) modalWeekNumber.textContent = weeks;
+            if (modalMonthNumber) modalMonthNumber.textContent = months;
+            if (modalYearNumber) modalYearNumber.textContent = years;
+            
+            if (modalStartDate) {
+                const displayDate = new Date(startDateStr).toLocaleDateString('vi-VN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                modalStartDate.textContent = `Từ ngày ${displayDate}`;
+            }
+        }
+        
+        function toggleEditDate() {
+            const editForm = document.getElementById('editDateFormModal');
+            const startDateInput = document.getElementById('startDateModal');
+            const toggleBtn = document.getElementById('editDateToggleBtn');
+            
+            if (!editForm || !startDateInput) {
+                console.error('Edit form elements not found');
+                return;
+            }
+            
+            if (editForm.style.display === 'none') {
+                editForm.style.display = 'block';
+                toggleBtn.style.display = 'none';
+                
+                // Set current value
+                const startDateStr = localStorage.getItem(DAYS_COUNTER_KEY);
+                if (startDateStr) {
+                    // Format date to YYYY-MM-DD for input
+                    const dateObj = new Date(startDateStr);
+                    const year = dateObj.getFullYear();
+                    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                    const day = String(dateObj.getDate()).padStart(2, '0');
+                    startDateInput.value = `${year}-${month}-${day}`;
+                } else {
+                    startDateInput.value = '';
+                }
+                
+                startDateInput.focus();
+            } else {
+                editForm.style.display = 'none';
+                toggleBtn.style.display = 'block';
+            }
+        }
+        
+        function saveDaysDate() {
+            const startDateInput = document.getElementById('startDateModal');
+            const selectedDate = startDateInput.value;
+            
+            if (!selectedDate) {
+                showWarning('⚠️ Vui lòng chọn ngày!');
+                return;
+            }
+            
+            // Validate date
+            const dateObj = new Date(selectedDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (dateObj > today) {
+                showWarning('⚠️ Ngày không thể là ngày tương lai!');
+                return;
+            }
+            
+            // Save to localStorage
+            localStorage.setItem(DAYS_COUNTER_KEY, selectedDate);
+            
+            // Update display
+            updateDaysCounter();
+            
+            // Hide form
+            document.getElementById('editDateFormModal').style.display = 'none';
+            document.getElementById('editDateToggleBtn').style.display = 'block';
+            
+            showSuccess('💕 Đã lưu ngày bắt đầu!');
+        }
+        
+        // Toggle days info modal
+        function toggleDaysInfo() {
+            const modal = document.getElementById('daysInfoModal');
+            if (!modal) return;
+            
+            if (modal.classList.contains('show')) {
+                closeDaysInfo();
+            } else {
+                updateDaysCounter(); // Ensure data is up-to-date
+                modal.classList.add('show');
+            }
+        }
+        
+        // Close days info modal
+        function closeDaysInfo(event) {
+            const modal = document.getElementById('daysInfoModal');
+            if (!modal) return;
+            
+            // Only close if clicking outside the modal content
+            if (event && event.target !== modal) {
+                return;
+            }
+            
+            modal.classList.remove('show');
+        }
+        
+        // Initialize counter on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update counter on initial load
+            updateDaysCounter();
+            
+            // Update counter every minute
+            setInterval(updateDaysCounter, 60000);
+        });
+    </script>
+</body>
+</html>
