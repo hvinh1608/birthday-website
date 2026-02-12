@@ -1883,15 +1883,28 @@ body.birthday-wish {
     }
     
     .button-container {
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 15px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 12px;
+        padding: 0 10px;
+    }
+    
+    .gallery-button {
+        padding: 8px 14px;
+        font-size: 0.8em;
+        flex: 1 1 calc(50% - 8px);
+        min-width: 100px;
+        max-width: 140px;
     }
     
     .back-button, .next-button {
-        padding: 10px 15px;
-        font-size: 0.9em;
-        width: 120px;
+        padding: 8px 14px;
+        font-size: 0.8em;
+        flex: 1 1 calc(50% - 8px);
+        min-width: 100px;
+        max-width: 140px;
     }
     
     .page-nav {
