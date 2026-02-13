@@ -3134,6 +3134,13 @@ body.birthday-wish {
     align-items: center;
 }
 
+.control-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    line-height: 1;
+}
+
 .calendar-control {
     width: 50px;
     height: 50px;
@@ -3381,6 +3388,12 @@ body.birthday-wish {
         right: 15px;
         gap: 15px;
     }
+
+    .control-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
     
     .calendar-control {
         width: 45px;
@@ -3432,6 +3445,12 @@ body.birthday-wish {
     
     .controls-bar {
         gap: 8px;
+    }
+
+    .control-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
     }
     
     .calendar-control {
