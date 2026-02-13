@@ -1869,8 +1869,14 @@
             input.disabled = true;
 
             try {
+                // Show typing indicator
+                showTypingIndicator();
+                
                 await getBotResponse(message);
             } finally {
+                // Hide typing indicator
+                hideTypingIndicator();
+                
                 if (sendBtn) sendBtn.disabled = false;
                 input.disabled = false;
                 input.focus();
@@ -1912,6 +1918,48 @@
                     ? loveBotGreetings[Math.floor(Math.random() * loveBotGreetings.length)]
                     : loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
                 addBotMessage(fallback);
+            }
+        }
+        
+        function showTypingIndicator() {
+            const messagesArea = document.querySelector('.lovebot-messages');
+            if (!messagesArea) return;
+            
+            // Remove any existing typing indicator
+            const existingTyping = messagesArea.querySelector('.typing-indicator-item');
+            if (existingTyping) existingTyping.remove();
+            
+            // Create typing indicator bubble
+            const typingItem = document.createElement('div');
+            typingItem.className = 'chat-bubble-item bot-msg typing-indicator-item';
+            typingItem.innerHTML = `
+                <div class="chat-bubble bot-message typing-indicator">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+            
+            messagesArea.appendChild(typingItem);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            const messagesArea = document.querySelector('.lovebot-messages');
+            if (!messagesArea) return;
+            
+            const typingItem = messagesArea.querySelector('.typing-indicator-item');
+            if (typingItem) {
+                // Smooth fade out and remove
+                typingItem.style.opacity = '0';
+                typingItem.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => {
+                    if (typingItem.parentNode) {
+                        typingItem.remove();
+                    }
+                }, 300);
             }
         }
         
