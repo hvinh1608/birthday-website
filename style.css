@@ -3806,6 +3806,9 @@ body.birthday-wish {
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
+    object-position: center;
+    -webkit-object-fit: cover;
+    -webkit-object-position: center;
 }
 
 .lovebot-container.minimized .lovebot-avatar {
