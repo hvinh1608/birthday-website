@@ -192,7 +192,7 @@
         <!-- Love Bot Chat Bubbles Container -->
         <div class="lovebot-container" id="lovebotContainer">
             <div class="lovebot-header">
-                <div class="lovebot-header-title">🤖 Love Bot</div>
+                <div class="lovebot-header-title">Anh Yêu</div>
                 <div style="display: flex; gap: 4px;">
                     <button class="lovebot-minimize" onclick="toggleLoveBot()" title="Minimize">_</button>
                     <button class="lovebot-close" onclick="minimizeLoveBot()">✖</button>
@@ -202,7 +202,7 @@
             <div class="lovebot-messages">
                 <div class="chat-bubble-item bot-msg">
                     <div class="chat-bubble bot-message">
-                        <div class="chat-message-text">Xin chào! 👋 Tôi là Love Bot, đây là tin nhắn đầu tiên!</div>
+                        <div class="chat-message-text">Hellu Bae! Nhớ anh rồi hảaaa</div>
                     </div>
                 </div>
             </div>
@@ -1943,7 +1943,8 @@
                     startLoveBotScheduler();
                 }
                 loveBotActive = true;
-                loveBotMinimized = false;
+                loveBotMinimized = true;
+                container.classList.add('minimized');
             }
             
             // Mark as initialized
