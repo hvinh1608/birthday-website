@@ -3793,6 +3793,18 @@ body.birthday-wish {
     font-size: 14px;
 }
 
+.lovebot-avatar {
+    display: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.lovebot-container.minimized .lovebot-avatar {
+    display: block !important;
+}
+
 .lovebot-container.minimized .lovebot-header-title {
     display: none;
 }
