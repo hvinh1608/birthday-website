@@ -4083,7 +4083,7 @@ body.birthday-wish {
     padding: 8px 12px;
     border: 1px solid #e0e0e0;
     border-radius: 20px;
-    font-size: 13px;
+    font-size: 16px;
     font-family: inherit;
     transition: all 0.3s;
     resize: none;
@@ -4148,7 +4148,7 @@ body.birthday-wish {
     }
     
     .lovebot-input {
-        font-size: 14px;
+        font-size: 16px;
         min-height: 40px;
         max-height: 40px;
         padding: 8px 12px;
@@ -4205,7 +4205,7 @@ body.birthday-wish {
     }
     
     .lovebot-input {
-        font-size: 13px;
+        font-size: 16px;
         min-height: 38px;
         max-height: 38px;
         resize: none;
