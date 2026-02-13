@@ -10,6 +10,7 @@ require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const HOST = '0.0.0.0';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
 
@@ -547,8 +548,9 @@ app.get('/test', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, HOST, () => {
   console.log(`🚀 Birthday Backend Server running on http://localhost:${PORT}`);
+  console.log(`🌐 Listening on ${HOST}:${PORT}`);
   console.log(`📁 Admin Panel: http://localhost:${PORT}/admin`);
   console.log(`📸 Upload API: http://localhost:${PORT}/api/upload`);
   console.log(`🤖 Gemini model: ${GEMINI_MODEL}`);
