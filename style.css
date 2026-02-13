@@ -3652,6 +3652,8 @@ body.birthday-wish {
     align-items: center;
     justify-content: center;
     user-select: none;
+    padding: 0;
+    line-height: 1;
 }
 
 .quotes-control:hover {
