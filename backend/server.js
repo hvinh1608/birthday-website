@@ -4,9 +4,14 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs-extra');
 const sharp = require('sharp');
+const https = require('https');
+
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
 
 // Middleware
 app.use(cors());
@@ -95,6 +100,161 @@ const saveConfig = () => {
 };
 
 // Routes
+
+const buildGeminiPrompt = (message, history = []) => {
+  const intro = 'Bạn là Love Bot, trả lời ngắn gọn, ấm áp, thân mật như người yêu.';
+  const safeHistory = Array.isArray(history) ? history.slice(-10) : [];
+  const conversation = safeHistory
+    .map((item) => {
+      const sender = item.sender === 'user' ? 'User' : 'Bot';
+      const text = typeof item.message === 'string' ? item.message : '';
+      return `${sender}: ${text}`.trim();
+    })
+    .filter(Boolean)
+    .join('\n');
+
+  return `${intro}\n\nCuộc trò chuyện gần đây:\n${conversation}\n\nUser: ${message}\nBot:`;
+};
+
+const callGemini = (message, history) => new Promise((resolve, reject) => {
+  if (!GEMINI_API_KEY) {
+    return reject(new Error('Missing GEMINI_API_KEY'));
+  }
+
+  const prompt = buildGeminiPrompt(message, history);
+  const payload = JSON.stringify({
+    contents: [
+      {
+        role: 'user',
+        parts: [{ text: prompt }]
+      }
+    ],
+    generationConfig: {
+      temperature: 0.8,
+      topP: 0.9,
+      maxOutputTokens: 200
+    }
+  });
+
+  const options = {
+    hostname: 'generativelanguage.googleapis.com',
+    path: `/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(payload)
+    }
+  };
+
+  const req = https.request(options, (res) => {
+    let data = '';
+    res.on('data', (chunk) => {
+      data += chunk;
+    });
+    res.on('end', () => {
+      if (res.statusCode < 200 || res.statusCode >= 300) {
+        return reject(new Error(`Gemini API error: ${res.statusCode} ${data}`));
+      }
+
+      try {
+        const json = JSON.parse(data);
+        const text = json?.candidates?.[0]?.content?.parts
+          ?.map((part) => part.text)
+          .join('')
+          .trim();
+
+        if (!text) {
+          return reject(new Error('Empty response from Gemini'));
+        }
+
+        resolve(text);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+
+  req.on('error', reject);
+  req.write(payload);
+  req.end();
+});
+
+const listGeminiModels = () => new Promise((resolve, reject) => {
+  if (!GEMINI_API_KEY) {
+    return reject(new Error('Missing GEMINI_API_KEY'));
+  }
+
+  const options = {
+    hostname: 'generativelanguage.googleapis.com',
+    path: `/v1beta/models?key=${GEMINI_API_KEY}`,
+    method: 'GET'
+  };
+
+  const req = https.request(options, (res) => {
+    let data = '';
+    res.on('data', (chunk) => {
+      data += chunk;
+    });
+    res.on('end', () => {
+      if (res.statusCode < 200 || res.statusCode >= 300) {
+        return reject(new Error(`Gemini API error: ${res.statusCode} ${data}`));
+      }
+
+      try {
+        const json = JSON.parse(data);
+        const models = Array.isArray(json?.models) ? json.models : [];
+        const supported = models.filter((model) =>
+          Array.isArray(model.supportedGenerationMethods)
+          && model.supportedGenerationMethods.includes('generateContent')
+        );
+
+        resolve({
+          allModels: models,
+          supportedModels: supported
+        });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+
+  req.on('error', reject);
+  req.end();
+});
+
+app.post('/api/chat', async (req, res) => {
+  try {
+    const { message, history } = req.body || {};
+    if (!message) {
+      return res.status(400).json({ error: 'message is required' });
+    }
+
+    const reply = await callGemini(message, history);
+    res.json({ reply });
+  } catch (error) {
+    console.error('Gemini chat error:', error);
+    res.status(500).json({ error: 'Gemini request failed', details: error.message });
+  }
+});
+
+app.get('/api/gemini-models', async (req, res) => {
+  try {
+    const { allModels, supportedModels } = await listGeminiModels();
+    res.json({
+      total: allModels.length,
+      supportedCount: supportedModels.length,
+      supported: supportedModels.map((model) => ({
+        name: model.name,
+        displayName: model.displayName,
+        description: model.description,
+        supportedGenerationMethods: model.supportedGenerationMethods
+      }))
+    });
+  } catch (error) {
+    console.error('Gemini list models error:', error);
+    res.status(500).json({ error: 'Gemini list models failed', details: error.message });
+  }
+});
 
 // Serve placeholder for missing images
 app.get('/uploads/images/:filename', (req, res) => {
@@ -391,6 +551,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Birthday Backend Server running on http://localhost:${PORT}`);
   console.log(`📁 Admin Panel: http://localhost:${PORT}/admin`);
   console.log(`📸 Upload API: http://localhost:${PORT}/api/upload`);
+  console.log(`🤖 Gemini model: ${GEMINI_MODEL}`);
 });
 
 module.exports = app;

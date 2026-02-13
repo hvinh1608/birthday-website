@@ -24,3 +24,9 @@ DOMAIN_SETUP.md
 # Temporary files
 *.tmp
 *.temp
+
+# Dependencies
+node_modules/
+
+# Environment
+.env

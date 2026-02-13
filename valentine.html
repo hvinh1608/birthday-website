@@ -182,6 +182,34 @@
                 <div class="quotes-control" id="quotesControl" onclick="toggleQuotes()" title="Xem lời yêu thương">
                     💬
                 </div>
+                
+                <div class="lovebot-control" id="lovebotControl" onclick="toggleLoveBot()" title="Bật/Tắt Love Bot">
+                    🤖
+                </div>
+            </div>
+        </div>
+        
+        <!-- Love Bot Chat Bubbles Container -->
+        <div class="lovebot-container" id="lovebotContainer">
+            <div class="lovebot-header">
+                <div class="lovebot-header-title">🤖 Love Bot</div>
+                <div style="display: flex; gap: 4px;">
+                    <button class="lovebot-minimize" onclick="toggleLoveBot()" title="Minimize">_</button>
+                    <button class="lovebot-close" onclick="minimizeLoveBot()">✖</button>
+                </div>
+            </div>
+            
+            <div class="lovebot-messages">
+                <div class="chat-bubble-item bot-msg">
+                    <div class="chat-bubble bot-message">
+                        <div class="chat-message-text">Xin chào! 👋 Tôi là Love Bot, đây là tin nhắn đầu tiên!</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lovebot-footer">
+                <input type="text" class="lovebot-input" placeholder="Viết tin nhắn..." id="lovebotInput">
+                <button class="lovebot-send-btn" id="lovebotSendBtn" onclick="sendUserMessage()">Gửi</button>
             </div>
         </div>
         
@@ -414,6 +442,7 @@
         ];
         
         let currentQuoteIndex = 0;
+        let loveBotUserMessages = [];
         
         function showPage(pageNum) {
             // Ẩn tất cả các trang
@@ -943,6 +972,9 @@
             document.addEventListener('click', startMusicOnInteraction, { once: true });
             document.addEventListener('touchstart', startMusicOnInteraction, { once: true });
             document.addEventListener('touchend', startMusicOnInteraction, { once: true });
+            
+            // Initialize Love Bot
+            initLoveBot();
         });
 
         function openBook() {
@@ -1555,6 +1587,369 @@
                 console.error('Lỗi khi copy:', err);
                 showError('❌ Không thể copy');
             });
+        }
+        
+        // ==================== LOVE BOT FUNCTIONS ====================
+        const LOVEBOT_API_URL = window.LOVEBOT_API_URL || 'http://localhost:3001/api/chat';
+        const loveBotGreetings = [
+            "Em đang làm gì vậy? 😊",
+            "Bạn vui không? 💖",
+            "Em có khỏe không? 🥰",
+            "Nhớ em lắm! 💕",
+            "Chúc em một ngày tốt lành! ☀️",
+            "Em đang bận rồi à? 🤔",
+            "Anh/chị yêu em lắm lắm! 💘",
+            "Cảm ơn em vì luôn ở bên cạnh! 🌹",
+            "Em muốn ăn gì không? 🍰",
+            "Anh/chị chỉ muốn em hạnh phúc! ✨",
+            "Em đã uống nước chưa? 💧",
+            "Cái mũi nước mắt anh/chị chỉ vì yêu em! 😭💕"
+        ];
+        
+        let loveBotActive = false;
+        let loveBotMinimized = false;
+        let loveBotLastSendTime = {};
+        const LOVEBOT_SEND_TIMES = [8, 12, 21]; // 8am, 12pm, 9pm
+
+        function getRecentChatHistory() {
+            try {
+                const messages = JSON.parse(localStorage.getItem('loveBotMessages') || '[]');
+                return messages.slice(-10).map((item) => ({
+                    sender: item.sender,
+                    message: item.message
+                }));
+            } catch (error) {
+                return [];
+            }
+        }
+        
+        function toggleLoveBot() {
+            const container = document.getElementById('lovebotContainer');
+            if (!container) return;
+            
+            if (loveBotMinimized) {
+                expandLoveBot();
+            } else {
+                minimizeLoveBot();
+            }
+        }
+        
+        function expandLoveBot() {
+            const container = document.getElementById('lovebotContainer');
+            if (!container) return;
+            
+            container.classList.remove('minimized');
+            loveBotMinimized = false;
+            loveBotActive = true;
+            
+            // Start bot if not already running
+            if (!window.loveBotInterval) {
+                startLoveBotScheduler();
+            }
+        }
+        
+        function minimizeLoveBot() {
+            const container = document.getElementById('lovebotContainer');
+            if (!container) return;
+            
+            container.classList.add('minimized');
+            loveBotMinimized = true;
+        }
+        
+        function openLoveBot() {
+            expandLoveBot();
+        }
+        
+        function closeLoveBot() {
+            minimizeLoveBot();
+        }
+        
+        function addBotMessage(message) {
+            const container = document.getElementById('lovebotContainer');
+            if (!container) return;
+            
+            // Get or create messages area
+            let messagesArea = container.querySelector('.lovebot-messages');
+            if (!messagesArea) {
+                messagesArea = document.createElement('div');
+                messagesArea.className = 'lovebot-messages';
+                container.appendChild(messagesArea);
+            }
+            
+            // Create and add message bubble
+            const messageItem = document.createElement('div');
+            messageItem.className = 'chat-bubble-item bot-msg';
+            messageItem.innerHTML = `
+                <div class="chat-bubble bot-message">
+                    <div class="chat-message-text">${message}</div>
+                    <div class="chat-message-time">${new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</div>
+                </div>
+            `;
+            
+            messagesArea.appendChild(messageItem);
+            
+            // Scroll to bottom
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+            
+            // Save to localStorage for persistence
+            saveBotMessageToLocalStorage(message, 'bot');
+        }
+        
+        function saveBotMessageToLocalStorage(message, sender) {
+            const messages = JSON.parse(localStorage.getItem('loveBotMessages') || '[]');
+            messages.push({
+                time: new Date().getTime(),
+                message: message,
+                sender: sender
+            });
+            // Keep only last 50 messages
+            if (messages.length > 50) {
+                messages.shift();
+            }
+            localStorage.setItem('loveBotMessages', JSON.stringify(messages));
+        }
+        
+        function loadBotMessagesFromLocalStorage() {
+            const messages = JSON.parse(localStorage.getItem('loveBotMessages') || '[]');
+            const container = document.getElementById('lovebotContainer');
+            
+            // Clear existing messages
+            const messagesArea = container.querySelector('.lovebot-messages');
+            if (messagesArea) {
+                const bubbles = messagesArea.querySelectorAll('.chat-bubble-item');
+                bubbles.forEach(bubble => bubble.remove());
+            }
+            
+            if (!container.querySelector('.lovebot-messages')) {
+                const newMessagesArea = document.createElement('div');
+                newMessagesArea.className = 'lovebot-messages';
+                container.appendChild(newMessagesArea);
+            }
+
+            const targetArea = container.querySelector('.lovebot-messages');
+
+            // If no saved messages, show initial greeting
+            if (!messages.length) {
+                const welcomeItem = document.createElement('div');
+                welcomeItem.className = 'chat-bubble-item bot-msg';
+                welcomeItem.innerHTML = `
+                    <div class="chat-bubble bot-message">
+                        <div class="chat-message-text">Xin chào! 👋 Tôi là Love Bot, đây là tin nhắn đầu tiên!</div>
+                    </div>
+                `;
+                targetArea.appendChild(welcomeItem);
+                return;
+            }
+
+            // Load saved messages (bot + user)
+            messages.forEach(msg => {
+                const messageItem = document.createElement('div');
+                const msgDate = new Date(msg.time);
+                const timeText = msgDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+
+                if (msg.sender === 'bot') {
+                    messageItem.className = 'chat-bubble-item bot-msg';
+                    messageItem.innerHTML = `
+                        <div class="chat-bubble bot-message">
+                            <div class="chat-message-text">${msg.message}</div>
+                            <div class="chat-message-time">${timeText}</div>
+                        </div>
+                    `;
+                } else {
+                    messageItem.className = 'chat-bubble-item user-msg';
+                    messageItem.innerHTML = `
+                        <div class="chat-bubble user-message">
+                            <div class="chat-message-text">${msg.message}</div>
+                            <div class="chat-message-time">${timeText}</div>
+                        </div>
+                    `;
+                }
+
+                targetArea.appendChild(messageItem);
+            });
+        }
+        
+        function startLoveBotScheduler() {
+            // Check every minute if it's time to send message
+            window.loveBotInterval = setInterval(() => {
+                const now = new Date();
+                const currentHour = now.getHours();
+                const currentMinute = now.getMinutes();
+                const dateKey = `${now.toDateString()}_${currentHour}`;
+                
+                // Check if current hour matches one of the send times
+                if (LOVEBOT_SEND_TIMES.includes(currentHour)) {
+                    // Send message only once per hour
+                    if (!loveBotLastSendTime[dateKey]) {
+                        loveBotLastSendTime[dateKey] = true;
+                        
+                        // Randomly choose between love quote and greeting
+                        let messageToSend;
+                        if (Math.random() < 0.5) {
+                            // Send a love quote
+                            const randomQuoteIndex = Math.floor(Math.random() * loveQuotes.length);
+                            messageToSend = loveQuotes[randomQuoteIndex];
+                        } else {
+                            // Send a greeting
+                            const randomGreetingIndex = Math.floor(Math.random() * loveBotGreetings.length);
+                            messageToSend = loveBotGreetings[randomGreetingIndex];
+                        }
+                        
+                        // Show message immediately if container is visible
+                        addBotMessage(messageToSend);
+                        
+                        // Show notification
+                        if (loveBotActive) {
+                            showSuccess('💬 Love Bot: ' + messageToSend);
+                        }
+                        
+                        console.log(`🤖 Love Bot sent message at ${currentHour}:${currentMinute}: ${messageToSend}`);
+                    }
+                }
+                
+                // Clean up old entries from loveBotLastSendTime (keep only current day)
+                const keys = Object.keys(loveBotLastSendTime);
+                keys.forEach(key => {
+                    if (!key.startsWith(now.toDateString())) {
+                        delete loveBotLastSendTime[key];
+                    }
+                });
+            }, 60000); // Check every minute
+            
+            console.log('🤖 Love Bot scheduler started');
+        }
+        
+        function stopLoveBotScheduler() {
+            if (window.loveBotInterval) {
+                clearInterval(window.loveBotInterval);
+                window.loveBotInterval = null;
+                console.log('🤖 Love Bot scheduler stopped');
+            }
+        }
+        
+        // Send user message to Love Bot
+        async function sendUserMessage() {
+            const input = document.getElementById('lovebotInput');
+            const sendBtn = document.getElementById('lovebotSendBtn');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Create user message bubble
+            const messagesArea = document.querySelector('.lovebot-messages');
+            const messageItem = document.createElement('div');
+            messageItem.className = 'chat-bubble-item user-msg';
+            
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            
+            messageItem.innerHTML = `
+                <div class="chat-bubble user-message">
+                    <div class="chat-message-text">${escapeHtml(message)}</div>
+                    <div class="chat-message-time">${timeStr}</div>
+                </div>
+            `;
+            
+            messagesArea.appendChild(messageItem);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+            
+            // Save user message to localStorage for persistence
+            saveBotMessageToLocalStorage(message, 'user');
+            
+            // Clear input
+            input.value = '';
+            input.focus();
+            
+            if (sendBtn) sendBtn.disabled = true;
+            input.disabled = true;
+
+            try {
+                await getBotResponse(message);
+            } finally {
+                if (sendBtn) sendBtn.disabled = false;
+                input.disabled = false;
+                input.focus();
+            }
+            
+            console.log('💬 User message sent:', message);
+        }
+        
+        // Get bot response
+        async function getBotResponse(userMessage) {
+            try {
+                const response = await fetch(LOVEBOT_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: userMessage,
+                        history: getRecentChatHistory()
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Chat API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const botMessage = (data && data.reply) ? data.reply : '';
+
+                if (!botMessage) {
+                    throw new Error('Empty bot response');
+                }
+
+                addBotMessage(botMessage);
+                console.log('🤖 Bot response:', botMessage);
+            } catch (error) {
+                console.error('🤖 Bot response error:', error);
+                const fallback = Math.random() < 0.6
+                    ? loveBotGreetings[Math.floor(Math.random() * loveBotGreetings.length)]
+                    : loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
+                addBotMessage(fallback);
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function setupBotInputHandlers() {
+            const input = document.getElementById('lovebotInput');
+            if (input) {
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendUserMessage();
+                    }
+                });
+            }
+        }
+        
+        // Initialize Love Bot on page load
+        function initLoveBot() {
+            // Load saved messages
+            loadBotMessagesFromLocalStorage();
+            
+            // Setup input handlers
+            setupBotInputHandlers();
+            
+            // Start bot scheduler
+            const container = document.getElementById('lovebotContainer');
+            if (container) {
+                if (!window.loveBotInterval) {
+                    startLoveBotScheduler();
+                }
+                loveBotActive = true;
+                loveBotMinimized = false;
+            }
+            
+            // Mark as initialized
+            if (!localStorage.getItem('loveBotInitialized')) {
+                localStorage.setItem('loveBotInitialized', 'true');
+            }
         }
     </script>
 </body>
