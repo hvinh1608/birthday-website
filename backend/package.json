@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "init": "npm install"
+    "init": "npm install",
+    "postinstall": "npm rebuild sharp --platform=linux --arch=x64"
   },
   "keywords": [
     "express",
