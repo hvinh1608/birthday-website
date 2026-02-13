@@ -3054,7 +3054,8 @@ body.birthday-wish {
 @media (max-width: 768px) {
     .gallery-content {
         padding: 20px;
-        max-height: 95vh;
+        max-height: 80vh;
+        overflow-y: auto;
     }
     
     .gallery-header h2 {
@@ -3088,6 +3089,8 @@ body.birthday-wish {
     .gallery-content {
         padding: 15px;
         border-radius: 15px;
+        max-height: 82vh;
+        overflow-y: auto;
     }
     
     .gallery-header {
@@ -3410,6 +3413,8 @@ body.birthday-wish {
     .days-info-content {
         padding: 30px;
         border-radius: 20px;
+        max-height: 80vh;
+        overflow-y: auto;
     }
     
     .modal-header h2 {
@@ -3469,6 +3474,8 @@ body.birthday-wish {
         padding: 20px;
         width: 95%;
         margin: 20px;
+        max-height: 82vh;
+        overflow-y: auto;
     }
     
     .close-modal-btn {
@@ -3546,6 +3553,8 @@ body.birthday-wish {
     position: relative;
     animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     border: 2px solid rgba(255, 107, 157, 0.2);
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .quote-display {
@@ -3684,6 +3693,76 @@ body.birthday-wish {
 .quotes-control:active {
     transform: translateY(-1px) scale(1.05);
     box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+}
+
+/* Responsive design for quotes modal */
+@media (max-width: 768px) {
+    .quotes-content {
+        padding: 30px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    
+    .modal-header h2 {
+        font-size: 22px;
+    }
+    
+    .quote-display {
+        padding: 20px;
+        min-height: 120px;
+    }
+    
+    .quote-text {
+        font-size: 20px;
+    }
+    
+    .quote-nav-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+    
+    .copy-quote-btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .quotes-content {
+        padding: 20px;
+        width: 95%;
+        max-height: 82vh;
+        overflow-y: auto;
+    }
+    
+    .close-modal-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+    }
+    
+    .modal-header h2 {
+        font-size: 18px;
+    }
+    
+    .quote-display {
+        padding: 15px;
+        min-height: 100px;
+    }
+    
+    .quote-text {
+        font-size: 18px;
+    }
+    
+    .quote-nav-btn {
+        padding: 9px 14px;
+        font-size: 12px;
+    }
+    
+    .copy-quote-btn {
+        padding: 10px;
+        font-size: 13px;
+    }
 }
 
 /* ==================== LOVE BOT STYLES ==================== */

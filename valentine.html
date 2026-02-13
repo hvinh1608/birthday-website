@@ -182,21 +182,17 @@
                 <div class="quotes-control control-btn" id="quotesControl" onclick="toggleQuotes()" title="Xem lời yêu thương">
                     💬
                 </div>
-                
-                <div class="lovebot-control control-btn" id="lovebotControl" onclick="toggleLoveBot()" title="Bật/Tắt Love Bot">
-                    🤖
-                </div>
             </div>
         </div>
         
         <!-- Love Bot Chat Bubbles Container -->
-        <div class="lovebot-container" id="lovebotContainer">
+        <div class="lovebot-container" id="lovebotContainer" onclick="expandWhenMinimized(event)">
             <div class="lovebot-header">
                 <img src="images/avatar.jpg" alt="Love Bot" class="lovebot-avatar">
                 <div class="lovebot-header-title">Anh Yêu</div>
                 <div style="display: flex; gap: 4px;">
-                    <button class="lovebot-minimize" onclick="toggleLoveBot()" title="Minimize">_</button>
-                    <button class="lovebot-close" onclick="minimizeLoveBot()">✖</button>
+                    <button class="lovebot-minimize" onclick="event.stopPropagation(); toggleLoveBot()" title="Minimize">_</button>
+                    <button class="lovebot-close" onclick="event.stopPropagation(); minimizeLoveBot()">✖</button>
                 </div>
             </div>
             
@@ -1663,6 +1659,14 @@
         
         function closeLoveBot() {
             minimizeLoveBot();
+        }
+        
+        function expandWhenMinimized(event) {
+            const container = document.getElementById('lovebotContainer');
+            if (container && loveBotMinimized) {
+                event.stopPropagation();
+                expandLoveBot();
+            }
         }
         
         function addBotMessage(message) {
