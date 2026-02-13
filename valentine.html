@@ -178,6 +178,42 @@
                 <div class="calendar-control" id="calendarControl" onclick="toggleDaysInfo()" title="Xem ngày bên nhau">
                     📅
                 </div>
+                
+                <div class="quotes-control" id="quotesControl" onclick="toggleQuotes()" title="Xem lời yêu thương">
+                    💬
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal hiển thị love quotes -->
+        <div class="quotes-modal" id="quotesModal" onclick="closeQuotes(event)">
+            <div class="quotes-content" onclick="event.stopPropagation()">
+                <button class="close-modal-btn" onclick="closeQuotes()">✖</button>
+                
+                <div class="modal-header">
+                    <h2>💕 Lời Yêu Thương 💕</h2>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="quote-display">
+                        <div class="quote-text" id="quoteText">💕 Yêu em nhiều! 💕</div>
+                        <div class="quote-author" id="quoteAuthor" style="display: none;">- Từ trái tim anh</div>
+                    </div>
+                    
+                    <div class="quote-counter">
+                        <span id="quoteCurrentIndex">1</span> / <span id="quoteTotalCount">0</span>
+                    </div>
+                    
+                    <div class="quote-navigation">
+                        <button onclick="prevQuote()" class="quote-nav-btn">← Trước</button>
+                        <button onclick="randomQuote()" class="quote-nav-btn random-btn">🎲 Ngẫu nhiên</button>
+                        <button onclick="nextQuote()" class="quote-nav-btn">Sau →</button>
+                    </div>
+                    
+                    <button class="copy-quote-btn" onclick="copyQuote()" title="Copy lời yêu thương">
+                        📋 Copy lời yêu thương
+                    </button>
+                </div>
             </div>
         </div>
         
@@ -342,6 +378,42 @@
         const confettiCount = prefersReducedMotion ? 0 : (isMobile ? 80 : 150);
         const heartIntervalMs = isMobile ? 1200 : 800;
         const heartDurationMs = isMobile ? 12000 : 20000;
+        
+        // Love Quotes Data - Danh sách lời yêu thương ngẫu nhiên
+        const loveQuotes = [
+            "Yêu em là cách tốt nhất để bắt đầu mỗi ngày.",
+            "Em là lí do tôi tin vào tình yêu.",
+            "Mỗi khoảnh khắc bên em đều có giá trị vô cùng.",
+            "Em là nơi tôi muốn ở đến cuối cùng.",
+            "Tôi yêu em nhiều hơn cách tôi yêu chính mình.",
+            "Nơi em ở, nơi đó là quê hương của tôi.",
+            "Nụ cười của em là ánh nắng của cuộc sống tôi.",
+            "Anh muốn dành cả đời để khiến em hạnh phúc.",
+            "Em là thiên thần mà tôi không xứng đáng nhưng biết ơn vì có được.",
+            "Tình yêu của anh dành cho em tidak có giới hạn.",
+            "Em là lý do tôi tin vào điều không thể.",
+            "Một ngày không thấy em là một ngày thiếu vắng.",
+            "Yêu em là quyết định dễ dàng nhất của tôi.",
+            "Em làm cho mọi thứ có ý nghĩa, ngay cả những điều bình thường.",
+            "Trái tim tôi chỉ biết nhịp đập khi em ở bên.",
+            "Em là bài hát yêu thích mà tôi muốn nghe mãi mãi.",
+            "Tôi không cần cả thế giới, nếu tôi có em.",
+            "Cảm ơn em vì luôn ở đó khi anh cần.",
+            "Em là hy vọng, em là mơ mộng, em là tương lai của tôi.",
+            "Yêu em là việc tốt nhất tôi từng làm.",
+            "Em là người mà anh muốn để buổi sáng đầu tiên và buổi tối cuối cùng.",
+            "Tình yêu của anh là vĩnh viễn, không bao giờ thay đổi.",
+            "Mỗi lần nhìn em, anh đều yêu em hơn.",
+            "Em là chứng minh rằng những điều tốt nhất là không thể lên kế hoạch.",
+            "Với em, anh tìm thấy rất nhiều lý do để cười.",
+            "Em là con tim của anh bên ngoài cơ thể.",
+            "Bình yên là khi anh nằm cạnh em.",
+            "Em làm cho ngày tệ nhất của anh trở thành tốt.",
+            "Anh yêu: nụ cười của em, tiếng cười của em, cách em nhìn anh.",
+            "Em là điều duy nhất anh cần để hạnh phúc."
+        ];
+        
+        let currentQuoteIndex = 0;
         
         function showPage(pageNum) {
             // Ẩn tất cả các trang
@@ -1404,7 +1476,86 @@
             
             // Update counter every minute
             setInterval(updateDaysCounter, 60000);
+            
+            // Update quote count on load
+            updateQuoteCount();
         });
+        
+        // ==================== LOVE QUOTES FUNCTIONS ====================
+        function displayQuote(index) {
+            if (loveQuotes.length === 0) return;
+            
+            index = (index + loveQuotes.length) % loveQuotes.length;
+            currentQuoteIndex = index;
+            
+            const quoteText = document.getElementById('quoteText');
+            const quoteCurrentIndex = document.getElementById('quoteCurrentIndex');
+            
+            if (quoteText) {
+                quoteText.innerHTML = '💝 ' + loveQuotes[index] + ' 💝';
+            }
+            if (quoteCurrentIndex) {
+                quoteCurrentIndex.textContent = index + 1;
+            }
+        }
+        
+        function updateQuoteCount() {
+            const quoteTotalCount = document.getElementById('quoteTotalCount');
+            if (quoteTotalCount) {
+                quoteTotalCount.textContent = loveQuotes.length;
+            }
+        }
+        
+        function nextQuote() {
+            displayQuote(currentQuoteIndex + 1);
+        }
+        
+        function prevQuote() {
+            displayQuote(currentQuoteIndex - 1);
+        }
+        
+        function randomQuote() {
+            const randomIndex = Math.floor(Math.random() * loveQuotes.length);
+            displayQuote(randomIndex);
+            showSuccess('💝 Một lời yêu thương ngẫu nhiên cho em!');
+        }
+        
+        function toggleQuotes() {
+            const modal = document.getElementById('quotesModal');
+            if (!modal) return;
+            
+            if (modal.classList.contains('show')) {
+                closeQuotes();
+            } else {
+                modal.classList.add('show');
+                displayQuote(currentQuoteIndex);
+            }
+        }
+        
+        function closeQuotes(event) {
+            const modal = document.getElementById('quotesModal');
+            if (!modal) return;
+            
+            // Close if clicking on the modal backdrop (not the content)
+            if (event && !event.target.closest('.quotes-content')) {
+                modal.classList.remove('show');
+            } else if (!event) {
+                // Always close if called without an event (from close button)
+                modal.classList.remove('show');
+            }
+        }
+        
+        function copyQuote() {
+            const quote = loveQuotes[currentQuoteIndex];
+            const textToCopy = '💝 ' + quote + ' 💝';
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showSuccess('💕 Đã copy lời yêu thương!');
+            }).catch(err => {
+                console.error('Lỗi khi copy:', err);
+                showError('❌ Không thể copy');
+            });
+        }
     </script>
 </body>
 </html>
