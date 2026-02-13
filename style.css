@@ -4086,6 +4086,8 @@ body.birthday-wish {
     font-size: 13px;
     font-family: inherit;
     transition: all 0.3s;
+    resize: none;
+    max-height: 100px;
 }
 
 .lovebot-input:focus {
@@ -4124,6 +4126,7 @@ body.birthday-wish {
         left: 12px;
         bottom: calc(12px + env(safe-area-inset-bottom));
         border-radius: 14px;
+        max-height: 520px !important;
     }
     
     .lovebot-container.minimized {
@@ -4141,17 +4144,21 @@ body.birthday-wish {
     
     .lovebot-footer {
         padding: 10px 12px;
+        flex-shrink: 0;
     }
     
     .lovebot-input {
         font-size: 14px;
         min-height: 40px;
+        max-height: 40px;
         padding: 8px 12px;
+        resize: none;
     }
     
     .lovebot-send-btn {
         min-height: 40px;
         padding: 8px 14px;
+        flex-shrink: 0;
     }
     
     .chat-bubble {
@@ -4167,6 +4174,7 @@ body.birthday-wish {
         bottom: calc(8px + env(safe-area-inset-bottom));
         right: 8px;
         left: 8px;
+        max-height: 480px !important;
     }
     
     .lovebot-container.minimized {
@@ -4193,16 +4201,20 @@ body.birthday-wish {
     
     .lovebot-footer {
         padding: 8px 10px;
+        flex-shrink: 0;
     }
     
     .lovebot-input {
         font-size: 13px;
         min-height: 38px;
+        max-height: 38px;
+        resize: none;
     }
     
     .lovebot-send-btn {
         min-height: 38px;
         font-size: 12.5px;
+        flex-shrink: 0;
     }
 }
 
