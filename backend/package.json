@@ -17,6 +17,9 @@
   ],
   "author": "Birthday Website Admin",
   "license": "MIT",
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
