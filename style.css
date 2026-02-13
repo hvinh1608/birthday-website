@@ -3784,5 +3784,19 @@ body.birthday-wish {
         padding: 10px 10px;
         font-size: 12px;
     }
+    
+    .quote-navigation {
+        gap: 6px;
+    }
+    
+    .quote-nav-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .copy-quote-btn {
+        padding: 12px;
+        font-size: 13px;
+    }
 
 }
