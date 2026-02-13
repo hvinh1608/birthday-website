@@ -1681,11 +1681,16 @@
                 container.appendChild(messagesArea);
             }
             
+            // Create unique timestamp
+            const timestamp = new Date().getTime();
+            
             // Create and add message bubble
             const messageItem = document.createElement('div');
             messageItem.className = 'chat-bubble-item bot-msg';
+            messageItem.setAttribute('data-timestamp', timestamp);
             messageItem.innerHTML = `
                 <div class="chat-bubble bot-message">
+                    <button class="chat-delete-btn" onclick="deleteMessage(${timestamp})" title="Xóa tin nhắn">✕</button>
                     <div class="chat-message-text">${message}</div>
                     <div class="chat-message-time">${new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</div>
                 </div>
@@ -1697,13 +1702,13 @@
             messagesArea.scrollTop = messagesArea.scrollHeight;
             
             // Save to localStorage for persistence
-            saveBotMessageToLocalStorage(message, 'bot');
+            saveBotMessageToLocalStorage(message, 'bot', timestamp);
         }
         
-        function saveBotMessageToLocalStorage(message, sender) {
+        function saveBotMessageToLocalStorage(message, sender, timestamp) {
             const messages = JSON.parse(localStorage.getItem('loveBotMessages') || '[]');
             messages.push({
-                time: new Date().getTime(),
+                time: timestamp || new Date().getTime(),
                 message: message,
                 sender: sender
             });
@@ -1712,6 +1717,26 @@
                 messages.shift();
             }
             localStorage.setItem('loveBotMessages', JSON.stringify(messages));
+        }
+        
+        function deleteMessage(timestamp) {
+            // Find and remove message element from DOM with animation
+            const messageItem = document.querySelector(`[data-timestamp="${timestamp}"]`);
+            if (messageItem) {
+                messageItem.classList.add('deleting');
+                
+                // Remove from DOM after animation
+                setTimeout(() => {
+                    messageItem.remove();
+                }, 300);
+            }
+            
+            // Remove from localStorage
+            const messages = JSON.parse(localStorage.getItem('loveBotMessages') || '[]');
+            const filteredMessages = messages.filter(msg => msg.time !== timestamp);
+            localStorage.setItem('loveBotMessages', JSON.stringify(filteredMessages));
+            
+            console.log(`🗑️ Deleted message with timestamp ${timestamp}`);
         }
         
         function loadBotMessagesFromLocalStorage() {
@@ -1751,11 +1776,13 @@
                 const messageItem = document.createElement('div');
                 const msgDate = new Date(msg.time);
                 const timeText = msgDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+                messageItem.setAttribute('data-timestamp', msg.time);
 
                 if (msg.sender === 'bot') {
                     messageItem.className = 'chat-bubble-item bot-msg';
                     messageItem.innerHTML = `
                         <div class="chat-bubble bot-message">
+                            <button class="chat-delete-btn" onclick="deleteMessage(${msg.time})" title="Xóa tin nhắn">✕</button>
                             <div class="chat-message-text">${msg.message}</div>
                             <div class="chat-message-time">${timeText}</div>
                         </div>
@@ -1764,6 +1791,7 @@
                     messageItem.className = 'chat-bubble-item user-msg';
                     messageItem.innerHTML = `
                         <div class="chat-bubble user-message">
+                            <button class="chat-delete-btn" onclick="deleteMessage(${msg.time})" title="Xóa tin nhắn">✕</button>
                             <div class="chat-message-text">${msg.message}</div>
                             <div class="chat-message-time">${timeText}</div>
                         </div>
@@ -1846,10 +1874,13 @@
             messageItem.className = 'chat-bubble-item user-msg';
             
             const now = new Date();
+            const timestamp = now.getTime();
             const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
             
+            messageItem.setAttribute('data-timestamp', timestamp);
             messageItem.innerHTML = `
                 <div class="chat-bubble user-message">
+                    <button class="chat-delete-btn" onclick="deleteMessage(${timestamp})" title="Xóa tin nhắn">✕</button>
                     <div class="chat-message-text">${escapeHtml(message)}</div>
                     <div class="chat-message-time">${timeStr}</div>
                 </div>
@@ -1859,7 +1890,7 @@
             messagesArea.scrollTop = messagesArea.scrollHeight;
             
             // Save user message to localStorage for persistence
-            saveBotMessageToLocalStorage(message, 'user');
+            saveBotMessageToLocalStorage(message, 'user', timestamp);
             
             // Clear input
             input.value = '';

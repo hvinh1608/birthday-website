@@ -3996,6 +3996,64 @@ body.birthday-wish {
     line-height: 1.4;
     max-width: 85%;
     word-wrap: break-word;
+    position: relative;
+}
+
+/* Delete message button */
+.chat-delete-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #ff4444;
+    color: white;
+    border: 2px solid white;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.chat-bubble-item:hover .chat-delete-btn {
+    display: flex;
+}
+
+.chat-delete-btn:hover {
+    background: #cc0000;
+    transform: scale(1.1);
+}
+
+.chat-delete-btn:active {
+    transform: scale(0.95);
+}
+
+/* Animation for message deletion */
+@keyframes messageDeleteOut {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.8) translateX(20px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5) translateX(40px);
+        height: 0;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.chat-bubble-item.deleting {
+    animation: messageDeleteOut 0.3s ease forwards;
 }
 
 .bot-message {
