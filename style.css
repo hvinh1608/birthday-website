@@ -4204,6 +4204,118 @@ body.birthday-wish {
     transform: translateY(0);
 }
 
+.lovebot-input:disabled,
+.lovebot-send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Love Bot Lock Message */
+.lock-message {
+    background: linear-gradient(135deg, #667eea, #764ba2) !important;
+    padding: 24px 20px !important;
+    text-align: center;
+    border-radius: 16px !important;
+}
+
+.lock-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    animation: lockPulse 2s ease-in-out infinite;
+}
+
+@keyframes lockPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.lock-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: white;
+}
+
+.lock-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+    color: white;
+}
+
+.countdown-timer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.countdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 12px 16px;
+    border-radius: 12px;
+    min-width: 70px;
+    backdrop-filter: blur(10px);
+}
+
+.countdown-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+    font-family: 'Courier New', monospace;
+}
+
+.countdown-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    margin-top: 4px;
+    opacity: 0.9;
+    color: white;
+    letter-spacing: 0.5px;
+}
+
+.countdown-separator {
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    opacity: 0.6;
+    animation: blinkSeparator 1s ease-in-out infinite;
+}
+
+@keyframes blinkSeparator {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.2;
+    }
+}
+
+.lock-footer {
+    font-size: 14px;
+    margin-top: 16px;
+    color: white;
+    opacity: 0.95;
+    font-weight: 500;
+}
+
+.lock-message-item {
+    width: 100% !important;
+    justify-content: center !important;
+}
+
 /* Mobile responsive for Love Bot */
 @media (max-width: 768px) {
     .lovebot-container {

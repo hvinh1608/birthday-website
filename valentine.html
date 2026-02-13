@@ -1589,6 +1589,10 @@
         
         // ==================== LOVE BOT FUNCTIONS ====================
         const LOVEBOT_API_URL = window.LOVEBOT_API_URL || 'https://valentine-website-f2u1.onrender.com/api/chat';
+        const LOVEBOT_UNLOCK_DATE = new Date(2026, 1, 14, 0, 0, 0); // February 14, 2026, 00:00:00 (Month is 0-indexed)
+        let loveBotLocked = true;
+        let lockCountdownInterval = null;
+        
         const loveBotGreetings = [
             "Em đang làm gì vậy? 😊",
             "Bạn vui không? 💖",
@@ -1904,6 +1908,12 @@
         
         // Send user message to Love Bot
         async function sendUserMessage() {
+            // Check if Love Bot is locked
+            if (loveBotLocked) {
+                showWarning('🔒 Love Bot sẽ mở vào ngày Valentine! Hãy chờ đợi nhé!');
+                return;
+            }
+            
             const input = document.getElementById('lovebotInput');
             const sendBtn = document.getElementById('lovebotSendBtn');
             const message = input.value.trim();
@@ -2056,16 +2066,19 @@
         
         // Initialize Love Bot on page load
         function initLoveBot() {
+            // Check lock status first
+            checkLoveBotLockStatus();
+            
             // Load saved messages
             loadBotMessagesFromLocalStorage();
             
             // Setup input handlers
             setupBotInputHandlers();
             
-            // Start bot scheduler
+            // Start bot scheduler only if unlocked
             const container = document.getElementById('lovebotContainer');
             if (container) {
-                if (!window.loveBotInterval) {
+                if (!loveBotLocked && !window.loveBotInterval) {
                     startLoveBotScheduler();
                 }
                 loveBotActive = true;
@@ -2077,6 +2090,153 @@
             if (!localStorage.getItem('loveBotInitialized')) {
                 localStorage.setItem('loveBotInitialized', 'true');
             }
+        }
+        
+        function checkLoveBotLockStatus() {
+            const now = new Date();
+            
+            if (now >= LOVEBOT_UNLOCK_DATE) {
+                // Unlocked!
+                unlockLoveBot();
+            } else {
+                // Still locked
+                loveBotLocked = true;
+                showLockMessage();
+                startLockCountdown();
+            }
+        }
+        
+        function showLockMessage() {
+            const container = document.getElementById('lovebotContainer');
+            if (!container) return;
+            
+            const messagesArea = container.querySelector('.lovebot-messages');
+            if (!messagesArea) return;
+            
+            // Clear existing messages
+            messagesArea.innerHTML = '';
+            
+            // Add lock message
+            const lockMessage = document.createElement('div');
+            lockMessage.className = 'chat-bubble-item bot-msg lock-message-item';
+            lockMessage.innerHTML = `
+                <div class="chat-bubble bot-message lock-message">
+                    <div class="lock-icon">🔒</div>
+                    <div class="lock-title">Love Bot đang khóa</div>
+                    <div class="lock-subtitle">Sẽ mở vào ngày Valentine!</div>
+                    <div class="countdown-timer" id="lockCountdown">
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="countdownDays">00</span>
+                            <span class="countdown-label">Ngày</span>
+                        </div>
+                        <div class="countdown-separator">:</div>
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="countdownHours">00</span>
+                            <span class="countdown-label">Giờ</span>
+                        </div>
+                        <div class="countdown-separator">:</div>
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="countdownMinutes">00</span>
+                            <span class="countdown-label">Phút</span>
+                        </div>
+                        <div class="countdown-separator">:</div>
+                        <div class="countdown-item">
+                            <span class="countdown-value" id="countdownSeconds">00</span>
+                            <span class="countdown-label">Giây</span>
+                        </div>
+                    </div>
+                    <div class="lock-footer">💖 Hẹn gặp em ngày 14/2! 💖</div>
+                </div>
+            `;
+            messagesArea.appendChild(lockMessage);
+            
+            // Disable input and button
+            const input = document.getElementById('lovebotInput');
+            const sendBtn = document.getElementById('lovebotSendBtn');
+            if (input) {
+                input.disabled = true;
+                input.placeholder = '🔒 Đang tạm khóa...';
+            }
+            if (sendBtn) {
+                sendBtn.disabled = true;
+            }
+        }
+        
+        function startLockCountdown() {
+            updateLockCountdown(); // Update immediately
+            
+            // Update every second
+            lockCountdownInterval = setInterval(() => {
+                updateLockCountdown();
+            }, 1000);
+        }
+        
+        function updateLockCountdown() {
+            const now = new Date();
+            const diff = LOVEBOT_UNLOCK_DATE - now;
+            
+            if (diff <= 0) {
+                // Time to unlock!
+                unlockLoveBot();
+                return;
+            }
+            
+            // Calculate time remaining
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            // Update display
+            const daysEl = document.getElementById('countdownDays');
+            const hoursEl = document.getElementById('countdownHours');
+            const minutesEl = document.getElementById('countdownMinutes');
+            const secondsEl = document.getElementById('countdownSeconds');
+            
+            if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+            if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+            if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+            if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+        
+        function unlockLoveBot() {
+            loveBotLocked = false;
+            
+            // Stop countdown
+            if (lockCountdownInterval) {
+                clearInterval(lockCountdownInterval);
+                lockCountdownInterval = null;
+            }
+            
+            // Enable input and button
+            const input = document.getElementById('lovebotInput');
+            const sendBtn = document.getElementById('lovebotSendBtn');
+            if (input) {
+                input.disabled = false;
+                input.placeholder = 'Viết tin nhắn...';
+            }
+            if (sendBtn) {
+                sendBtn.disabled = false;
+            }
+            
+            // Clear lock message and load normal messages
+            const container = document.getElementById('lovebotContainer');
+            if (container) {
+                const messagesArea = container.querySelector('.lovebot-messages');
+                if (messagesArea) {
+                    messagesArea.innerHTML = '';
+                }
+                loadBotMessagesFromLocalStorage();
+                
+                // Start scheduler if not already running
+                if (!window.loveBotInterval) {
+                    startLoveBotScheduler();
+                }
+            }
+            
+            // Show unlock notification
+            showSuccess('🎉 Chúc mừng Valentine! Love Bot đã mở! 💖');
+            console.log('🔓 Love Bot unlocked!');
         }
     </script>
 </body>
