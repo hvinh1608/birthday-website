@@ -3788,6 +3788,13 @@ body.birthday-wish {
     display: block !important;
 }
 
+/* Desktop view - ensure avatar shows */
+@media (min-width: 769px) {
+    .lovebot-container.minimized .lovebot-avatar {
+        display: block !important;
+    }
+}
+
 .lovebot-header-title {
     font-weight: 600;
     font-size: 14px;
