@@ -3947,6 +3947,35 @@ body.birthday-wish {
     opacity: 1;
 }
 
+.lovebot-clear-all {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: all 0.3s;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+}
+
+.lovebot-container.minimized .lovebot-clear-all {
+    display: none;
+}
+
+.lovebot-clear-all:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.lovebot-clear-all:active {
+    transform: scale(0.95);
+}
+
 /* Chat messages area */
 .lovebot-messages {
     flex: 1;

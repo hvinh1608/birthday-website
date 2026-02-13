@@ -191,6 +191,7 @@
                 <img src="images/avatar.jpg" alt="Love Bot" class="lovebot-avatar">
                 <div class="lovebot-header-title">Anh Yêu</div>
                 <div style="display: flex; gap: 4px;">
+                    <button class="lovebot-clear-all" onclick="event.stopPropagation(); clearAllMessages()" title="Xóa tất cả tin nhắn">🗑️</button>
                     <button class="lovebot-minimize" onclick="event.stopPropagation(); toggleLoveBot()" title="Minimize">_</button>
                     <button class="lovebot-close" onclick="event.stopPropagation(); minimizeLoveBot()">✖</button>
                 </div>
@@ -1737,6 +1738,47 @@
             localStorage.setItem('loveBotMessages', JSON.stringify(filteredMessages));
             
             console.log(`🗑️ Deleted message with timestamp ${timestamp}`);
+        }
+        
+        function clearAllMessages() {
+            if (!confirm('Bạn có chắc muốn xóa tất cả tin nhắn? Hành động này không thể hoàn tác.')) {
+                return;
+            }
+            
+            // Remove all messages from DOM with staggered animation
+            const messageItems = document.querySelectorAll('.chat-bubble-item');
+            messageItems.forEach((item, index) => {
+                setTimeout(() => {
+                    if (item) {
+                        item.classList.add('deleting');
+                        setTimeout(() => item.remove(), 300);
+                    }
+                }, index * 50); // Stagger the deletion for visual effect
+            });
+            
+            // Clear localStorage
+            localStorage.removeItem('loveBotMessages');
+            
+            // Show welcome message after all deleted
+            setTimeout(() => {
+                const container = document.getElementById('lovebotContainer');
+                const messagesArea = container.querySelector('.lovebot-messages');
+                
+                if (messagesArea) {
+                    const welcomeItem = document.createElement('div');
+                    welcomeItem.className = 'chat-bubble-item bot-msg';
+                    welcomeItem.innerHTML = `
+                        <div class="chat-bubble bot-message">
+                            <div class="chat-message-text">Hellu Bae! Nhớ anh rồi hảaaa</div>
+                        </div>
+                    `;
+                    messagesArea.appendChild(welcomeItem);
+                }
+                
+                showSuccess('🗑️ Đã xóa tất cả tin nhắn!');
+            }, messageItems.length * 50 + 400);
+            
+            console.log('🗑️ Cleared all messages');
         }
         
         function loadBotMessagesFromLocalStorage() {
