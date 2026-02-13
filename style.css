@@ -3943,30 +3943,93 @@ body.birthday-wish {
 }
 
 /* Mobile responsive for Love Bot */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .lovebot-container {
-        width: 85vw;
-        height: 60vh;
-        bottom: 10px;
-        right: 10px;
-        left: 10px;
+        width: calc(100vw - 24px);
+        height: min(70vh, 520px);
+        right: 12px;
+        left: 12px;
+        bottom: calc(12px + env(safe-area-inset-bottom));
+        border-radius: 14px;
     }
     
     .lovebot-container.minimized {
-        width: 55px;
-        height: 55px;
-        bottom: 80px;
-        right: 10px;
+        width: 56px;
+        height: 56px;
+        right: 12px;
+        left: auto;
+        bottom: calc(12px + env(safe-area-inset-bottom));
+    }
+    
+    .lovebot-messages {
+        padding: 12px;
+        gap: 10px;
+    }
+    
+    .lovebot-footer {
+        padding: 10px 12px;
+    }
+    
+    .lovebot-input {
+        font-size: 14px;
+        min-height: 40px;
+        padding: 8px 12px;
+    }
+    
+    .lovebot-send-btn {
+        min-height: 40px;
+        padding: 8px 14px;
+    }
+    
+    .chat-bubble {
+        max-width: 92%;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .lovebot-container {
+        width: calc(100vw - 16px);
+        height: min(72vh, 480px);
+        bottom: calc(8px + env(safe-area-inset-bottom));
+        right: 8px;
+        left: 8px;
+    }
+    
+    .lovebot-container.minimized {
+        width: 52px;
+        height: 52px;
+        bottom: calc(8px + env(safe-area-inset-bottom));
+        right: 8px;
         left: auto;
     }
     
     .chat-bubble {
-        max-width: 90%;
-        font-size: 13px;
+        max-width: 94%;
+        font-size: 12.5px;
     }
     
     .lovebot-header-title {
+        font-size: 12.5px;
+    }
+
+    .lovebot-messages {
+        padding: 10px;
+        gap: 8px;
+    }
+    
+    .lovebot-footer {
+        padding: 8px 10px;
+    }
+    
+    .lovebot-input {
         font-size: 13px;
+        min-height: 38px;
+    }
+    
+    .lovebot-send-btn {
+        min-height: 38px;
+        font-size: 12.5px;
     }
 }
 
