@@ -3644,7 +3644,7 @@ body.birthday-wish {
     background: linear-gradient(135deg, #ff4757, #ee5a6f);
     border: none;
     color: white;
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
