@@ -1644,8 +1644,8 @@
             loveBotMinimized = false;
             loveBotActive = true;
             
-            // Start bot if not already running
-            if (!window.loveBotInterval) {
+            // Start bot if not already running and not locked
+            if (!loveBotLocked && !window.loveBotInterval) {
                 startLoveBotScheduler();
             }
         }
@@ -2082,8 +2082,15 @@
                     startLoveBotScheduler();
                 }
                 loveBotActive = true;
-                loveBotMinimized = true;
-                container.classList.add('minimized');
+                
+                // Keep expanded if locked to show countdown timer, otherwise minimize
+                if (loveBotLocked) {
+                    loveBotMinimized = false;
+                    container.classList.remove('minimized');
+                } else {
+                    loveBotMinimized = true;
+                    container.classList.add('minimized');
+                }
             }
             
             // Mark as initialized
@@ -2232,6 +2239,10 @@
                 if (!window.loveBotInterval) {
                     startLoveBotScheduler();
                 }
+                
+                // Minimize after unlocking
+                loveBotMinimized = true;
+                container.classList.add('minimized');
             }
             
             // Show unlock notification
