@@ -1926,11 +1926,11 @@
             if (!message) return;
             
             // Debouncing - prevent spam
-            const now = Date.now();
-            if (now - loveBotLastRequestTime < LOVEBOT_REQUEST_COOLDOWN) {
+            const currentTime = Date.now();
+            if (currentTime - loveBotLastRequestTime < LOVEBOT_REQUEST_COOLDOWN) {
                 return;
             }
-            loveBotLastRequestTime = now;
+            loveBotLastRequestTime = currentTime;
             
             // Rate limiting check
             if (!checkRateLimit()) {
