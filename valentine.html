@@ -364,9 +364,9 @@
         const connectedRef = database.ref('.info/connected');
         connectedRef.on('value', (snap) => {
             if (snap.val() === true) {
-                console.log('🔗 Firebase đã kết nối!');
+                // Firebase connected
             } else {
-                console.log('📡 Đang kết nối Firebase...');
+                // Connecting to Firebase...
             }
         });
 
@@ -393,7 +393,6 @@
             const countElement = document.getElementById('onlineCount');
             if (countElement) {
                 countElement.textContent = onlineCount;
-                console.log(`👥 Có ${onlineCount} người đang online`);
             }
         });
 
@@ -540,7 +539,7 @@
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.2);
             } catch (e) {
-                console.log('Audio not available');
+                // Audio not available
             }
         }
 
@@ -576,11 +575,8 @@
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             };
             
-            console.log(`💾 Đang lưu trang ${pageNum}:`, dataToSave);
-            
             // Lưu vào Firebase Realtime Database
             pagesRef.child(`page${pageNum}`).set(dataToSave).then(() => {
-                console.log(`✅ Đã lưu trang ${pageNum} thành công!`);
                 
                 // Kết thúc chỉnh sửa
                 content.contentEditable = 'false';
@@ -594,7 +590,6 @@
                 // Show save notification
                 showNotification('💾 Đã lưu vào cloud thành công!');
             }).catch((error) => {
-                console.error('❌ Lỗi khi lưu:', error);
                 showNotification('❌ Lỗi khi lưu: ' + error.message);
             });
         }
@@ -690,12 +685,11 @@
                             }
                         }
                     });
-                    console.log(`✅ Đã load ${Object.keys(data).length} trang từ Firebase`);
                 } else {
-                    console.log('ℹ️ Chưa có dữ liệu trên Firebase');
+                    // No data in Firebase yet
                 }
             }, (error) => {
-                console.error('Lỗi khi load từ Firebase:', error);
+                // Firebase load error
             });
         }
         
@@ -736,7 +730,6 @@
             `;
             
             bookContainer.appendChild(newPage);
-            console.log(`📄 Đã tạo trang ${pageNum}`);
         }
         
         function resetBook() {
@@ -752,7 +745,6 @@
             navigator.clipboard.writeText(url.toString()).then(() => {
                 showNotification(`📎 Đã copy link trang ${pageNum}!`);
             }).catch(err => {
-                console.error('Lỗi khi copy:', err);
                 showNotification('❌ Không thể copy link');
             });
         }
@@ -783,9 +775,7 @@
                 }
                 
                 showNotification(`🗑️ Đã xóa trang ${pageNum}!`);
-                console.log(`🗑️ Đã xóa trang ${pageNum}`);
             }).catch(error => {
-                console.error('Lỗi khi xóa:', error);
                 showNotification('❌ Lỗi khi xóa trang');
             });
         }
@@ -925,7 +915,6 @@
                         currentPage = pageNum;
                         openBook();
                         showPage(pageNum);
-                        console.log(`📖 Đã mở trang ${pageNum} từ URL`);
                     }, 1000);
                 }
             }
@@ -962,8 +951,7 @@
                     music.play().then(() => {
                         musicControl.textContent = '🎵';
                         musicStarted = true;
-                        console.log('Nhạc nền đã bắt đầu phát!');
-                    }).catch(e => console.log('Không thể phát nhạc:', e));
+                    }).catch(e => {/* Music play failed */});
                 }
             }
             
@@ -1006,7 +994,7 @@
                 music.play().then(() => {
                     musicControl.textContent = '🎵';
                 }).catch(error => {
-                    console.log('Không thể phát nhạc:', error);
+                    // Music play failed
                 });
             }
         }
@@ -1045,7 +1033,7 @@
                 music.play().then(() => {
                     musicControl.textContent = '🎵';
                 }).catch(error => {
-                    console.log('Không thể phát nhạc:', error);
+                    // Music play failed
                 });
             } else {
                 music.pause();
@@ -1222,7 +1210,6 @@
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
-                    console.error('Cloudinary error:', data.error);
                     showError('❌ Lỗi upload: ' + data.error.message);
                     return;
                 }
@@ -1238,12 +1225,10 @@
                     loadPhotos();
                     document.getElementById('photoInput').value = '';
                 }).catch((error) => {
-                    console.error('Database error:', error);
                     showError('❌ Lỗi khi lưu metadata');
                 });
             })
             .catch(error => {
-                console.error('Upload error:', error);
                 showError('❌ Lỗi khi upload: ' + error.message);
             });
         }
@@ -1279,10 +1264,7 @@
                 });
 
                 setupLazyImages();
-                
-                console.log(`📸 Đã load ${photos.length} ảnh`);
             }).catch((error) => {
-                console.error('Error loading photos:', error);
                 gridElement.innerHTML = '<div class="no-photos">❌ Lỗi khi tải ảnh</div>';
             });
         }
@@ -1300,7 +1282,6 @@
                 showSuccess('🗑️ Đã xóa ảnh!');
                 loadPhotos();
             }).catch((error) => {
-                console.error('Error deleting:', error);
                 showError('❌ Lỗi khi xóa ảnh');
             });
         }
@@ -1389,7 +1370,6 @@
             const toggleBtn = document.getElementById('editDateToggleBtn');
             
             if (!editForm || !startDateInput) {
-                console.error('Edit form elements not found');
                 return;
             }
             
@@ -1446,7 +1426,7 @@
                     timestamp: firebase.database.ServerValue.TIMESTAMP
                 });
             } catch (error) {
-                console.error('Error saving to Firebase:', error);
+                // Failed to save to Firebase
             }
             
             // Update display
@@ -1498,7 +1478,6 @@
                     localStorage.setItem(DAYS_COUNTER_KEY, data.date);
                     // Update display
                     updateDaysCounter();
-                    console.log('📅 Đã cập nhật ngày bên nhau từ Firebase:', data.date);
                 }
             });
             
@@ -1583,7 +1562,6 @@
             navigator.clipboard.writeText(textToCopy).then(() => {
                 showSuccess('💕 Đã copy lời yêu thương!');
             }).catch(err => {
-                console.error('Lỗi khi copy:', err);
                 showError('❌ Không thể copy');
             });
         }
@@ -1738,8 +1716,6 @@
             const messages = JSON.parse(localStorage.getItem('loveBotMessages') || '[]');
             const filteredMessages = messages.filter(msg => msg.time !== timestamp);
             localStorage.setItem('loveBotMessages', JSON.stringify(filteredMessages));
-            
-            console.log(`🗑️ Deleted message with timestamp ${timestamp}`);
         }
         
         function clearAllMessages() {
@@ -1779,8 +1755,6 @@
                 
                 showSuccess('🗑️ Đã xóa tất cả tin nhắn!');
             }, messageItems.length * 50 + 400);
-            
-            console.log('🗑️ Cleared all messages');
         }
         
         function loadBotMessagesFromLocalStorage() {
@@ -1879,8 +1853,6 @@
                         if (loveBotActive) {
                             showSuccess('💬 Love Bot: ' + messageToSend);
                         }
-                        
-                        console.log(`🤖 Love Bot sent message at ${currentHour}:${currentMinute}: ${messageToSend}`);
                     }
                 }
                 
@@ -1892,15 +1864,12 @@
                     }
                 });
             }, 60000); // Check every minute
-            
-            console.log('🤖 Love Bot scheduler started');
         }
         
         function stopLoveBotScheduler() {
             if (window.loveBotInterval) {
                 clearInterval(window.loveBotInterval);
                 window.loveBotInterval = null;
-                console.log('🤖 Love Bot scheduler stopped');
             }
         }
         
@@ -1956,8 +1925,6 @@
                 input.disabled = false;
                 input.focus();
             }
-            
-            console.log('💬 User message sent:', message);
         }
         
         // Get bot response
@@ -1986,9 +1953,7 @@
                 }
 
                 addBotMessage(botMessage);
-                console.log('🤖 Bot response:', botMessage);
             } catch (error) {
-                console.error('🤖 Bot response error:', error);
                 const fallback = Math.random() < 0.6
                     ? loveBotGreetings[Math.floor(Math.random() * loveBotGreetings.length)]
                     : loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
