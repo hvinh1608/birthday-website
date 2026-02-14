@@ -1569,6 +1569,21 @@
         // ==================== LOVE BOT FUNCTIONS ====================
         const LOVEBOT_API_URL = window.LOVEBOT_API_URL || 'https://valentine-website-f2u1.onrender.com/api/chat';
         
+        // Love Bot optimization variables
+        let loveBotAbortController = null;
+        let loveBotLastRequestTime = 0;
+        const LOVEBOT_REQUEST_COOLDOWN = 1000; // 1 second debounce
+        const LOVEBOT_REQUEST_TIMEOUT = 10000; // 10 second timeout
+        const LOVEBOT_MAX_RETRIES = 2;
+        const LOVEBOT_RATE_LIMIT = 20; // Max 20 messages per minute
+        let loveBotRequestCount = 0;
+        let loveBotRateLimitResetTime = Date.now() + 60000;
+        
+        // Simple response cache (question -> answer)
+        const loveBotCache = new Map();
+        const LOVEBOT_CACHE_SIZE = 50;
+        const LOVEBOT_CACHE_TTL = 300000; // 5 minutes
+        
         const loveBotGreetings = [
             "Em đang làm gì vậy? 😊",
             "Bạn vui không? 💖",
@@ -1755,6 +1770,9 @@
                 
                 showSuccess('🗑️ Đã xóa tất cả tin nhắn!');
             }, messageItems.length * 50 + 400);
+            
+            // Clear cache as well
+            loveBotCache.clear();
         }
         
         function loadBotMessagesFromLocalStorage() {
@@ -1873,6 +1891,32 @@
             }
         }
         
+        // Helper function to normalize message for caching
+        function normalizeCacheKey(message) {
+            return message.toLowerCase().trim().replace(/[^\w\s]/g, '');
+        }
+        
+        // Check and update rate limit
+        function checkRateLimit() {
+            const now = Date.now();
+            
+            // Reset counter if time window expired
+            if (now > loveBotRateLimitResetTime) {
+                loveBotRequestCount = 0;
+                loveBotRateLimitResetTime = now + 60000;
+            }
+            
+            // Check if exceeded rate limit
+            if (loveBotRequestCount >= LOVEBOT_RATE_LIMIT) {
+                const timeLeft = Math.ceil((loveBotRateLimitResetTime - now) / 1000);
+                showError(`⏱️ Bạn gửi tin quá nhanh! Vui lòng chờ ${timeLeft} giây.`);
+                return false;
+            }
+            
+            loveBotRequestCount++;
+            return true;
+        }
+        
         // Send user message to Love Bot
         async function sendUserMessage() {
             const input = document.getElementById('lovebotInput');
@@ -1880,6 +1924,18 @@
             const message = input.value.trim();
             
             if (!message) return;
+            
+            // Debouncing - prevent spam
+            const now = Date.now();
+            if (now - loveBotLastRequestTime < LOVEBOT_REQUEST_COOLDOWN) {
+                return;
+            }
+            loveBotLastRequestTime = now;
+            
+            // Rate limiting check
+            if (!checkRateLimit()) {
+                return;
+            }
             
             // Create user message bubble
             const messagesArea = document.querySelector('.lovebot-messages');
@@ -1927,9 +1983,27 @@
             }
         }
         
-        // Get bot response
-        async function getBotResponse(userMessage) {
+        // Get bot response with retry logic and caching
+        async function getBotResponse(userMessage, retryCount = 0) {
+            // Check cache first
+            const cacheKey = normalizeCacheKey(userMessage);
+            const cachedResponse = loveBotCache.get(cacheKey);
+            
+            if (cachedResponse && (Date.now() - cachedResponse.timestamp < LOVEBOT_CACHE_TTL)) {
+                addBotMessage(cachedResponse.reply);
+                return;
+            }
+            
             try {
+                // Cancel previous request if exists
+                if (loveBotAbortController) {
+                    loveBotAbortController.abort();
+                }
+                
+                // Create new abort controller for timeout
+                loveBotAbortController = new AbortController();
+                const timeoutId = setTimeout(() => loveBotAbortController.abort(), LOVEBOT_REQUEST_TIMEOUT);
+                
                 const response = await fetch(LOVEBOT_API_URL, {
                     method: 'POST',
                     headers: {
@@ -1938,8 +2012,11 @@
                     body: JSON.stringify({
                         message: userMessage,
                         history: getRecentChatHistory()
-                    })
+                    }),
+                    signal: loveBotAbortController.signal
                 });
+                
+                clearTimeout(timeoutId);
 
                 if (!response.ok) {
                     throw new Error(`Chat API error: ${response.status}`);
@@ -1952,12 +2029,43 @@
                     throw new Error('Empty bot response');
                 }
 
+                // Cache the response
+                loveBotCache.set(cacheKey, {
+                    reply: botMessage,
+                    timestamp: Date.now()
+                });
+                
+                // Limit cache size
+                if (loveBotCache.size > LOVEBOT_CACHE_SIZE) {
+                    const firstKey = loveBotCache.keys().next().value;
+                    loveBotCache.delete(firstKey);
+                }
+
                 addBotMessage(botMessage);
             } catch (error) {
-                const fallback = Math.random() < 0.6
-                    ? loveBotGreetings[Math.floor(Math.random() * loveBotGreetings.length)]
-                    : loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
-                addBotMessage(fallback);
+                // Retry logic for network errors (not for aborts)
+                if (error.name !== 'AbortError' && retryCount < LOVEBOT_MAX_RETRIES) {
+                    // Exponential backoff: 1s, 2s
+                    const delay = Math.pow(2, retryCount) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    return getBotResponse(userMessage, retryCount + 1);
+                }
+                
+                // Show appropriate error message
+                let errorMsg;
+                if (error.name === 'AbortError') {
+                    errorMsg = 'Xin lỗi, server phản hồi quá lâu. Thử lại nhé! ⏱️';
+                } else if (retryCount >= LOVEBOT_MAX_RETRIES) {
+                    errorMsg = 'Xin lỗi, tôi hơi bận rồi. Hỏi lại sau nhé! 🔄';
+                } else {
+                    errorMsg = Math.random() < 0.6
+                        ? loveBotGreetings[Math.floor(Math.random() * loveBotGreetings.length)]
+                        : loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
+                }
+                
+                addBotMessage(errorMsg);
+            } finally {
+                loveBotAbortController = null;
             }
         }
         
