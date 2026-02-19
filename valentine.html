@@ -166,11 +166,6 @@
                 <span id="onlineCount">0</span> người đang xem
             </div>
             
-            <!-- Days counter display on mobile -->
-            <div class="days-display-mobile" id="daysDisplay" style="display: none;">
-                <span id="daysNumber">0</span> ngày
-            </div>
-            
             <!-- Nút điều khiển nhạc, lịch và khoảnh khắc -->
             <div class="controls-bar">
                 <div class="music-control control-btn" id="musicControl" onclick="toggleMusic()" title="Bật/Tắt nhạc">
@@ -1007,9 +1002,6 @@
             
             // Initialize Love Bot
             initLoveBot();
-            
-            // Show days counter on mobile
-            showDaysDisplayOnMobile();
             
             // Setup Firebase real-time sync for days counter
             const daysStartDateRef = database ? database.ref('shared/daysStartDate') : null;
