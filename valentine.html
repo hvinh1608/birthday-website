@@ -19,7 +19,7 @@
 </head>
 <body class="birthday-wish">
     <div class="wish-container" id="wishContainer">
-        <h1 class="main-title">💖 Happy Valentine's Day! 💖</h1>
+        <h1 class="main-title">💖 Câu Chuyện Của Đôi Ta! 💖</h1>
         
         <div class="book-container">
             <!-- Bút lông vũ trang trí -->
@@ -332,10 +332,8 @@
     </div>
     
     <!-- Thêm audio element -->
-    <audio id="birthdayMusic" preload="auto">
-        <source src="audio/valentine.mp3" type="audio/mpeg">
-        <source src="audio/birthday-music.wav" type="audio/wav">
-        <!-- Fallback cho các trình duyệt không hỗ trợ -->
+    <audio id="birthdayMusic" preload="auto" crossorigin="anonymous">
+        <!-- Music sources will be set dynamically by JavaScript -->
         Your browser does not support the audio element.
     </audio>
 
@@ -353,48 +351,69 @@
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const pagesRef = database.ref('valentinePages');
-        const photosRef = database.ref('photos');
+        
+        // Get Database reference - fix for Firebase SDK v9+
+        let database;
+        try {
+            database = firebase.database ? firebase.database() : firebase.app().database();
+        } catch (e) {
+            console.error('❌ Firebase Database Error:', e);
+            database = null;
+        }
+        
+        // Validate database connection
+        if (!database) {
+            console.error('❌ Failed to initialize Firebase Realtime Database');
+            alert('⚠️ Không kết nối được Firebase, vui lòng tải lại trang!');
+        }
+        
+        const pagesRef = database ? database.ref('valentinePages') : null;
+        const photosRef = database ? database.ref('photos') : null;
         
         // Cloudinary Cloud Name
         const CLOUDINARY_CLOUD_NAME = 'dn3vjvokz';
 
         // Monitor Firebase connection status
-        const connectedRef = database.ref('.info/connected');
-        connectedRef.on('value', (snap) => {
-            if (snap.val() === true) {
-                // Firebase connected
-            } else {
-                // Connecting to Firebase...
-            }
-        });
+        const connectedRef = database ? database.ref('.info/connected') : null;
+        if (connectedRef) {
+            connectedRef.on('value', (snap) => {
+                if (snap.val() === true) {
+                    // Firebase connected
+                } else {
+                    // Connecting to Firebase...
+                }
+            });
+        }
 
         // Online presence tracking
-        const presenceRef = database.ref('presence');
-        const myConnectionRef = presenceRef.push();
+        const presenceRef = database ? database.ref('presence') : null;
+        const myConnectionRef = presenceRef ? presenceRef.push() : null;
         
-        connectedRef.on('value', (snap) => {
-            if (snap.val() === true) {
-                // Thêm user vào danh sách online
-                myConnectionRef.set({
-                    online: true,
-                    timestamp: firebase.database.ServerValue.TIMESTAMP
-                });
-                
-                // Tự động xóa khi disconnect
-                myConnectionRef.onDisconnect().remove();
-            }
-        });
+        if (connectedRef && myConnectionRef) {
+            connectedRef.on('value', (snap) => {
+                if (snap.val() === true) {
+                    // Thêm user vào danh sách online
+                    myConnectionRef.set({
+                        online: true,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    });
+                    
+                    // Tự động xóa khi disconnect
+                    myConnectionRef.onDisconnect().remove();
+                }
+            });
+        }
         
         // Đếm số người online
-        presenceRef.on('value', (snapshot) => {
-            const onlineCount = snapshot.numChildren();
-            const countElement = document.getElementById('onlineCount');
-            if (countElement) {
-                countElement.textContent = onlineCount;
-            }
-        });
+        if (presenceRef) {
+            presenceRef.on('value', (snapshot) => {
+                const onlineCount = snapshot.numChildren();
+                const countElement = document.getElementById('onlineCount');
+                if (countElement) {
+                    countElement.textContent = onlineCount;
+                }
+            });
+        }
 
         // Functions for page navigation
         let currentPage = 1;
@@ -441,6 +460,14 @@
         
         let currentQuoteIndex = 0;
         let loveBotUserMessages = [];
+        
+        // Danh sách nhạc để random
+        const musicTracks = ['kobuong.mp3', 'vetthuong.mp3'];
+        
+        function getRandomMusic() {
+            const randomTrack = musicTracks[Math.floor(Math.random() * musicTracks.length)];
+            return `audio/${randomTrack}`;
+        }
         
         function showPage(pageNum) {
             // Ẩn tất cả các trang
@@ -572,26 +599,28 @@
             
             const dataToSave = {
                 content: content.innerHTML,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
+                timestamp: firebase.database ? firebase.database.ServerValue.TIMESTAMP : Date.now()
             };
             
             // Lưu vào Firebase Realtime Database
-            pagesRef.child(`page${pageNum}`).set(dataToSave).then(() => {
-                
-                // Kết thúc chỉnh sửa
-                content.contentEditable = 'false';
-                content.classList.remove('editing');
-                controls.style.display = 'none';
-                editBtn.style.display = 'inline-block';
-                
-                // Remove typing sound listener
-                content.removeEventListener('input', playTypingSound);
-                
-                // Show save notification
-                showNotification('💾 Đã lưu vào cloud thành công!');
-            }).catch((error) => {
-                showNotification('❌ Lỗi khi lưu: ' + error.message);
-            });
+            if (pagesRef) {
+                pagesRef.child(`page${pageNum}`).set(dataToSave).then(() => {
+                    
+                    // Kết thúc chỉnh sửa
+                    content.contentEditable = 'false';
+                    content.classList.remove('editing');
+                    controls.style.display = 'none';
+                    editBtn.style.display = 'inline-block';
+                    
+                    // Remove typing sound listener
+                    content.removeEventListener('input', playTypingSound);
+                    
+                    // Show save notification
+                    showNotification('💾 Đã lưu vào cloud thành công!');
+                }).catch((error) => {
+                    showNotification('❌ Lỗi khi lưu: ' + error.message);
+                });
+            }
         }
         
         function cancelEdit(pageNum) {
@@ -652,6 +681,12 @@
         
         // Load saved content from Firebase - Realtime sync
         function loadSavedContent() {
+            // Only attempt if Firebase is initialized
+            if (!pagesRef) {
+                console.warn('⚠️ Firebase Pages Reference not available');
+                return;
+            }
+            
             // Sử dụng .on() để tự động cập nhật khi có thay đổi
             pagesRef.on('value', (snapshot) => {
                 const data = snapshot.val();
@@ -689,7 +724,7 @@
                     // No data in Firebase yet
                 }
             }, (error) => {
-                // Firebase load error
+                console.error('❌ Firebase load error:', error);
             });
         }
         
@@ -901,6 +936,11 @@
         document.addEventListener('DOMContentLoaded', function() {
             createConfetti();
             createHearts();
+            // Initialize random music on load
+            const audioEl = document.getElementById('birthdayMusic');
+            if (audioEl) {
+                audioEl.src = getRandomMusic();
+            }
             // Load nội dung đã lưu từ Firebase
             loadSavedContent();
             
@@ -988,7 +1028,9 @@
                     }
                 }, 800);
                 
-                // Phát nhạc khi mở sổ
+                // Phát nhạc random khi mở sổ
+                const randomMusicPath = getRandomMusic();
+                music.src = randomMusicPath;
                 music.currentTime = 0;
                 music.volume = 0.5;
                 music.play().then(() => {
@@ -1030,6 +1072,10 @@
             const musicControl = document.getElementById('musicControl');
             
             if (music.paused) {
+                // Nếu chưa có nhạc, load random track
+                if (!music.src) {
+                    music.src = getRandomMusic();
+                }
                 music.play().then(() => {
                     musicControl.textContent = '🎵';
                 }).catch(error => {
@@ -1215,18 +1261,23 @@
                 }
                 
                 // Save metadata to Firebase Database
-                photosRef.push({
-                    url: data.secure_url,
-                    public_id: data.public_id,
-                    filename: file.name,
-                    timestamp: firebase.database.ServerValue.TIMESTAMP
-                }).then(() => {
-                    showSuccess('✨ Đã thêm ảnh thành công!');
-                    loadPhotos();
+                if (photosRef) {
+                    photosRef.push({
+                        url: data.secure_url,
+                        public_id: data.public_id,
+                        filename: file.name,
+                        timestamp: firebase.database ? firebase.database.ServerValue.TIMESTAMP : Date.now()
+                    }).then(() => {
+                        showSuccess('✨ Đã thêm ảnh thành công!');
+                        loadPhotos();
+                        document.getElementById('photoInput').value = '';
+                    }).catch((error) => {
+                        showError('❌ Lỗi khi lưu metadata');
+                    });
+                } else {
+                    showSuccess('✨ Ảnh đã upload! (Chưa lưu được metadata vì Firebase chưa sẵn sàng)');
                     document.getElementById('photoInput').value = '';
-                }).catch((error) => {
-                    showError('❌ Lỗi khi lưu metadata');
-                });
+                }
             })
             .catch(error => {
                 showError('❌ Lỗi khi upload: ' + error.message);
@@ -1236,6 +1287,11 @@
         function loadPhotos() {
             const gridElement = document.getElementById('galleryGrid');
             gridElement.innerHTML = '<div class="loading-photos">Đang tải ảnh...</div>';
+            
+            if (!photosRef) {
+                gridElement.innerHTML = '<div class="no-photos">⚠️ Firebase chưa sẵn sàng, không thể tải ảnh</div>';
+                return;
+            }
             
             photosRef.orderByChild('timestamp').once('value').then((snapshot) => {
                 gridElement.innerHTML = '';
@@ -1420,13 +1476,15 @@
             localStorage.setItem(DAYS_COUNTER_KEY, selectedDate);
             
             // Save to Firebase for real-time sync
-            try {
-                database.ref('shared/daysStartDate').set({
-                    date: selectedDate,
-                    timestamp: firebase.database.ServerValue.TIMESTAMP
-                });
-            } catch (error) {
-                // Failed to save to Firebase
+            if (database) {
+                try {
+                    database.ref('shared/daysStartDate').set({
+                        date: selectedDate,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    });
+                } catch (error) {
+                    console.error('❌ Error saving date to Firebase:', error);
+                }
             }
             
             // Update display
@@ -1439,150 +1497,8 @@
             showSuccess('💕 Đã lưu ngày bắt đầu! (Cả hai người đều có thể thấy)');
         }
         
-        // Toggle days info modal
-        function toggleDaysInfo() {
-            const modal = document.getElementById('daysInfoModal');
-            if (!modal) return;
-            
-            if (modal.classList.contains('show')) {
-                closeDaysInfo();
-            } else {
-                updateDaysCounter(); // Ensure data is up-to-date
-                modal.classList.add('show');
-            }
-        }
-        
-        // Close days info modal
-        function closeDaysInfo(event) {
-            const modal = document.getElementById('daysInfoModal');
-            if (!modal) return;
-            
-            // Close if clicking on the modal backdrop (not the content)
-            if (event && !event.target.closest('.days-info-content')) {
-                modal.classList.remove('show');
-            } else if (!event) {
-                // Always close if called without an event (from close button)
-                modal.classList.remove('show');
-            }
-        }
-        
-        // Initialize counter on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load days start date from Firebase and listen for real-time updates
-            const sharedDaysRef = database.ref('shared/daysStartDate');
-            
-            sharedDaysRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data && data.date) {
-                    // Save to localStorage
-                    localStorage.setItem(DAYS_COUNTER_KEY, data.date);
-                    // Update display
-                    updateDaysCounter();
-                }
-            });
-            
-            // Update counter on initial load
-            updateDaysCounter();
-            
-            // Update counter every minute
-            setInterval(updateDaysCounter, 60000);
-            
-            // Update quote count on load
-            updateQuoteCount();
-        });
-        
-        // ==================== LOVE QUOTES FUNCTIONS ====================
-        function displayQuote(index) {
-            if (loveQuotes.length === 0) return;
-            
-            index = (index + loveQuotes.length) % loveQuotes.length;
-            currentQuoteIndex = index;
-            
-            const quoteText = document.getElementById('quoteText');
-            const quoteCurrentIndex = document.getElementById('quoteCurrentIndex');
-            
-            if (quoteText) {
-                quoteText.innerHTML = '💝 ' + loveQuotes[index] + ' 💝';
-            }
-            if (quoteCurrentIndex) {
-                quoteCurrentIndex.textContent = index + 1;
-            }
-        }
-        
-        function updateQuoteCount() {
-            const quoteTotalCount = document.getElementById('quoteTotalCount');
-            if (quoteTotalCount) {
-                quoteTotalCount.textContent = loveQuotes.length;
-            }
-        }
-        
-        function nextQuote() {
-            displayQuote(currentQuoteIndex + 1);
-        }
-        
-        function prevQuote() {
-            displayQuote(currentQuoteIndex - 1);
-        }
-        
-        function randomQuote() {
-            const randomIndex = Math.floor(Math.random() * loveQuotes.length);
-            displayQuote(randomIndex);
-            showSuccess('💝 Một lời yêu thương ngẫu nhiên cho em!');
-        }
-        
-        function toggleQuotes() {
-            const modal = document.getElementById('quotesModal');
-            if (!modal) return;
-            
-            if (modal.classList.contains('show')) {
-                closeQuotes();
-            } else {
-                modal.classList.add('show');
-                displayQuote(currentQuoteIndex);
-            }
-        }
-        
-        function closeQuotes(event) {
-            const modal = document.getElementById('quotesModal');
-            if (!modal) return;
-            
-            // Close if clicking on the modal backdrop (not the content)
-            if (event && !event.target.closest('.quotes-content')) {
-                modal.classList.remove('show');
-            } else if (!event) {
-                // Always close if called without an event (from close button)
-                modal.classList.remove('show');
-            }
-        }
-        
-        function copyQuote() {
-            const quote = loveQuotes[currentQuoteIndex];
-            const textToCopy = '💝 ' + quote + ' 💝';
-            
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                showSuccess('💕 Đã copy lời yêu thương!');
-            }).catch(err => {
-                showError('❌ Không thể copy');
-            });
-        }
-        
         // ==================== LOVE BOT FUNCTIONS ====================
         const LOVEBOT_API_URL = window.LOVEBOT_API_URL || 'https://valentine-website-f2u1.onrender.com/api/chat';
-        
-        // Love Bot optimization variables
-        let loveBotAbortController = null;
-        let loveBotLastRequestTime = 0;
-        const LOVEBOT_REQUEST_COOLDOWN = 1000; // 1 second debounce
-        const LOVEBOT_REQUEST_TIMEOUT = 10000; // 10 second timeout
-        const LOVEBOT_MAX_RETRIES = 2;
-        const LOVEBOT_RATE_LIMIT = 20; // Max 20 messages per minute
-        let loveBotRequestCount = 0;
-        let loveBotRateLimitResetTime = Date.now() + 60000;
-        
-        // Simple response cache (question -> answer)
-        const loveBotCache = new Map();
-        const LOVEBOT_CACHE_SIZE = 50;
-        const LOVEBOT_CACHE_TTL = 300000; // 5 minutes
         
         const loveBotGreetings = [
             "Em đang làm gì vậy? 😊",
@@ -1616,89 +1532,24 @@
             }
         }
         
-        function toggleLoveBot() {
-            const container = document.getElementById('lovebotContainer');
-            if (!container) return;
-            
-            if (loveBotMinimized) {
-                expandLoveBot();
-            } else {
-                minimizeLoveBot();
-            }
-        }
-        
-        function expandLoveBot() {
-            const container = document.getElementById('lovebotContainer');
-            if (!container) return;
-            
-            container.classList.remove('minimized');
-            loveBotMinimized = false;
-            loveBotActive = true;
-            
-            // Start bot if not already running
-            if (!window.loveBotInterval) {
-                startLoveBotScheduler();
-            }
-        }
-        
-        function minimizeLoveBot() {
-            const container = document.getElementById('lovebotContainer');
-            if (!container) return;
-            
-            container.classList.add('minimized');
-            loveBotMinimized = true;
-        }
-        
-        function openLoveBot() {
-            expandLoveBot();
-        }
-        
-        function closeLoveBot() {
-            minimizeLoveBot();
-        }
-        
-        function expandWhenMinimized(event) {
-            const container = document.getElementById('lovebotContainer');
-            if (container && loveBotMinimized) {
-                event.stopPropagation();
-                expandLoveBot();
-            }
-        }
+        // Old functions removed - using simplified version below
         
         function addBotMessage(message) {
             const container = document.getElementById('lovebotContainer');
             if (!container) return;
             
-            // Get or create messages area
-            let messagesArea = container.querySelector('.lovebot-messages');
-            if (!messagesArea) {
-                messagesArea = document.createElement('div');
-                messagesArea.className = 'lovebot-messages';
-                container.appendChild(messagesArea);
-            }
+            const messagesDiv = container.querySelector('.lovebot-messages');
+            if (!messagesDiv) return;
             
-            // Create unique timestamp
-            const timestamp = new Date().getTime();
-            
-            // Create and add message bubble
-            const messageItem = document.createElement('div');
-            messageItem.className = 'chat-bubble-item bot-msg';
-            messageItem.setAttribute('data-timestamp', timestamp);
-            messageItem.innerHTML = `
+            const botBubble = document.createElement('div');
+            botBubble.className = 'chat-bubble-item bot-msg';
+            botBubble.innerHTML = `
                 <div class="chat-bubble bot-message">
-                    <button class="chat-delete-btn" onclick="deleteMessage(${timestamp})" title="Xóa tin nhắn">✕</button>
                     <div class="chat-message-text">${message}</div>
-                    <div class="chat-message-time">${new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}</div>
                 </div>
             `;
-            
-            messagesArea.appendChild(messageItem);
-            
-            // Scroll to bottom
-            messagesArea.scrollTop = messagesArea.scrollHeight;
-            
-            // Save to localStorage for persistence
-            saveBotMessageToLocalStorage(message, 'bot', timestamp);
+            messagesDiv.appendChild(botBubble);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
         
         function saveBotMessageToLocalStorage(message, sender, timestamp) {
@@ -1770,9 +1621,6 @@
                 
                 showSuccess('🗑️ Đã xóa tất cả tin nhắn!');
             }, messageItems.length * 50 + 400);
-            
-            // Clear cache as well
-            loveBotCache.clear();
         }
         
         function loadBotMessagesFromLocalStorage() {
@@ -1891,32 +1739,6 @@
             }
         }
         
-        // Helper function to normalize message for caching
-        function normalizeCacheKey(message) {
-            return message.toLowerCase().trim().replace(/[^\w\s]/g, '');
-        }
-        
-        // Check and update rate limit
-        function checkRateLimit() {
-            const now = Date.now();
-            
-            // Reset counter if time window expired
-            if (now > loveBotRateLimitResetTime) {
-                loveBotRequestCount = 0;
-                loveBotRateLimitResetTime = now + 60000;
-            }
-            
-            // Check if exceeded rate limit
-            if (loveBotRequestCount >= LOVEBOT_RATE_LIMIT) {
-                const timeLeft = Math.ceil((loveBotRateLimitResetTime - now) / 1000);
-                showError(`⏱️ Bạn gửi tin quá nhanh! Vui lòng chờ ${timeLeft} giây.`);
-                return false;
-            }
-            
-            loveBotRequestCount++;
-            return true;
-        }
-        
         // Send user message to Love Bot
         async function sendUserMessage() {
             const input = document.getElementById('lovebotInput');
@@ -1924,18 +1746,6 @@
             const message = input.value.trim();
             
             if (!message) return;
-            
-            // Debouncing - prevent spam
-            const currentTime = Date.now();
-            if (currentTime - loveBotLastRequestTime < LOVEBOT_REQUEST_COOLDOWN) {
-                return;
-            }
-            loveBotLastRequestTime = currentTime;
-            
-            // Rate limiting check
-            if (!checkRateLimit()) {
-                return;
-            }
             
             // Create user message bubble
             const messagesArea = document.querySelector('.lovebot-messages');
@@ -1983,27 +1793,9 @@
             }
         }
         
-        // Get bot response with retry logic and caching
-        async function getBotResponse(userMessage, retryCount = 0) {
-            // Check cache first
-            const cacheKey = normalizeCacheKey(userMessage);
-            const cachedResponse = loveBotCache.get(cacheKey);
-            
-            if (cachedResponse && (Date.now() - cachedResponse.timestamp < LOVEBOT_CACHE_TTL)) {
-                addBotMessage(cachedResponse.reply);
-                return;
-            }
-            
+        // Get bot response
+        async function getBotResponse(userMessage) {
             try {
-                // Cancel previous request if exists
-                if (loveBotAbortController) {
-                    loveBotAbortController.abort();
-                }
-                
-                // Create new abort controller for timeout
-                loveBotAbortController = new AbortController();
-                const timeoutId = setTimeout(() => loveBotAbortController.abort(), LOVEBOT_REQUEST_TIMEOUT);
-                
                 const response = await fetch(LOVEBOT_API_URL, {
                     method: 'POST',
                     headers: {
@@ -2012,11 +1804,8 @@
                     body: JSON.stringify({
                         message: userMessage,
                         history: getRecentChatHistory()
-                    }),
-                    signal: loveBotAbortController.signal
+                    })
                 });
-                
-                clearTimeout(timeoutId);
 
                 if (!response.ok) {
                     throw new Error(`Chat API error: ${response.status}`);
@@ -2029,43 +1818,12 @@
                     throw new Error('Empty bot response');
                 }
 
-                // Cache the response
-                loveBotCache.set(cacheKey, {
-                    reply: botMessage,
-                    timestamp: Date.now()
-                });
-                
-                // Limit cache size
-                if (loveBotCache.size > LOVEBOT_CACHE_SIZE) {
-                    const firstKey = loveBotCache.keys().next().value;
-                    loveBotCache.delete(firstKey);
-                }
-
                 addBotMessage(botMessage);
             } catch (error) {
-                // Retry logic for network errors (not for aborts)
-                if (error.name !== 'AbortError' && retryCount < LOVEBOT_MAX_RETRIES) {
-                    // Exponential backoff: 1s, 2s
-                    const delay = Math.pow(2, retryCount) * 1000;
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                    return getBotResponse(userMessage, retryCount + 1);
-                }
-                
-                // Show appropriate error message
-                let errorMsg;
-                if (error.name === 'AbortError') {
-                    errorMsg = 'Xin lỗi, server phản hồi quá lâu. Thử lại nhé! ⏱️';
-                } else if (retryCount >= LOVEBOT_MAX_RETRIES) {
-                    errorMsg = 'Xin lỗi, tôi hơi bận rồi. Hỏi lại sau nhé! 🔄';
-                } else {
-                    errorMsg = Math.random() < 0.6
-                        ? loveBotGreetings[Math.floor(Math.random() * loveBotGreetings.length)]
-                        : loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
-                }
-                
-                addBotMessage(errorMsg);
-            } finally {
-                loveBotAbortController = null;
+                const fallback = Math.random() < 0.6
+                    ? loveBotGreetings[Math.floor(Math.random() * loveBotGreetings.length)]
+                    : loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
+                addBotMessage(fallback);
             }
         }
         
@@ -2111,44 +1869,24 @@
             }
         }
         
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        function setupBotInputHandlers() {
-            const input = document.getElementById('lovebotInput');
-            if (input) {
-                input.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault();
-                        sendUserMessage();
-                    }
-                });
+        function saveBotMessageToLocalStorage(message, sender, timestamp) {
+            try {
+                const messages = JSON.parse(localStorage.getItem('loveBotMessages') || '[]');
+                messages.push({ message, sender, timestamp });
+                localStorage.setItem('loveBotMessages', JSON.stringify(messages));
+            } catch (error) {
+                console.error('❌ Error saving message:', error);
             }
         }
         
-        // Initialize Love Bot on page load
+        // Initialize Love Bot
         function initLoveBot() {
-            // Load saved messages
-            loadBotMessagesFromLocalStorage();
-            
-            // Setup input handlers
-            setupBotInputHandlers();
-            
-            // Start bot scheduler
             const container = document.getElementById('lovebotContainer');
-            if (container) {
-                if (!window.loveBotInterval) {
-                    startLoveBotScheduler();
-                }
-                loveBotActive = true;
-                
-                // Minimize by default
-                loveBotMinimized = true;
-                container.classList.add('minimized');
-            }
+            if (!container) return;
+            
+            // Initialize with minimized state
+            loveBotMinimized = true;
+            container.classList.add('minimized');
             
             // Mark as initialized
             if (!localStorage.getItem('loveBotInitialized')) {
@@ -2156,7 +1894,166 @@
             }
         }
         
+        // ==================== TOGGLES & MODALS ====================
+        function toggleQuotes() {
+            const modal = document.getElementById('quotesModal');
+            if (modal.style.display === 'flex') {
+                closeQuotes();
+            } else {
+                modal.style.display = 'flex';
+                document.getElementById('quoteTotalCount').textContent = loveQuotes.length;
+                nextQuote();
+            }
+        }
+        
+        function closeQuotes(event) {
+            const modal = document.getElementById('quotesModal');
+            if (event && event.target === modal) {
+                modal.style.display = 'none';
+            } else if (!event) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        function nextQuote() {
+            currentQuoteIndex = (currentQuoteIndex + 1) % loveQuotes.length;
+            displayQuote();
+        }
+        
+        function prevQuote() {
+            currentQuoteIndex = (currentQuoteIndex - 1 + loveQuotes.length) % loveQuotes.length;
+            displayQuote();
+        }
+        
+        function randomQuote() {
+            currentQuoteIndex = Math.floor(Math.random() * loveQuotes.length);
+            displayQuote();
+        }
+        
+        function displayQuote() {
+            const quoteText = document.getElementById('quoteText');
+            const quoteIndex = document.getElementById('quoteCurrentIndex');
+            quoteText.textContent = loveQuotes[currentQuoteIndex];
+            quoteIndex.textContent = currentQuoteIndex + 1;
+        }
+        
+        function copyQuote() {
+            const quoteText = loveQuotes[currentQuoteIndex];
+            navigator.clipboard.writeText(quoteText).then(() => {
+                showSuccess('📋 Đã copy lời yêu thương!');
+            }).catch(() => {
+                showError('❌ Không thể copy');
+            });
+        }
+        
+        function toggleDaysInfo() {
+            const modal = document.getElementById('daysInfoModal');
+            if (!modal) return;
+            updateDaysCounter();
+            modal.style.display = 'flex';
+        }
+        
+        function closeDaysInfo(event) {
+            const modal = document.getElementById('daysInfoModal');
+            if (!modal) return;
+            if (event && !event.target.closest('.days-info-content')) {
+                modal.style.display = 'none';
+            } else if (!event) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        function toggleEditDate() {
+            const form = document.getElementById('editDateFormModal');
+            const btn = document.getElementById('editDateToggleBtn');
+            if (form.style.display === 'none') {
+                const startDateStr = localStorage.getItem(DAYS_COUNTER_KEY);
+                if (startDateStr) {
+                    document.getElementById('startDateModal').value = startDateStr;
+                }
+                form.style.display = 'block';
+                btn.style.display = 'none';
+            } else {
+                form.style.display = 'none';
+                btn.style.display = 'block';
+            }
+        }
+        
+        function saveDaysDate() {
+            const startDateInput = document.getElementById('startDateModal');
+            const selectedDate = startDateInput.value;
+            
+            if (!selectedDate) {
+                showWarning('⚠️ Vui lòng chọn ngày!');
+                return;
+            }
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            const dateObj = new Date(selectedDate);
+            dateObj.setHours(0, 0, 0, 0);
+            
+            if (dateObj > today) {
+                showWarning('⚠️ Ngày không thể là ngày tương lai!');
+                return;
+            }
+            
+            localStorage.setItem(DAYS_COUNTER_KEY, selectedDate);
+            
+            if (database) {
+                try {
+                    database.ref('shared/daysStartDate').set({
+                        date: selectedDate,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP
+                    });
+                } catch (error) {
+                    console.error('❌ Error saving date to Firebase:', error);
+                }
+            }
+            
+            updateDaysCounter();
+            document.getElementById('editDateFormModal').style.display = 'none';
+            document.getElementById('editDateToggleBtn').style.display = 'block';
+            showSuccess('💕 Đã lưu ngày bắt đầu! (Cả hai người đều có thể thấy)');
+        }
+        
 
+        
+        function toggleLoveBot() {
+            const container = document.getElementById('lovebotContainer');
+            loveBotMinimized = !loveBotMinimized;
+            if (loveBotMinimized) {
+                container.classList.add('minimized');
+            } else {
+                container.classList.remove('minimized');
+            }
+        }
+        
+        function minimizeLoveBot() {
+            const container = document.getElementById('lovebotContainer');
+            loveBotMinimized = true;
+            container.classList.add('minimized');
+        }
+        
+        function expandWhenMinimized(event) {
+            const container = document.getElementById('lovebotContainer');
+            if (loveBotMinimized && event.target === container) {
+                loveBotMinimized = false;
+                container.classList.remove('minimized');
+            }
+        }
+        
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
     </script>
 </body>
 </html>
