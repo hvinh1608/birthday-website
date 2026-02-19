@@ -420,26 +420,6 @@
             });
         }
 
-        // Real-time sync for days counter
-        const daysStartDateRef = database ? database.ref('shared/daysStartDate') : null;
-        if (daysStartDateRef) {
-            daysStartDateRef.on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data && data.date) {
-                    // Update localStorage
-                    const currentLocal = localStorage.getItem('valentineDaysStartDate');
-                    if (currentLocal !== data.date) {
-                        localStorage.setItem('valentineDaysStartDate', data.date);
-                        console.log('📅 Đã đồng bộ ngày bắt đầu từ Firebase:', data.date);
-                        // Update display if updateDaysCounter function exists
-                        if (typeof updateDaysCounter === 'function') {
-                            updateDaysCounter();
-                        }
-                    }
-                }
-            });
-        }
-
         // Functions for page navigation
         let currentPage = 1;
         let totalPages = 4;
@@ -1030,6 +1010,26 @@
             
             // Show days counter on mobile
             showDaysDisplayOnMobile();
+            
+            // Setup Firebase real-time sync for days counter
+            const daysStartDateRef = database ? database.ref('shared/daysStartDate') : null;
+            if (daysStartDateRef) {
+                daysStartDateRef.on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data && data.date) {
+                        const currentLocal = localStorage.getItem('valentineDaysStartDate');
+                        if (currentLocal !== data.date) {
+                            localStorage.setItem('valentineDaysStartDate', data.date);
+                            console.log('📅 Đã đồng bộ ngày bắt đầu từ Firebase:', data.date);
+                            // Force update display
+                            setTimeout(() => {
+                                updateDaysCounter();
+                                showSuccess('💕 Ngày bên nhau đã được cập nhật!');
+                            }, 100);
+                        }
+                    }
+                });
+            }
         });
 
         function openBook() {
