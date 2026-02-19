@@ -420,6 +420,26 @@
             });
         }
 
+        // Real-time sync for days counter
+        const daysStartDateRef = database ? database.ref('shared/daysStartDate') : null;
+        if (daysStartDateRef) {
+            daysStartDateRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data && data.date) {
+                    // Update localStorage
+                    const currentLocal = localStorage.getItem('valentineDaysStartDate');
+                    if (currentLocal !== data.date) {
+                        localStorage.setItem('valentineDaysStartDate', data.date);
+                        console.log('📅 Đã đồng bộ ngày bắt đầu từ Firebase:', data.date);
+                        // Update display if updateDaysCounter function exists
+                        if (typeof updateDaysCounter === 'function') {
+                            updateDaysCounter();
+                        }
+                    }
+                }
+            });
+        }
+
         // Functions for page navigation
         let currentPage = 1;
         let totalPages = 4;
@@ -2047,46 +2067,6 @@
             }
         }
         
-        function saveDaysDate() {
-            const startDateInput = document.getElementById('startDateModal');
-            const selectedDate = startDateInput.value;
-            
-            if (!selectedDate) {
-                showWarning('⚠️ Vui lòng chọn ngày!');
-                return;
-            }
-            
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            
-            const dateObj = new Date(selectedDate);
-            dateObj.setHours(0, 0, 0, 0);
-            
-            if (dateObj > today) {
-                showWarning('⚠️ Ngày không thể là ngày tương lai!');
-                return;
-            }
-            
-            localStorage.setItem(DAYS_COUNTER_KEY, selectedDate);
-            
-            if (database) {
-                try {
-                    database.ref('shared/daysStartDate').set({
-                        date: selectedDate,
-                        timestamp: firebase.database.ServerValue.TIMESTAMP
-                    });
-                } catch (error) {
-                    console.error('❌ Error saving date to Firebase:', error);
-                }
-            }
-            
-            updateDaysCounter();
-            document.getElementById('editDateFormModal').style.display = 'none';
-            document.getElementById('editDateToggleBtn').style.display = 'block';
-            showSuccess('💕 Đã lưu ngày bắt đầu! (Cả hai người đều có thể thấy)');
-        }
-        
-
         
         function toggleLoveBot() {
             const container = document.getElementById('lovebotContainer');
