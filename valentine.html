@@ -1378,6 +1378,20 @@
                 if (daysNumber) daysNumber.textContent = '?';
                 if (counterDetails) counterDetails.style.display = 'none';
                 if (startDateDisplay) startDateDisplay.textContent = '👆 Nhấn ✏️ để thiết lập ngày bắt đầu';
+                
+                // Update modal to show prompt
+                const modalDaysNumber = document.getElementById('modalDaysNumber');
+                const modalWeekNumber = document.getElementById('modalWeekNumber');
+                const modalMonthNumber = document.getElementById('modalMonthNumber');
+                const modalYearNumber = document.getElementById('modalYearNumber');
+                const modalStartDate = document.getElementById('modalStartDate');
+                
+                if (modalDaysNumber) modalDaysNumber.textContent = '?';
+                if (modalWeekNumber) modalWeekNumber.textContent = '?';
+                if (modalMonthNumber) modalMonthNumber.textContent = '?';
+                if (modalYearNumber) modalYearNumber.textContent = '?';
+                if (modalStartDate) modalStartDate.textContent = '👆 Nhấn ✏️ để thiết lập ngày bắt đầu';
+                
                 return;
             }
             
@@ -1385,6 +1399,8 @@
             const weeks = Math.floor(days / 7);
             const months = Math.floor(days / 30.44); // Trung bình một tháng
             const years = Math.floor(days / 365.25); // Trung bình một năm
+            
+            console.log('Days calculated:', days, 'weeks:', weeks, 'months:', months, 'years:', years);
             
             const daysNumber = document.getElementById('daysNumber');
             const weekValue = document.getElementById('weekValue');
@@ -1406,17 +1422,38 @@
                 startDateDisplay.textContent = `Từ ngày ${displayDate}`;
             }
             
-            // Update modal info
+            // Update modal info - force update with setAttribute as well
             const modalDaysNumber = document.getElementById('modalDaysNumber');
             const modalWeekNumber = document.getElementById('modalWeekNumber');
             const modalMonthNumber = document.getElementById('modalMonthNumber');
             const modalYearNumber = document.getElementById('modalYearNumber');
             const modalStartDate = document.getElementById('modalStartDate');
             
-            if (modalDaysNumber) modalDaysNumber.textContent = days;
-            if (modalWeekNumber) modalWeekNumber.textContent = weeks;
-            if (modalMonthNumber) modalMonthNumber.textContent = months;
-            if (modalYearNumber) modalYearNumber.textContent = years;
+            console.log('Modal elements found:', {
+                modalDaysNumber: !!modalDaysNumber,
+                modalWeekNumber: !!modalWeekNumber,
+                modalMonthNumber: !!modalMonthNumber,
+                modalYearNumber: !!modalYearNumber,
+                modalStartDate: !!modalStartDate
+            });
+            
+            if (modalDaysNumber) {
+                modalDaysNumber.textContent = days;
+                modalDaysNumber.innerText = days;
+                console.log('Updated modalDaysNumber to:', days);
+            }
+            if (modalWeekNumber) {
+                modalWeekNumber.textContent = weeks;
+                modalWeekNumber.innerText = weeks;
+            }
+            if (modalMonthNumber) {
+                modalMonthNumber.textContent = months;
+                modalMonthNumber.innerText = months;
+            }
+            if (modalYearNumber) {
+                modalYearNumber.textContent = years;
+                modalYearNumber.innerText = years;
+            }
             
             if (modalStartDate) {
                 const displayDate = new Date(startDateStr).toLocaleDateString('vi-VN', {
@@ -1425,6 +1462,7 @@
                     day: 'numeric'
                 });
                 modalStartDate.textContent = `Từ ngày ${displayDate}`;
+                modalStartDate.innerText = `Từ ngày ${displayDate}`;
             }
         }
         
