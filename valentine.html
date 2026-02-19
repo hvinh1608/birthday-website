@@ -2004,28 +2004,6 @@
             });
         }
         
-        function showDaysDisplayOnMobile() {
-            const daysDisplay = document.getElementById('daysDisplay');
-            if (!daysDisplay) return;
-            
-            // Show on mobile (max-width: 768px), hide on desktop
-            function toggleDaysDisplay() {
-                if (window.innerWidth <= 768) {
-                    daysDisplay.style.display = 'flex';
-                    // Update the days count
-                    updateDaysCounter();
-                } else {
-                    daysDisplay.style.display = 'none';
-                }
-            }
-            
-            // Check on load
-            toggleDaysDisplay();
-            
-            // Check on resize
-            window.addEventListener('resize', toggleDaysDisplay);
-        }
-        
         function toggleDaysInfo() {
             const modal = document.getElementById('daysInfoModal');
             if (!modal) return;

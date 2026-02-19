@@ -3172,23 +3172,9 @@ body.birthday-wish {
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-/* Days counter display for mobile */
+/* Days counter display for mobile - DISABLED */
 .days-display-mobile {
-    background: linear-gradient(135deg, #86efac, #4ade80);
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 600;
-    box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
-    white-space: nowrap;
-    display: none;
-}
-
-.days-display-mobile #daysNumber {
-    font-size: 16px;
-    font-weight: 700;
-    color: white;
+    display: none !important;
 }
 
 /* Camera control icon */
@@ -3411,12 +3397,6 @@ body.birthday-wish {
         gap: 15px;
     }
     
-    .days-display-mobile {
-        display: flex !important;
-        align-items: center;
-        gap: 6px;
-    }
-
     .control-btn {
         width: 45px;
         height: 45px;
@@ -3471,15 +3451,6 @@ body.birthday-wish {
         right: 10px;
         gap: 10px;
         flex-wrap: wrap;
-    }
-    
-    .days-display-mobile {
-        display: flex !important;
-        align-items: center;
-        gap: 4px;
-        font-size: 13px;
-        padding: 6px 12px;
-        flex-shrink: 0;
     }
     
     .controls-bar {
