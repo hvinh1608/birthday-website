@@ -4669,6 +4669,86 @@ body.birthday-wish {
     box-shadow: 0 20px 50px rgba(196, 69, 105, 0.28);
     text-align: center;
     border: 1px solid rgba(255, 107, 157, 0.25);
+    max-height: min(88vh, 760px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.envelope-modal-card.letter-open {
+    width: min(520px, 100%);
+    text-align: left;
+}
+
+.envelope-letter-view {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1;
+}
+
+.envelope-letter-view[hidden],
+.envelope-locked-view[hidden] {
+    display: none !important;
+}
+
+.envelope-letter-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0 0 12px;
+}
+
+.envelope-edit-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    background: linear-gradient(135deg, #ff6b9d, #c44569);
+    box-shadow: 0 4px 12px rgba(196, 69, 105, 0.25);
+}
+
+.envelope-edit-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.envelope-edit-actions[hidden] {
+    display: none !important;
+}
+
+.envelope-letter-body {
+    flex: 1;
+    min-height: 220px;
+    max-height: min(55vh, 420px);
+    overflow-y: auto;
+    background: #fffdf8;
+    border: 1px solid rgba(255, 107, 157, 0.2);
+    border-radius: 16px;
+    padding: 18px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: #5a3a45;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.envelope-letter-body p {
+    margin: 0 0 14px;
+}
+
+.envelope-letter-body p:last-child {
+    margin-bottom: 0;
+}
+
+.envelope-letter-body.editing {
+    outline: 2px solid rgba(255, 107, 157, 0.45);
+    background: #fff;
 }
 
 .envelope-close-btn {

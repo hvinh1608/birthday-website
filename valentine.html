@@ -7,7 +7,7 @@
     <!-- Favicon - Valentine Heart -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' text-anchor='middle' x='50'>💖</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?v=6.1">
+    <link rel="stylesheet" href="./style.css?v=6.2">
     
     <!-- Firebase SDK (v8 compat) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -40,10 +40,6 @@
             <div class="book" id="book">
                 <div class="book-cover" onclick="openBook()" id="bookCover">
                     <img src="images/anhbia.jpg?v=20260211" alt="Valentine Photo" class="cover-image" loading="lazy" decoding="async">
-                    <div class="book-lock-overlay" id="bookLockOverlay">
-                        <span class="book-lock-icon">✉️🔒</span>
-                        <span class="book-lock-text">Mở lúc 0h · 08/10</span>
-                    </div>
                 </div>
                 
                 <!-- Trang 1: Lời chúc chính -->
@@ -55,9 +51,12 @@
                             <button class="copy-link-btn" onclick="copyPageLink(1)">📎 Copy link</button>
                         </div>
                         <div class="message editable-content" id="content1" contenteditable="false">
-                            <p class="message-line">Chúc mừng sinh nhật embe của anh ❤️🎂</p>
-                            <p class="message-line">Tuổi mới anh chúc embe luôn xinh đẹp, vui vẻ, mạnh khỏe và lúc nào cũng giữ được nụ cười thật xinh trên môi nha.</p>
-                            <p class="message-line">Anh mong những điều tốt đẹp nhất sẽ luôn đến với embe, những điều em mong muốn và những dự định của em đều sẽ dần trở thành hiện thực.</p>
+                            <p class="message-line">Hôm nay là ngày của yêu thương,</p>
+                            <p class="message-line">Ngày để mình nói lời trân trọng nhất.</p>
+                            <p class="message-line">Cảm ơn em vì luôn dịu dàng và ấm áp,</p>
+                            <p class="message-line">Cảm ơn em vì đã ở bên cạnh anh.</p>
+                            <p class="message-line">Chúc mình mãi ngọt ngào như hôm nay! 💕</p>
+                            <p class="message-line">Và mọi điều ước sẽ thành hiện thực! 💘</p>
                         </div>
                         <div class="edit-controls" id="controls1" style="display: none;">
                             <button onclick="saveContent(1)" class="save-btn">💾 Lưu</button>
@@ -77,10 +76,14 @@
                             <button class="edit-btn" onclick="toggleEdit(2)">✏️ Chỉnh sửa</button>
                             <button class="copy-link-btn" onclick="copyPageLink(2)">📎 Copy link</button>
                         </div>
-                        <div class="page-title">🥺 Dù anh đang ở xa...</div>
+                        <div class="page-title">📸 Những Kỷ Niệm Đáng Yêu</div>
                         <div class="message editable-content" id="content2" contenteditable="false">
-                            <p class="message-line">Sinh nhật năm nay anh buồn một chút vì không thể ở bên cạnh embe, không thể tự tay tặng quà, ôm embe một cái hay cùng em đón sinh nhật như anh mong muốn.</p>
-                            <p class="message-line">Nhưng dù đang ở xa, anh vẫn luôn nhớ đến em và mong hôm nay em sẽ có một ngày thật vui và thật hạnh phúc ❤️</p>
+                            <p class="message-line">Nhớ những lần mình nắm tay thật chặt,</p>
+                            <p class="message-line">Những câu chuyện nhỏ nhưng đầy ấm áp,</p>
+                            <p class="message-line">Những chuyến đi, những khoảnh khắc,</p>
+                            <p class="message-line">Tất cả đều thật đáng yêu! 🌟</p>
+                            <p class="message-line">Cảm ơn em đã bước vào</p>
+                            <p class="message-line">cuộc đời này! 💖</p>
                         </div>
                         <div class="edit-controls" id="controls2" style="display: none;">
                             <button onclick="saveContent(2)" class="save-btn">💾 Lưu</button>
@@ -101,11 +104,14 @@
                             <button class="edit-btn" onclick="toggleEdit(3)">✏️ Chỉnh sửa</button>
                             <button class="copy-link-btn" onclick="copyPageLink(3)">📎 Copy link</button>
                         </div>
-                        <div class="page-title">💝 Cảm ơn embe</div>
+                        <div class="page-title">🌈 Lời Ước Cho Chúng Mình</div>
                         <div class="message editable-content" id="content3" contenteditable="false">
-                            <p class="message-line">Cảm ơn embe vì đã xuất hiện trong cuộc sống của anh, cảm ơn em vì đã luôn ở đó và cùng anh trải qua những ngày vui buồn.</p>
-                            <p class="message-line">Khoảng thời gian này anh không thể ở cạnh em nhiều như trước, nhưng anh vẫn luôn cố gắng và mong em hiểu cho anh nhé.</p>
-                            <p class="message-line">Anh chỉ mong embe luôn vui vẻ, luôn được yêu thương và đừng vì anh đang ở xa mà cảm thấy mình một mình. Anh vẫn ở đây, vẫn nhớ em và vẫn thương embe rất nhiều.</p>
+                            <p class="message-line">Mong em luôn khỏe mạnh và hạnh phúc,</p>
+                            <p class="message-line">Mỗi ngày đều tràn đầy tiếng cười,</p>
+                            <p class="message-line">Mọi điều em muốn đều thuận lợi,</p>
+                            <p class="message-line">Tình yêu luôn ấm áp, bình yên! 🏠</p>
+                            <p class="message-line">Và hãy nhớ rằng có anh</p>
+                            <p class="message-line">luôn ủng hộ em! 💪</p>
                         </div>
                         <div class="edit-controls" id="controls3" style="display: none;">
                             <button onclick="saveContent(3)" class="save-btn">💾 Lưu</button>
@@ -126,15 +132,17 @@
                             <button class="edit-btn" onclick="toggleEdit(4)">✏️ Chỉnh sửa</button>
                             <button class="copy-link-btn" onclick="copyPageLink(4)">📎 Copy link</button>
                         </div>
-                        <div class="page-title">🎂 Sinh Nhật Vui Vẻ Nha 🎂</div>
+                        <div class="page-title">💖 Valentine Ngọt Ngào 💖</div>
                         <div class="message special-message editable-content" id="content4" contenteditable="false">
-                            <p class="message-line">Chúc embe tuổi mới thật nhiều niềm vui, thật nhiều hạnh phúc và thật nhiều điều tốt đẹp.</p>
-                            <p class="message-line">Mong rằng những sinh nhật sau, anh sẽ có thể ở ngay bên cạnh em, tự tay chúc mừng sinh nhật embe và bù lại cho em tất cả những điều mà năm nay anh chưa thể làm được.</p>
-                            <p class="message-line big-text">Sinh nhật vui vẻ nhé embe của anh ❤️🎂</p>
-                            <p class="message-line">Yêu embe nhiều lắm. Nhớ embe nhiều lắm. 🥺❤️</p>
+                            <p class="message-line big-text">Yêu em nhiều!</p>
+                            <p class="message-line">💘🌹💝✨</p>
+                            <p class="message-line">Chúc em một Valentine</p>
+                            <p class="message-line">thật ấm áp và hạnh phúc.</p>
+                            <p class="message-line">Và chúng mình sẽ</p>
+                            <p class="message-line">luôn bên nhau! ✨</p>
                         </div>
                         <div class="signature editable-content" id="signature4" contenteditable="false">
-                            💝 Yêu embe nhiều lắm 💝
+                            💝 Love you 3000 💝
                         </div>
                         <div class="edit-controls" id="controls4" style="display: none;">
                             <button onclick="saveContent(4)" class="save-btn">💾 Lưu</button>
@@ -183,38 +191,60 @@
             </div>
         </div>
 
-        <!-- Phong bì mở thư (khóa đến 0h 08/10) -->
+        <!-- Phong bì mở thư sinh nhật (khóa đến 0h 08/10) -->
         <div class="envelope-modal" id="envelopeModal" onclick="closeEnvelopeModal(event)">
-            <div class="envelope-modal-card" onclick="event.stopPropagation()">
+            <div class="envelope-modal-card" id="envelopeModalCard" onclick="event.stopPropagation()">
                 <button class="close-modal-btn envelope-close-btn" onclick="closeEnvelopeModal()" title="Đóng">✖</button>
 
-                <div class="envelope-scene" id="envelopeScene">
-                    <div class="envelope" id="envelope">
-                        <div class="envelope-flap"></div>
-                        <div class="envelope-body">
-                            <div class="envelope-heart">💌</div>
-                            <div class="envelope-seal" id="envelopeSeal">🔒</div>
-                        </div>
-                        <div class="envelope-letter" id="envelopeLetterPreview">
-                            <p>Thư dành riêng cho em</p>
-                            <span>Mở lúc 0h ngày 08/10</span>
+                <div class="envelope-locked-view" id="envelopeLockedView">
+                    <div class="envelope-scene" id="envelopeScene">
+                        <div class="envelope" id="envelope">
+                            <div class="envelope-flap"></div>
+                            <div class="envelope-body">
+                                <div class="envelope-heart">💌</div>
+                                <div class="envelope-seal" id="envelopeSeal">🔒</div>
+                            </div>
+                            <div class="envelope-letter" id="envelopeLetterPreview">
+                                <p>Thư sinh nhật</p>
+                                <span>Mở lúc 0h ngày 08/10</span>
+                            </div>
                         </div>
                     </div>
+
+                    <h2 class="envelope-title" id="envelopeTitle">Phong bì lời chúc</h2>
+                    <p class="envelope-subtitle" id="envelopeSubtitle">Thư sẽ mở đúng 0 giờ đêm ngày 8 tháng 10</p>
+
+                    <div class="envelope-countdown" id="envelopeCountdown">
+                        <div class="countdown-item"><span id="cdDays">0</span><small>ngày</small></div>
+                        <div class="countdown-item"><span id="cdHours">0</span><small>giờ</small></div>
+                        <div class="countdown-item"><span id="cdMins">0</span><small>phút</small></div>
+                        <div class="countdown-item"><span id="cdSecs">0</span><small>giây</small></div>
+                    </div>
+
+                    <button class="envelope-open-btn" id="envelopeOpenBtn" onclick="tryOpenLetterFromEnvelope()" disabled>
+                        🔒 Chưa đến giờ mở
+                    </button>
                 </div>
 
-                <h2 class="envelope-title" id="envelopeTitle">Phong bì lời chúc</h2>
-                <p class="envelope-subtitle" id="envelopeSubtitle">Thư sẽ mở đúng 0 giờ đêm ngày 8 tháng 10</p>
-
-                <div class="envelope-countdown" id="envelopeCountdown">
-                    <div class="countdown-item"><span id="cdDays">0</span><small>ngày</small></div>
-                    <div class="countdown-item"><span id="cdHours">0</span><small>giờ</small></div>
-                    <div class="countdown-item"><span id="cdMins">0</span><small>phút</small></div>
-                    <div class="countdown-item"><span id="cdSecs">0</span><small>giây</small></div>
+                <div class="envelope-letter-view" id="envelopeLetterView" hidden>
+                    <h2 class="envelope-title">🎂 Thư sinh nhật cho embe 🎂</h2>
+                    <div class="envelope-letter-toolbar">
+                        <button type="button" class="envelope-edit-btn" id="envelopeEditBtn" onclick="toggleEnvelopeLetterEdit()">✏️ Chỉnh sửa</button>
+                        <div class="envelope-edit-actions" id="envelopeEditActions" hidden>
+                            <button type="button" class="save-btn" onclick="saveEnvelopeLetter()">💾 Lưu</button>
+                            <button type="button" class="cancel-btn" onclick="cancelEnvelopeLetterEdit()">❌ Hủy</button>
+                        </div>
+                    </div>
+                    <div class="envelope-letter-body editable-content" id="envelopeLetterBody" contenteditable="false">
+                        <p>Chúc mừng sinh nhật embe của anh ❤️🎂</p>
+                        <p>Tuổi mới anh chúc embe luôn xinh đẹp, vui vẻ, mạnh khỏe và lúc nào cũng giữ được nụ cười thật xinh trên môi nha. Anh mong những điều tốt đẹp nhất sẽ luôn đến với embe, những điều em mong muốn và những dự định của em đều sẽ dần trở thành hiện thực.</p>
+                        <p>Sinh nhật năm nay anh buồn một chút vì không thể ở bên cạnh embe, không thể tự tay tặng quà, ôm embe một cái hay cùng em đón sinh nhật như anh mong muốn. Nhưng dù đang ở xa, anh vẫn luôn nhớ đến em và mong hôm nay em sẽ có một ngày thật vui và thật hạnh phúc ❤️</p>
+                        <p>Cảm ơn embe vì đã xuất hiện trong cuộc sống của anh, cảm ơn em vì đã luôn ở đó và cùng anh trải qua những ngày vui buồn. Khoảng thời gian này anh không thể ở cạnh em nhiều như trước, nhưng anh vẫn luôn cố gắng và mong em hiểu cho anh nhé.</p>
+                        <p>Anh chỉ mong embe luôn vui vẻ, luôn được yêu thương và đừng vì anh đang ở xa mà cảm thấy mình một mình. Anh vẫn ở đây, vẫn nhớ em và vẫn thương embe rất nhiều.</p>
+                        <p>Chúc embe tuổi mới thật nhiều niềm vui, thật nhiều hạnh phúc và thật nhiều điều tốt đẹp. Mong rằng những sinh nhật sau, anh sẽ có thể ở ngay bên cạnh em, tự tay chúc mừng sinh nhật embe và bù lại cho em tất cả những điều mà năm nay anh chưa thể làm được.</p>
+                        <p>Sinh nhật vui vẻ nhé embe của anh ❤️🎂<br>Yêu embe nhiều lắm. Nhớ embe nhiều lắm. 🥺❤️</p>
+                    </div>
                 </div>
-
-                <button class="envelope-open-btn" id="envelopeOpenBtn" onclick="tryOpenLetterFromEnvelope()" disabled>
-                    🔒 Chưa đến giờ mở
-                </button>
             </div>
         </div>
         
@@ -976,8 +1006,9 @@
             // Load nội dung đã lưu từ Firebase
             loadSavedContent();
 
-            // Phong bì khóa đến 0h 08/10 — cập nhật icon/countdown
+            // Phong bì thư sinh nhật — cập nhật icon/countdown
             refreshEnvelopeLockState();
+            loadEnvelopeLetter();
             if (!isLetterUnlocked()) {
                 setInterval(() => {
                     refreshEnvelopeLockState();
@@ -992,12 +1023,8 @@
                 if (pageNum > 0) {
                     // Đợi một chút để Firebase load xong
                     setTimeout(() => {
-                        if (!isLetterUnlocked()) {
-                            openEnvelopeLetter();
-                            return;
-                        }
                         currentPage = pageNum;
-                        openBook(true);
+                        openBook();
                         showPage(pageNum);
                     }, 1000);
                 }
@@ -1068,12 +1095,13 @@
             }
         });
 
-        // Phong bì lời chúc: mở từ 0h ngày 08/10/2026
+        // Phong bì thư sinh nhật: mở từ 0h 08/10/2026 (riêng, không đụng sổ)
         // LETTER_PREVIEW_UNLOCK = true → mở tạm để xem/chỉnh sửa; đổi false trước khi gửi em
         const LETTER_PREVIEW_UNLOCK = true;
         const LETTER_UNLOCK_AT = new Date(2026, 9, 8, 0, 0, 0, 0);
         let envelopeCountdownTimer = null;
         let isOpeningLetter = false;
+        let originalEnvelopeLetterHtml = '';
 
         function isLetterUnlocked() {
             return LETTER_PREVIEW_UNLOCK || Date.now() >= LETTER_UNLOCK_AT.getTime();
@@ -1088,9 +1116,28 @@
             return { days, hours, mins, secs };
         }
 
+        function showEnvelopeLockedView() {
+            const lockedView = document.getElementById('envelopeLockedView');
+            const letterView = document.getElementById('envelopeLetterView');
+            const card = document.getElementById('envelopeModalCard');
+            if (lockedView) lockedView.hidden = false;
+            if (letterView) letterView.hidden = true;
+            if (card) card.classList.remove('letter-open');
+        }
+
+        function showEnvelopeLetterView() {
+            const lockedView = document.getElementById('envelopeLockedView');
+            const letterView = document.getElementById('envelopeLetterView');
+            const card = document.getElementById('envelopeModalCard');
+            if (lockedView) lockedView.hidden = true;
+            if (letterView) letterView.hidden = false;
+            if (card) card.classList.add('letter-open');
+            cancelEnvelopeLetterEdit();
+        }
+
         function updateEnvelopeCountdownUI() {
             const remaining = LETTER_UNLOCK_AT.getTime() - Date.now();
-            const unlocked = remaining <= 0;
+            const unlocked = isLetterUnlocked();
             const { days, hours, mins, secs } = formatCountdown(remaining);
 
             const cdDays = document.getElementById('cdDays');
@@ -1110,16 +1157,20 @@
             const letterPreview = document.getElementById('envelopeLetterPreview');
 
             if (unlocked) {
-                if (title) title.textContent = 'Thư đã sẵn sàng 💌';
-                if (subtitle) subtitle.textContent = 'Nhấn mở phong bì để đọc lời chúc dành cho em';
+                if (title) title.textContent = 'Thư sinh nhật đã sẵn sàng 💌';
+                if (subtitle) {
+                    subtitle.textContent = LETTER_PREVIEW_UNLOCK && remaining > 0
+                        ? 'Đang mở tạm để xem/chỉnh sửa (sẽ khóa lại lúc 0h 08/10)'
+                        : 'Nhấn mở phong bì để đọc thư sinh nhật';
+                }
                 if (countdown) countdown.classList.add('hidden');
                 if (openBtn) {
                     openBtn.disabled = false;
-                    openBtn.textContent = '✉️ Mở thư lời chúc';
+                    openBtn.textContent = '✉️ Mở thư sinh nhật';
                 }
                 if (seal) seal.textContent = '💖';
                 if (letterPreview) {
-                    letterPreview.innerHTML = '<p>Gửi em yêu</p><span>Chạm để mở sổ lời chúc</span>';
+                    letterPreview.innerHTML = '<p>Gửi embe</p><span>Chạm để đọc thư</span>';
                 }
             } else {
                 if (title) title.textContent = 'Phong bì còn khóa 🔒';
@@ -1139,19 +1190,9 @@
             const unlocked = isLetterUnlocked();
             const badge = document.getElementById('envelopeLockBadge');
             const control = document.getElementById('envelopeControl');
-            const overlay = document.getElementById('bookLockOverlay');
-            const hint = document.getElementById('clickHint');
-            const book = document.getElementById('book');
 
             if (control) control.classList.toggle('unlocked', unlocked);
             if (badge) badge.style.display = unlocked ? 'none' : 'flex';
-            if (overlay) overlay.classList.toggle('hidden', unlocked);
-
-            if (hint && book && !book.classList.contains('open')) {
-                hint.textContent = unlocked
-                    ? '👆 Nhấp vào sổ hoặc icon ✉️ để mở thư nhé!!!'
-                    : '✉️ Thư khóa đến 0h ngày 08/10 — nhấp ✉️ để xem countdown';
-            }
 
             if (unlocked && envelopeCountdownTimer) {
                 clearInterval(envelopeCountdownTimer);
@@ -1171,8 +1212,15 @@
             if (!modal) return;
 
             if (envelope) envelope.classList.remove('open');
+            showEnvelopeLockedView();
             modal.classList.add('show');
             updateEnvelopeCountdownUI();
+
+            // Preview unlock: mở thẳng thư để chỉnh sửa
+            if (LETTER_PREVIEW_UNLOCK && isLetterUnlocked()) {
+                showEnvelopeLetterView();
+                return;
+            }
 
             if (!isLetterUnlocked()) {
                 if (envelopeCountdownTimer) clearInterval(envelopeCountdownTimer);
@@ -1193,8 +1241,10 @@
 
             const modal = document.getElementById('envelopeModal');
             const envelope = document.getElementById('envelope');
+            cancelEnvelopeLetterEdit();
             if (modal) modal.classList.remove('show');
             if (envelope) envelope.classList.remove('open');
+            showEnvelopeLockedView();
             if (envelopeCountdownTimer) {
                 clearInterval(envelopeCountdownTimer);
                 envelopeCountdownTimer = null;
@@ -1214,18 +1264,82 @@
             if (envelope) envelope.classList.add('open');
 
             setTimeout(() => {
-                closeEnvelopeModal();
-                openBook(true);
+                showEnvelopeLetterView();
                 isOpeningLetter = false;
-            }, 1100);
+            }, 900);
         }
 
-        function openBook(forceUnlock = false) {
-            if (!forceUnlock && !isLetterUnlocked()) {
-                openEnvelopeLetter();
-                return;
-            }
+        function toggleEnvelopeLetterEdit() {
+            const body = document.getElementById('envelopeLetterBody');
+            const editBtn = document.getElementById('envelopeEditBtn');
+            const actions = document.getElementById('envelopeEditActions');
+            if (!body) return;
 
+            originalEnvelopeLetterHtml = body.innerHTML;
+            body.contentEditable = 'true';
+            body.classList.add('editing');
+            body.focus();
+            if (editBtn) editBtn.hidden = true;
+            if (actions) actions.hidden = false;
+        }
+
+        function cancelEnvelopeLetterEdit() {
+            const body = document.getElementById('envelopeLetterBody');
+            const editBtn = document.getElementById('envelopeEditBtn');
+            const actions = document.getElementById('envelopeEditActions');
+            if (!body) return;
+
+            if (originalEnvelopeLetterHtml && body.contentEditable === 'true') {
+                body.innerHTML = originalEnvelopeLetterHtml;
+            }
+            body.contentEditable = 'false';
+            body.classList.remove('editing');
+            if (editBtn) editBtn.hidden = false;
+            if (actions) actions.hidden = true;
+        }
+
+        function saveEnvelopeLetter() {
+            const body = document.getElementById('envelopeLetterBody');
+            const editBtn = document.getElementById('envelopeEditBtn');
+            const actions = document.getElementById('envelopeEditActions');
+            if (!body) return;
+
+            const dataToSave = {
+                content: body.innerHTML,
+                timestamp: firebase.database ? firebase.database.ServerValue.TIMESTAMP : Date.now()
+            };
+
+            const finish = () => {
+                originalEnvelopeLetterHtml = body.innerHTML;
+                body.contentEditable = 'false';
+                body.classList.remove('editing');
+                if (editBtn) editBtn.hidden = false;
+                if (actions) actions.hidden = true;
+                showNotification('💾 Đã lưu thư sinh nhật!');
+            };
+
+            if (database) {
+                database.ref('shared/birthdayLetter').set(dataToSave).then(finish).catch((error) => {
+                    showNotification('❌ Lỗi khi lưu: ' + error.message);
+                });
+            } else {
+                finish();
+            }
+        }
+
+        function loadEnvelopeLetter() {
+            if (!database) return;
+            database.ref('shared/birthdayLetter').on('value', (snapshot) => {
+                const data = snapshot.val();
+                const body = document.getElementById('envelopeLetterBody');
+                if (!body || !data || !data.content) return;
+                if (body.contentEditable === 'true') return;
+                body.innerHTML = data.content;
+                originalEnvelopeLetterHtml = data.content;
+            });
+        }
+
+        function openBook() {
             const book = document.getElementById('book');
             const clickHint = document.getElementById('clickHint');
             const music = document.getElementById('birthdayMusic');
