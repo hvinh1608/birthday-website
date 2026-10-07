@@ -398,6 +398,7 @@
         <!-- Music sources will be set dynamically by JavaScript -->
         Your browser does not support the audio element.
     </audio>
+    <audio id="letterMusic" preload="auto" crossorigin="anonymous"></audio>
 
     <script>
         // Firebase Configuration
@@ -526,34 +527,86 @@
         // Danh sách nhạc để random
         const musicTracks = ['kobuong.mp3', 'vetthuong.mp3'];
         const LETTER_MUSIC_SRC = 'music/noi-nho-khong-khoang-cach.mp3';
+        let outsideMusicWasPlaying = false;
         
         function getRandomMusic() {
             const randomTrack = musicTracks[Math.floor(Math.random() * musicTracks.length)];
             return `audio/${randomTrack}`;
         }
 
-        function playLetterMusic() {
-            const music = document.getElementById('birthdayMusic');
+        function isEnvelopeLetterOpen() {
+            const letterView = document.getElementById('envelopeLetterView');
+            return !!(letterView && !letterView.hidden);
+        }
+
+        function getOutsideMusic() {
+            return document.getElementById('birthdayMusic');
+        }
+
+        function getLetterMusic() {
+            return document.getElementById('letterMusic');
+        }
+
+        function updateMusicControlIcon() {
             const musicControl = document.getElementById('musicControl');
-            if (!music) return;
+            if (!musicControl) return;
+            const letterAudio = getLetterMusic();
+            const outsideAudio = getOutsideMusic();
+            const playing = isEnvelopeLetterOpen()
+                ? (letterAudio && !letterAudio.paused)
+                : (outsideAudio && !outsideAudio.paused);
+            musicControl.textContent = playing ? '🎵' : '🔇';
+        }
 
-            const absoluteLetterSrc = new URL(LETTER_MUSIC_SRC, window.location.href).href;
-            const alreadyPlayingLetter = !music.paused && music.src && music.src === absoluteLetterSrc;
-
-            if (alreadyPlayingLetter) {
-                if (musicControl) musicControl.textContent = '🎵';
-                return;
+        function pauseOutsideMusicForLetter() {
+            const music = getOutsideMusic();
+            outsideMusicWasPlaying = !!(music && !music.paused && music.currentTime >= 0 && music.src);
+            if (music && !music.paused) {
+                music.pause();
             }
+        }
 
-            music.src = LETTER_MUSIC_SRC;
-            music.currentTime = 0;
-            music.volume = 0.5;
-            music.loop = true;
-            music.play().then(() => {
-                if (musicControl) musicControl.textContent = '🎵';
-            }).catch(() => {
-                // Autoplay có thể bị chặn; user đã click mở thư nên thường OK
-            });
+        function resumeOutsideMusicAfterLetter() {
+            const music = getOutsideMusic();
+            if (outsideMusicWasPlaying && music) {
+                music.play().then(updateMusicControlIcon).catch(() => {
+                    updateMusicControlIcon();
+                });
+            } else {
+                updateMusicControlIcon();
+            }
+            outsideMusicWasPlaying = false;
+        }
+
+        function playLetterMusic() {
+            const letterAudio = getLetterMusic();
+            if (!letterAudio) return;
+
+            pauseOutsideMusicForLetter();
+
+            if (!letterAudio.getAttribute('src')) {
+                letterAudio.src = LETTER_MUSIC_SRC;
+            }
+            letterAudio.volume = 0.5;
+            letterAudio.loop = true;
+
+            if (letterAudio.paused) {
+                letterAudio.currentTime = 0;
+                letterAudio.play().then(updateMusicControlIcon).catch(() => {
+                    updateMusicControlIcon();
+                });
+            } else {
+                updateMusicControlIcon();
+            }
+        }
+
+        function stopLetterMusic() {
+            const letterAudio = getLetterMusic();
+            if (letterAudio) {
+                letterAudio.pause();
+                letterAudio.currentTime = 0;
+            }
+            resumeOutsideMusicAfterLetter();
         }
         
         function showPage(pageNum) {
@@ -1082,10 +1135,15 @@
             let musicStarted = false;
             
             function startMusicOnInteraction() {
+                // Đang mở thư thì không tự bật nhạc ngoài đè lên nhạc thư
+                if (isEnvelopeLetterOpen()) {
+                    musicStarted = true;
+                    return;
+                }
                 if (!musicStarted && music.paused) {
                     music.volume = 0.5;
                     music.play().then(() => {
-                        musicControl.textContent = '🎵';
+                        updateMusicControlIcon();
                         musicStarted = true;
                     }).catch(e => {/* Music play failed */});
                 }
@@ -1268,6 +1326,7 @@
             const modal = document.getElementById('envelopeModal');
             const envelope = document.getElementById('envelope');
             cancelEnvelopeLetterEdit();
+            stopLetterMusic();
             if (modal) modal.classList.remove('show');
             if (envelope) envelope.classList.remove('open');
             showEnvelopeLockedView();
@@ -1368,8 +1427,7 @@
         function openBook() {
             const book = document.getElementById('book');
             const clickHint = document.getElementById('clickHint');
-            const music = document.getElementById('birthdayMusic');
-            const musicControl = document.getElementById('musicControl');
+            const music = getOutsideMusic();
             
             if (!book.classList.contains('open')) {
                 // Mở sách
@@ -1389,15 +1447,16 @@
                     }
                 }, 800);
                 
+                // Đang xem thư thì giữ nhạc thư, không đè nhạc ngoài
+                if (isEnvelopeLetterOpen()) return;
+
                 // Phát nhạc random khi mở sổ
                 const randomMusicPath = getRandomMusic();
                 music.src = randomMusicPath;
                 music.currentTime = 0;
                 music.volume = 0.5;
-                music.play().then(() => {
-                    musicControl.textContent = '🎵';
-                }).catch(error => {
-                    // Music play failed
+                music.play().then(updateMusicControlIcon).catch(() => {
+                    updateMusicControlIcon();
                 });
             }
         }
@@ -1405,8 +1464,7 @@
         function closeBook() {
             const book = document.getElementById('book');
             const clickHint = document.getElementById('clickHint');
-            const music = document.getElementById('birthdayMusic');
-            const musicControl = document.getElementById('musicControl');
+            const music = getOutsideMusic();
             
             book.classList.remove('open');
             clickHint.textContent = '👆 Nhấp vào sổ để mở nhé!!!';
@@ -1418,10 +1476,13 @@
                 featherPen.classList.remove('show');
             }
             
-            // Dừng nhạc khi đóng sổ
-            music.pause();
-            music.currentTime = 0;
-            musicControl.textContent = '🔇';
+            // Chỉ dừng nhạc ngoài; nếu đang trong thư thì không đụng nhạc thư
+            if (!isEnvelopeLetterOpen() && music) {
+                music.pause();
+                music.currentTime = 0;
+                outsideMusicWasPlaying = false;
+            }
+            updateMusicControlIcon();
             
             // Reset về trang đầu
             currentPage = 1;
@@ -1429,22 +1490,39 @@
         }
 
         function toggleMusic() {
-            const music = document.getElementById('birthdayMusic');
-            const musicControl = document.getElementById('musicControl');
+            // Trong thư: điều khiển nhạc thư; ngoài: điều khiển nhạc nền
+            if (isEnvelopeLetterOpen()) {
+                const letterAudio = getLetterMusic();
+                if (!letterAudio) return;
+                if (letterAudio.paused) {
+                    if (!letterAudio.getAttribute('src')) {
+                        letterAudio.src = LETTER_MUSIC_SRC;
+                    }
+                    letterAudio.volume = 0.5;
+                    letterAudio.loop = true;
+                    letterAudio.play().then(updateMusicControlIcon).catch(() => {
+                        updateMusicControlIcon();
+                    });
+                } else {
+                    letterAudio.pause();
+                    updateMusicControlIcon();
+                }
+                return;
+            }
+
+            const music = getOutsideMusic();
+            if (!music) return;
             
             if (music.paused) {
-                // Nếu chưa có nhạc, load random track
                 if (!music.src) {
                     music.src = getRandomMusic();
                 }
-                music.play().then(() => {
-                    musicControl.textContent = '🎵';
-                }).catch(error => {
-                    // Music play failed
+                music.play().then(updateMusicControlIcon).catch(() => {
+                    updateMusicControlIcon();
                 });
             } else {
                 music.pause();
-                musicControl.textContent = '🔇';
+                updateMusicControlIcon();
             }
         }
 
