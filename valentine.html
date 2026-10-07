@@ -7,7 +7,7 @@
     <!-- Favicon - Valentine Heart -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='90' text-anchor='middle' x='50'>💖</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./style.css?v=6.0">
+    <link rel="stylesheet" href="./style.css?v=6.1">
     
     <!-- Firebase SDK (v8 compat) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -38,8 +38,12 @@
                 <div class="ink-drop">💧</div>
             </div>
             <div class="book" id="book">
-                <div class="book-cover" onclick="openBook()">
+                <div class="book-cover" onclick="openBook()" id="bookCover">
                     <img src="images/anhbia.jpg?v=20260211" alt="Valentine Photo" class="cover-image" loading="lazy" decoding="async">
+                    <div class="book-lock-overlay" id="bookLockOverlay">
+                        <span class="book-lock-icon">✉️🔒</span>
+                        <span class="book-lock-text">Mở lúc 0h · 08/10</span>
+                    </div>
                 </div>
                 
                 <!-- Trang 1: Lời chúc chính -->
@@ -168,6 +172,11 @@
             
             <!-- Nút điều khiển nhạc, lịch và khoảnh khắc -->
             <div class="controls-bar">
+                <div class="envelope-control control-btn" id="envelopeControl" onclick="openEnvelopeLetter()" title="Mở thư lời chúc">
+                    ✉️
+                    <span class="envelope-lock-badge" id="envelopeLockBadge">🔒</span>
+                </div>
+
                 <div class="music-control control-btn" id="musicControl" onclick="toggleMusic()" title="Bật/Tắt nhạc">
                     🎵
                 </div>
@@ -183,6 +192,41 @@
                 <div class="quotes-control control-btn" id="quotesControl" onclick="toggleQuotes()" title="Xem lời yêu thương">
                     💬
                 </div>
+            </div>
+        </div>
+
+        <!-- Phong bì mở thư (khóa đến 0h 08/10) -->
+        <div class="envelope-modal" id="envelopeModal" onclick="closeEnvelopeModal(event)">
+            <div class="envelope-modal-card" onclick="event.stopPropagation()">
+                <button class="close-modal-btn envelope-close-btn" onclick="closeEnvelopeModal()" title="Đóng">✖</button>
+
+                <div class="envelope-scene" id="envelopeScene">
+                    <div class="envelope" id="envelope">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-body">
+                            <div class="envelope-heart">💌</div>
+                            <div class="envelope-seal" id="envelopeSeal">🔒</div>
+                        </div>
+                        <div class="envelope-letter" id="envelopeLetterPreview">
+                            <p>Thư dành riêng cho em</p>
+                            <span>Mở lúc 0h ngày 08/10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="envelope-title" id="envelopeTitle">Phong bì lời chúc</h2>
+                <p class="envelope-subtitle" id="envelopeSubtitle">Thư sẽ mở đúng 0 giờ đêm ngày 8 tháng 10</p>
+
+                <div class="envelope-countdown" id="envelopeCountdown">
+                    <div class="countdown-item"><span id="cdDays">0</span><small>ngày</small></div>
+                    <div class="countdown-item"><span id="cdHours">0</span><small>giờ</small></div>
+                    <div class="countdown-item"><span id="cdMins">0</span><small>phút</small></div>
+                    <div class="countdown-item"><span id="cdSecs">0</span><small>giây</small></div>
+                </div>
+
+                <button class="envelope-open-btn" id="envelopeOpenBtn" onclick="tryOpenLetterFromEnvelope()" disabled>
+                    🔒 Chưa đến giờ mở
+                </button>
             </div>
         </div>
         
@@ -943,6 +987,14 @@
             }
             // Load nội dung đã lưu từ Firebase
             loadSavedContent();
+
+            // Phong bì khóa đến 0h 08/10 — cập nhật icon/countdown
+            refreshEnvelopeLockState();
+            if (!isLetterUnlocked()) {
+                setInterval(() => {
+                    refreshEnvelopeLockState();
+                }, 1000);
+            }
             
             // Check URL parameter để mở trang cụ thể
             const urlParams = new URLSearchParams(window.location.search);
@@ -952,8 +1004,12 @@
                 if (pageNum > 0) {
                     // Đợi một chút để Firebase load xong
                     setTimeout(() => {
+                        if (!isLetterUnlocked()) {
+                            openEnvelopeLetter();
+                            return;
+                        }
                         currentPage = pageNum;
-                        openBook();
+                        openBook(true);
                         showPage(pageNum);
                     }, 1000);
                 }
@@ -1024,7 +1080,162 @@
             }
         });
 
-        function openBook() {
+        // Phong bì lời chúc: chỉ mở từ 0h ngày 08/10/2026 (giờ máy local)
+        const LETTER_UNLOCK_AT = new Date(2026, 9, 8, 0, 0, 0, 0);
+        let envelopeCountdownTimer = null;
+        let isOpeningLetter = false;
+
+        function isLetterUnlocked() {
+            return Date.now() >= LETTER_UNLOCK_AT.getTime();
+        }
+
+        function formatCountdown(ms) {
+            const totalSec = Math.max(0, Math.floor(ms / 1000));
+            const days = Math.floor(totalSec / 86400);
+            const hours = Math.floor((totalSec % 86400) / 3600);
+            const mins = Math.floor((totalSec % 3600) / 60);
+            const secs = totalSec % 60;
+            return { days, hours, mins, secs };
+        }
+
+        function updateEnvelopeCountdownUI() {
+            const remaining = LETTER_UNLOCK_AT.getTime() - Date.now();
+            const unlocked = remaining <= 0;
+            const { days, hours, mins, secs } = formatCountdown(remaining);
+
+            const cdDays = document.getElementById('cdDays');
+            const cdHours = document.getElementById('cdHours');
+            const cdMins = document.getElementById('cdMins');
+            const cdSecs = document.getElementById('cdSecs');
+            if (cdDays) cdDays.textContent = String(days);
+            if (cdHours) cdHours.textContent = String(hours).padStart(2, '0');
+            if (cdMins) cdMins.textContent = String(mins).padStart(2, '0');
+            if (cdSecs) cdSecs.textContent = String(secs).padStart(2, '0');
+
+            const openBtn = document.getElementById('envelopeOpenBtn');
+            const title = document.getElementById('envelopeTitle');
+            const subtitle = document.getElementById('envelopeSubtitle');
+            const countdown = document.getElementById('envelopeCountdown');
+            const seal = document.getElementById('envelopeSeal');
+            const letterPreview = document.getElementById('envelopeLetterPreview');
+
+            if (unlocked) {
+                if (title) title.textContent = 'Thư đã sẵn sàng 💌';
+                if (subtitle) subtitle.textContent = 'Nhấn mở phong bì để đọc lời chúc dành cho em';
+                if (countdown) countdown.classList.add('hidden');
+                if (openBtn) {
+                    openBtn.disabled = false;
+                    openBtn.textContent = '✉️ Mở thư lời chúc';
+                }
+                if (seal) seal.textContent = '💖';
+                if (letterPreview) {
+                    letterPreview.innerHTML = '<p>Gửi em yêu</p><span>Chạm để mở sổ lời chúc</span>';
+                }
+            } else {
+                if (title) title.textContent = 'Phong bì còn khóa 🔒';
+                if (subtitle) subtitle.textContent = 'Thư sẽ mở đúng 0 giờ đêm ngày 8 tháng 10';
+                if (countdown) countdown.classList.remove('hidden');
+                if (openBtn) {
+                    openBtn.disabled = true;
+                    openBtn.textContent = '🔒 Chưa đến giờ mở';
+                }
+                if (seal) seal.textContent = '🔒';
+            }
+
+            return unlocked;
+        }
+
+        function refreshEnvelopeLockState() {
+            const unlocked = isLetterUnlocked();
+            const badge = document.getElementById('envelopeLockBadge');
+            const control = document.getElementById('envelopeControl');
+            const overlay = document.getElementById('bookLockOverlay');
+            const hint = document.getElementById('clickHint');
+            const book = document.getElementById('book');
+
+            if (control) control.classList.toggle('unlocked', unlocked);
+            if (badge) badge.style.display = unlocked ? 'none' : 'flex';
+            if (overlay) overlay.classList.toggle('hidden', unlocked);
+
+            if (hint && book && !book.classList.contains('open')) {
+                hint.textContent = unlocked
+                    ? '👆 Nhấp vào sổ hoặc icon ✉️ để mở thư nhé!!!'
+                    : '✉️ Thư khóa đến 0h ngày 08/10 — nhấp ✉️ để xem countdown';
+            }
+
+            if (unlocked && envelopeCountdownTimer) {
+                clearInterval(envelopeCountdownTimer);
+                envelopeCountdownTimer = null;
+                const modal = document.getElementById('envelopeModal');
+                if (modal && modal.classList.contains('show')) {
+                    updateEnvelopeCountdownUI();
+                }
+            }
+
+            return unlocked;
+        }
+
+        function openEnvelopeLetter() {
+            const modal = document.getElementById('envelopeModal');
+            const envelope = document.getElementById('envelope');
+            if (!modal) return;
+
+            if (envelope) envelope.classList.remove('open');
+            modal.classList.add('show');
+            updateEnvelopeCountdownUI();
+
+            if (!isLetterUnlocked()) {
+                if (envelopeCountdownTimer) clearInterval(envelopeCountdownTimer);
+                envelopeCountdownTimer = setInterval(() => {
+                    const unlocked = updateEnvelopeCountdownUI();
+                    refreshEnvelopeLockState();
+                    if (unlocked) {
+                        clearInterval(envelopeCountdownTimer);
+                        envelopeCountdownTimer = null;
+                    }
+                }, 1000);
+            }
+        }
+
+        function closeEnvelopeModal(event) {
+            // Overlay click: chỉ đóng khi bấm nền ngoài card
+            if (event && event.target !== event.currentTarget) return;
+
+            const modal = document.getElementById('envelopeModal');
+            const envelope = document.getElementById('envelope');
+            if (modal) modal.classList.remove('show');
+            if (envelope) envelope.classList.remove('open');
+            if (envelopeCountdownTimer) {
+                clearInterval(envelopeCountdownTimer);
+                envelopeCountdownTimer = null;
+            }
+        }
+
+        function tryOpenLetterFromEnvelope() {
+            if (!isLetterUnlocked() || isOpeningLetter) return;
+
+            isOpeningLetter = true;
+            const envelope = document.getElementById('envelope');
+            const openBtn = document.getElementById('envelopeOpenBtn');
+            if (openBtn) {
+                openBtn.disabled = true;
+                openBtn.textContent = 'Đang mở thư...';
+            }
+            if (envelope) envelope.classList.add('open');
+
+            setTimeout(() => {
+                closeEnvelopeModal();
+                openBook(true);
+                isOpeningLetter = false;
+            }, 1100);
+        }
+
+        function openBook(forceUnlock = false) {
+            if (!forceUnlock && !isLetterUnlocked()) {
+                openEnvelopeLetter();
+                return;
+            }
+
             const book = document.getElementById('book');
             const clickHint = document.getElementById('clickHint');
             const music = document.getElementById('birthdayMusic');
